@@ -1,0 +1,71 @@
+This is good, because going in the other direction, from our familiar decimal base 10 to hex, is much easier and involves little mor math. 
+What we have to do is find the hex column values "within" a decimal number -- and that involves some long division. 
+
+Starting with decimal numbers: 499. 
+The calculator will be handy with a vengeance. 
+Tap in the number 449 and store it in the calculator's memory. 
+
+What we need to do first is find the larget hex column value that is contained in 449 at least once. 
+Looking back at "Hexadecimal_columns_as_powers_of_16_chart_written_Yes_this_is_very_important" text file, we can see that 256 is the largest power of 16, and hence the largest hex column value, that is present in 449 at least once. 
+
+Therefore, we start with 256, and determine how many times 256 goes into 449: 449 / 256 = 1.7539. 
+At least once, but not quite twice, so 449 contains only one 256. 
+Write down a 1 on paper. 
+We're keeping a running remainder. 
+The "1" is the left most hex digit of the hex value that is equivalent to decimal 449.. 
+
+We know that only one 256 is contained in 449. 
+What we must do now is remove that 256 from the original number, now that we've "counted" it by writing a 1 down on paper. 
+Subtract 256 from 449. 
+Store the difference, 193, into memory. 
+
+The 256 column has been removed from the number we're converting. 
+now we move to the next column to the right, the 16s. 
+How many 16s are contained in 193?
+193 / 16 = 12.0625. 
+This means the 16s column in the hex equivalent of 449 contains a 12.
+The value we call 12 is repreented by the letter C. 
+From a hex perspective, we have found that the original number contains C in the 16s column. 
+Write a C down to the right of you 1: 1C. 
+
+We've got the 16s column, so just as with the 256s, we have to remove the 16s from what's left of the original number. 
+The total value of the 16s column is C X 16 = 12 X 16 = 192. 
+Bring the 193 from it. 
+A lonely little 1 is al that's left. 
+
+There is one unit in one. 
+Write that 1 down to the right of the C in our hexadecimal number: 1C1. 
+Decimal 449 is equivalent to hex 1C1. 
+
+Look back at the big picture of the decial-to-hex convertion. 
+Looking for the hexadecimal columns hidden in the decimal value. 
+We find the largest column contained in the decimal number,find that column's value, and subtract that value from the decimal number. 
+then we look for the next smallest hex column, and the next smallest, and so on, removing the value of each column from the decimal number as we go. 
+We're dividing the number by consecutively smaller powers of 16 and keeping a running remainder by removing each column as we tally it 
+
+Try it again. Convert 988664 to hex-value: 
+				NOTE: make sure you start off by seeing how many times 16 goes into 988664
+	1) Find the largest column contained in 988664, from the hex_chart_file: 65536. 988,664 / 65536 = 15 and change. Ignore the change. 15 = F in hex. write down the F. 
+
+	2) Remove F X 65536 from 988664. Store the remainder: 5,624
+
+	3) Move to the next smallest column. 5624 / 4096 = 1 and change. Write down the 1. 
+
+	4) Remove 1 X 4096 from the remainder: 5624 - 4096 = 1528. Store the new remainder 1528. 
+
+	5) Move to the next smallest column. 1528 / 256 = 5 and change. Write down the 5
+
+	6) Remove 5 5 X 256 from the stored remainder, 1528. Store 248 as the new remainder. 
+
+	7) Move to the next smallest column. 248 / 16 = 15 and change. 15 = F in hex. Write down the F. 
+
+	8) Remove F X 16 from stored remainder, 248. The remainder, 8, is the number of units in the final column. Write down the 8. 
+
+There you have it 988664 decimal = F15F8H. 
+
+Not the presence of the H at the end of the hex number. 
+It's important because not every hex number contains letter digits to scream out the fact that the number is in base 16. 
+There is a 157H as surely as a 157 decimal, and the two are not the same number. 
+Don't forget that H in writing your assembly programs.
+
+

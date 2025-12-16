@@ -1,0 +1,4 @@
+Since NASM 2.12.02 obj file embedded dependency file information. 
+To suppress the generation of dependencies, use
+
+	%pragma obj nodepend

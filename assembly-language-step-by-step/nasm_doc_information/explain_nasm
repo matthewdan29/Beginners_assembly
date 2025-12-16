@@ -1,0 +1,5 @@
+The Netwide Assembler, NASM is an 80x-64 and x86-64 assembler designed for portability and modularity. 
+It supports a range of object file formats, including Linux and BSD a.out, ELF, Mach-O, 16-bit and 32-bit .obj (OMF) format, COFF (inclusing its Win32 and Win64 variants)
+It can also output plan binary files, Intel hex and Motorola S-Record(Didn't know they still make them) formats. 
+Its syntax is desinged to be simple and easy to understand, similar to the syntax in the intel software Developers manual (that not easy to read or understand TRUST ME just look at the repo). 
+It supports all currently known x86 architectural extensions, and has strong support for macros. 

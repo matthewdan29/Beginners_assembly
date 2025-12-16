@@ -1,0 +1,3 @@
+Once the linker completes an error-free pass, your finished executable file will be waiting for you in your working directory. 
+It's error-free if the assembleer and linker digested it without displaying any error message. 
+It might have a bug (The book tells me to say that and it is possible my guys)

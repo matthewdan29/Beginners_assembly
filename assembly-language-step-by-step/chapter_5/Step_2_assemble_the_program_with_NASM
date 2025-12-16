@@ -1,0 +1,13 @@
+Open a terminal window. 
+Many different terminal utilities are available for Linux just USE BASH. 
+Once you have the command prompt, navigate to the "eatsyscall" project directory using the "cd" command.
+
+Assuming that the file eatsyscall.asm is present, assemble it by entering the following command and pressing enter
+
+		"nasm -f elf -g -F stabs eatsyscall.asm"
+
+When NASM finds nothing wrong, it will say nothing, and you will simply get the command prompt back. 
+That means the assembly worked! (nasm -f bin -o myprogram.exe source.asm "This works for windows VIA bing.com")
+
+
+(This is to change the  name of the file object out put nasm-f elf-g-F stabs eatsyscall.asm-o eatdemo.o "Just like C/C++")

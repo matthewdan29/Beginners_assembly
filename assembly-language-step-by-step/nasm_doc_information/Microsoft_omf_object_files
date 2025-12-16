@@ -1,0 +1,48 @@
+The obj file format (NASM calls it obj rather than omf for historical reasons) is the one produced by MASM and TASM, which is typically fed to 16-bit DOS linkers to produce .EXE files. 
+It is alos the format used by OS/2. 
+
+OBJ provides a default output file-name extension of .obj
+
+obj is not exclusively a 16-bit format, though; NASM has full support for the 32-bit extensions to the format. 
+In particular, 32-bit obj format files are used by Borland's Win32 compilers, instead of using Microsoft newer win32 object file format. 
+
+The obj format does not define any special segment names: you can call your segments anything you like. 
+Typical names for segments in obj format files are CODE, DATA and BSS. 
+
+If your source file contains code before specifying an explicit "SEGMENT" directive, then NASM will invent its own segment called "__NASMDEFSEG" for you. 
+
+When you define a sement in an obj file, NASM defines the segment name as a symbol as well, so that you can access the segment address of the segment. 
+So for example: 
+
+		segment data 
+
+		dvar:	dw	1234
+
+		segment code 
+
+		function: 
+
+			mov	ax, data		; get segment address of data 
+
+			mov 	ds, ax			; and move it into DS 
+
+			inc 	word 	[dvar]		; now this regerence will work 
+
+			ret
+
+The obj format also enables the use of the SEG and WRT operations, so that you can write code which does things like
+
+		extern foo
+
+			mov	ax, seg foo			; get preferred segment of foo
+
+			mov	ds, ax		
+
+			mov 	ax, data			; a different segment 
+
+			mov 	es, ax		
+
+			mov	ax, [ds:foo]			; this accesses 'foo'
+
+
+			mov	[es:foo wrt data], bx		; so does this

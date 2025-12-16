@@ -1,0 +1,5 @@
+(This is the mode ill use if i'm using something big with Cmake or a bigger project)
+
+	-batch		Run in batch mode. Exit status 0 after processing all the command files specified with '-x' (and all commands from initialization files, if not inhibited with '-n'). Exit with nonzero status if an error occurs in executing the GDB commands in the command files. Batch mode also disables pagination, sets un-limited terminal width and height. Batch mode may be useful for running GDB as a filter, for example to download and run a program on another computer; in order to make this more useful, the message 
+
+					Program exited normally. 

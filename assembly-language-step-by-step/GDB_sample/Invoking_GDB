@@ -1,0 +1,52 @@
+Invoke "GDB" by running the program 'gdb'. 
+Once started, GDB reads commands from the terminal until you tell it to exit. 
+
+You can als run GBD with a command arguments and options, to specify more of your debugging environment at the outset. 
+
+
+The command-line options described here are desgined to cover a cariety of situations; in some environments, some of these options may effectively be unavailable. 
+
+	The most usual way to start GDB is with one argument, specifying an executable program: 
+
+			gbd <program>
+
+	You can also start with both an executable program and a core file specified: 
+
+			gdb <program core>
+
+	You can, instead, specify a process ID as a second argument or use option -p, if you want to debug a running process: 
+
+			gdb program 1234
+
+			gdb -p 1234
+
+	would attach GDB to process 1234. 
+	with option -p you can omit the program filename. 
+
+Taking advantage of the second command-line argument reuires a fairly complete operating system (DO NOT DO IT ON WINDOWS LOL USE LINUX AT THAT A STABLE VERISON.); when you use GDB as a romote debugger attached to a bare board, there may not be any notion of "process", and there is often no way to get a core dump. 
+GDB will warn you if it is unable to attach or to read cor dumps. 
+
+	You can optionally have gdb pass any arguments after the executable file to the inferior using --args or --no-escape-args. 
+	These options stop option processing
+
+		gdb --args gcc -02 -c foo.c 
+
+	This will cause gdb to debug gcc, and to set gcc's command-line arguments to -02 -c foo.c (<filename>). 
+	For the difference between --args and --no-escape-args, see page 15 of the manual I posted a link (my guy its long AF)
+
+	You can run gdb without printing the front material, which describes GDB's non-warranty, by specifying --silent (or -q/--quite): 
+
+			gdb --silent
+
+	You can futher control how GDB starts up by using command-line options. 
+	GDB itself can remind you of the options available. 
+
+		Type: 
+			gdb -help 
+
+	to display all available options and briefly describe their use 
+
+	All options and command line arguments you give are processed in sequential order. 
+	The order makes a difference whern the '-x' options is used.
+
+

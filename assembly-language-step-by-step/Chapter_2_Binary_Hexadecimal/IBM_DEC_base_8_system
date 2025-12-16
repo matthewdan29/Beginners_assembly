@@ -1,0 +1,6 @@
+DEX invented the minicomputer as a challenger to the massive and expensive mainframes pioneered by IBM. 
+To ensure that no software could possibly be moved from an IBM mainframe to a DEC minicomputer, DEC designed its machines to understand only number expresed in base 8. 
+DEC used digits from 0 to 7. Theres is no digit 8 in base 8! GET USE TO IT
+DEC gave a name to its base 8 system OCTAL. 
+
+A DEC base 8 system, more commonly known as the Octal Number System, uses eight digits (0 - 7) as its base, Making it a powerful compact way to represent binary (base 2) computer data, with each octal digit representing exactly three binary digits (bits) and widely used in computing history (like with DEC machines) for easier reading than long binary strings. 

@@ -1,0 +1,21 @@
+gdb <yourprogram>
+
+set <disassembly-flavor> <intel>
+
+break <_start>
+
+run 
+	
+	nexti (or ni)
+
+	stepi (or si)
+
+info registers 
+
+x/12xw <&msg>
+
+continue
+
+
+I have a repo explaing more in detail. 
+To be truthful I use print statments as much as I use GDB if not more LOL I know right but it works. 

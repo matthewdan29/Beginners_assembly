@@ -1,0 +1,1 @@
+This will be very short chapter if you have been following with me you know I only use linux if i'm doing real work in I'm just a little out of cash and this the only system I can get my hands on plus I like xbox gaming. I know I could use the BSD OS called mac

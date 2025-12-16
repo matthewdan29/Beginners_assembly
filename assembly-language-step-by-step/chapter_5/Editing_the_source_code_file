@@ -1,0 +1,2 @@
+Assembly language source code files are almost always saved to disk with an .ASM file extension. 
+In other workds, for a program named MyProg, the assembly language source code file would be named MyProg.asm . (I didn't want to confuse people starting out with programming in assemble that just the end of the sentence)

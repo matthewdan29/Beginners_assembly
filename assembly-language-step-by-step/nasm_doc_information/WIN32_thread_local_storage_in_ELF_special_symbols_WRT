@@ -1,0 +1,12 @@
+	1) In ELF32 mode, referring to an external or global symbol using "wrt ...tlsie" causes the linker to build an entry in the GOT containing the offset of the symbol within the TLS block, so you can access the value of the symbol with code such as: 
+
+		mov 	eax, [tid wrt ...tlsie]
+
+		mov	[gs:eax], ebx
+
+
+	2) In ELF64 or ELFx32 mode, referring to an external or global symbol using "wrt ...gottpoff" causes the linker to build an entry in the GOT containing the offset of the symbol within the TLS block, so you can access the value of the symbol with code such as: 
+
+		mov	rax, [rel tid wrt ...gottpoff]
+
+		mov	rcx, [fs:rax]

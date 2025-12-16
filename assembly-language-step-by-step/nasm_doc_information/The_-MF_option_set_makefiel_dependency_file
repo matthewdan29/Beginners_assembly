@@ -1,0 +1,4 @@
+This option can be used with the "-M" or "-MG" options to send the output to a file, rather than to stdout. 
+For example: 
+
+	nasm -M -MF myfile.asm

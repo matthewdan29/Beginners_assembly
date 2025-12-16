@@ -1,0 +1,2 @@
+To the right of each instruction is text starting with a semicolon. 
+This text is called a comment, and its purpose should be obvious: to cast some light on what the associated assembly language instruction is for. 

@@ -1,0 +1,31 @@
+OCTAL PEWER OF 8								DECIMAL OCTAL
+
+	1 = 8^0					=				1 X 8 = 10
+
+	10 = 8^1				= 				8 X 8 = 100
+
+	100 = 8^2				=				64 X 8 = 1000
+
+	1000 = 8^3				=				512 X 8 = 10000
+
+	10000 = 8^4				=				4096 X 8 = 100000
+
+	100000 = 8^5				=				32768 X 8 = 1000000
+
+	1000000 = 8^6				=				262144 X 8 = 10000000
+
+
+In general terms: each column has a value consisting of the number base raised to the power represented by the ordinal position of the column minus one. 
+Example, the value of the first column is the number based raised to the 1 minus 1, or zero, power. 
+Because any number raised to the zero power is one, the first column in any number based always has the value of one and is called the units column. 
+
+The second column has the value of the number based raised to the 2 minus 1, or first, power, wheich is the value of the number base itself. 
+In octal this is 8; in decimal, 10. The third column has a value consisting of the number base raised to the 3 minus 1, or second, power, and so on. 
+
+Within each column, the digit holding the column tells how many instances of that column's value is contained in the number as a whole. 
+The 6 in 76225 octal tells us that there are six instances of its column's value in the total value 76225 octal. 
+The six occupies the fourth column, which has a value of 8^4 - 1, which is 8^3, or 512. 
+This tells us that there are six 512s in the number as a whole. 
+
+You can convert the value of a  number in any base to decimal by determining the value of each column by the digit contrained in that column, and then finally taking the sum of the decimal equivalent of each column. 
+

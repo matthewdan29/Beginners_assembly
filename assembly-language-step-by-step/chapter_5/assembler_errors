@@ -1,0 +1,13 @@
+If the assembler encounters something it doesn't understand when it reads a line from the source code file, the misunderstood text is called an "error", and the assembler displays an "error message". 
+For example, the following line of assembly language will confuse the assembler and prompt an error message: 
+
+		mov eax, evx
+
+The reason is simple: there's no such thing as "EVX". 
+What comes cou as EVX was actually intended to be "EBX", which is the name of a CPU register. 
+
+							NOTE: 
+
+THe assembler will terminate, having printed numerous error messages. 
+Start at the first one, make sure you understand it and keep going. 
+If the erros following the first one don't make sense, fix the first one or two and assemble again. 

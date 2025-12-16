@@ -1,0 +1,8 @@
+The 'elf32' 'elf64' and 'elfx32' output formats generate ELF32 and ELF64 (Executable and linkable format) object files, as used by Linux as well as Unix System V, including Solaris x86, UnixWare and SCO Unix.
+ELF provides a default output file-name extension of .o.
+elf is a synonym for 'elf32'. 
+
+The 'elfx32' file format is an "ELF32" file containing 64-bit x86 code, and is used for the x32 ABI, which runs the CPU in 64-bit mode while 32-bit values for pointers to reduce memory footprint. 
+Thus, code intended to be used with the x32 ABI should be assembled with BITS 64. 
+
+

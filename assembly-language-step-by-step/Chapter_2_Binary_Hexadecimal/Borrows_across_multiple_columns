@@ -1,0 +1,6 @@
+What happens is that the middle two 0s act as loan brokers between the F and the rightmost 0, keeping their commission in the form of enough value to allow their own columns; subtractions to take place. 
+Each column to the right of the last column borrows 10 from its neighbor to the left, and loans 1 to the neightbor on its right. 
+After all the borrows trickle through the upper number, what we have looks like a cross-outs in base 10 subtraction. 
+
+At this point, each columnar subtraction can take place, and the difference is B494H. 
+

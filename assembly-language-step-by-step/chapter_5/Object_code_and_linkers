@@ -1,0 +1,22 @@
+Assemblers read you source code files and generate an object code file containing the machine instructions that the CPU understands, plus any data you've defined in the source code. 
+
+The assmebler NASM can do that for DOS programs, and can write out ".COM" executables files for the real mode flat model. 
+This intermediate step is a type of binary file called an "object module", or simply an object code file. 
+Object code files cannot themselves be run as programs. 
+An additional step, called linking, is necessary to turn object code files into executable program files. 
+
+The assembler assembles the various fragments spearately, and the several resulting object code files are then woven together into a single executable program file. 
+
+The Linker ensures that function calls out of one object module arrive at the target object module, and that all the many memory references actually reference what they're supposed to reference. 
+The assembler's job is obvious; the linker's job is subtle. 
+Both are necessary to produce a finished, working executable file. 
+
+To process several object modules into a single executable module, the linker must first build an index called a symbol table, with an entry for every named item in every object module it links, with information about what name refers to what location within the module. 
+Once the symbol table is complete, the linker builds an image of how the executable program will be arranged in memory when the operating system loads it. 
+This image is then written to disk as the executable file. 
+
+Object modules are allowed to refer to symbols in other object modules. 
+During assembly, these extrenal references are left as holes to be filled later -- naturally enough, because the module in which these external symbols exist may not have been assembled or even written yet. 
+
+Debugging infromation is, in a sense, a step backward: portions of the source code, which was all stripped out early in the assembly process, are put back in the object module by the assembler. 
+These portions of the source code are mostly the names of data items and procedures, and they're embedded in the object file to make it easier for the programmmerr to see the names of data items when you debug the program. 

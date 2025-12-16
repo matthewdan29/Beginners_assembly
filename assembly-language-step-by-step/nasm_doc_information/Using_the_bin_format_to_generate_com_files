@@ -1,0 +1,30 @@
+.COM files expect to be loaded at offset 100h into their segment. 
+Execution then begins at 100h, i.e. right at the start of the program. 
+So to write a .com program you would create a source file looking like: 
+
+		org 100h
+	
+	section .text
+
+	start: 
+
+		; put your code here 
+
+	section .data
+
+		; put data items hee 
+
+	section .bss
+
+		; put uninitialized data here
+
+The "bin" format puts the .text section first in the file, so you can declare data or BSS items before beginning to write code if you want to and the code will still end up at the front of the file where it belongs. 
+
+The BSS (uninitialzed data) section does not take up space in the .com file itself: instead, addresses of BSS items are resolved to point at space beyond the end of the file, on the grounds that this will be free memory when the program is run. 
+Therefore you should not rely on your BSS being initialized to all zeros when you run. 
+
+To assemble the above program, you should use a command line like 
+
+		nasm myprog.asm -f bin -o myprog.com
+
+The "bin" format would produce a file called 'myprog' if no explicit output file name were specified so you have to override it and give the desired file name. 

@@ -1,0 +1,12 @@
+The import format-specific directive defines a symbol to be imported from a DLL, for use if you are writing a DLL's import library in NASM. 
+You still need to declare the symbol as EXTERN as well as using the IMPORT directive. 
+
+The "IMPORT" directive takes two required parameters, separated by white space, which are (respectively) the name of the symbol you wish to import and the name of the library you wish to import it from. 
+For example: 
+
+		import WSAStartup wsock32.dill
+
+A third optional parameter gives the name by which the symbol is known in the library you are importing it from, in case this is not the same as the name you wish the symbol to be known by to your code once you have imported it. 
+For example: 
+
+		import asyncsel wsock32.dll WSAAsynSelect

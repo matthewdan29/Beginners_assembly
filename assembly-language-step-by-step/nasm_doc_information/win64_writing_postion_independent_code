@@ -1,0 +1,69 @@
+While REL takes good care of RIP-relative addressing, there is one aspect that is easy to overlook for a Win64 programmer: indirect references. 
+Consider a switch dispatch table: 
+
+	jmp 		qword [dsptch+rax*8]
+
+	...
+
+dspatc:	dq		case0
+
+	dq		case1
+	...
+
+Even a novice Win64 assembler programmer will soon realize that the code is not 64-bit savy.
+Most notably the linker will refuse to link it, showing: 
+	
+	'ADDR32' relocation to '.text' invalid without /LARGEADDRESSAWARE:NO	
+
+So he will have to split jmp instuction as following: 
+	
+	lea		rbx,[rel dsptch]
+	jmp 		qword [rbx+rax*8]
+
+What happens behiind the scenes is that the effective address in 'lea' is encoded relative to instrucion pointer, in a perfiectly position-independent manner. 
+But this is only part of the problem! 
+The issue is that in a .dll context, the "caseN" relocations will make their way to the final module and might have to be adjusted at .dll load time (specifically, when it can't be loaded at the perferred address). 
+When this occurs, pages with such relocations will be rendered private to current process, which kind of undermines the idea of a shared .dll . 
+But not to worry, it's trivial to fix: 
+
+		lea		rbx, [rel dsptch]
+		add		rbx, [rbx+rax*8]
+		jmp 		rbx
+		...
+	dsptch: dq		case0-dsptch
+		dq		case1-dsptch
+		...
+
+NASM version 2.03 and later provides another alternative, "wrt ... imagebase" operator, which returns an offset from base address of the current image, be it .exe or .dll module, hance the name. 
+For those acquainted with PE-COFF format, this base address denotes the start of the "IMAGE_DOS_HEADER" structure. 
+Here is how to implement a switch statment with these image-relative references: 
+
+		lea		rbx, [rel dsptch]
+
+		mov		eax, [rbx+rax*4]
+	
+		sub		rbx, dsptch wrt ...imagebase
+
+		add		rbx, rax
+
+		jmp 		rbx
+	
+		...
+
+	dsptch: dd		case0 wrt	...imagebase
+
+		dd		case1 wrt	...imagebase
+
+
+That said, the snippet before last works just fine with any NASM version and is not even Windows specific, which makes this operator unnescessary in this case. 
+The real reason for the 'wrt ...imagebase' operator will become apparent
+
+It should be noted the 'wrt ...imagebase' is defined as 32-bit operand only: 
+
+		dd		label wrt ...imagebase 			; ok 
+
+		dq		label wrt ...imagebase			; bad
+
+		mov		eax, label wrt ...imagebase		; ok
+
+		mov		rax, label wrt ...imagebase		; bad

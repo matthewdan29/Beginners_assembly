@@ -1,0 +1,2 @@
+When the linker lins the .O file prodcued from you in-progress .ASM file, it adds in the previously assembled .O files.
+The single executable file that the linker writes to disk contains the machine instructions and data items from all of the .O files that were handed to the linker when the linker was invoked. 

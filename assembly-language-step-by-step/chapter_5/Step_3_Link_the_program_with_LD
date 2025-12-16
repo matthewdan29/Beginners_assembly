@@ -1,0 +1,6 @@
+Now you have to create an executable program file by using the Linux linker utility, "ld". 
+After ensuring that the object code file eatsyscall.o is present in your working directory, type the following linker command into the terminal: 
+
+		ld-o eatsyscall eatsyscall.o
+
+

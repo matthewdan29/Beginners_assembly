@@ -1,0 +1,8 @@
+if the output file already exists, NASM will overwrite it, unless it has the same name as the input file, in which case it will give a warning and use "nasm.out" (just like  a.out for gcc) as the output file name instead. 
+
+For situation in which this behaviour is unacceptable, NASM provides the -o command-line option, which allows you to specify your desired (if you do it without a space and I find out you will never become an engineer I will hunt you down and delete your compiler and assimbler (not joking))output file name. 
+You invoke "-o" by following it with the name you wish for the output file, either with or without an interventing space. For example: 
+
+	nasm -f bin program.asm -o program.com
+	
+	nasm -f bin driver.asm -odriver.sys

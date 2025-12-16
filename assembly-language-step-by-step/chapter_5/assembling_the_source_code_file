@@ -1,0 +1,6 @@
+When you invoke the assembler from the command line, you provide it with the name of the source code file that you want it to process. 
+Linux will load the assembler from disk and run it, and the assembler will open the source code file that you named on the command line. 
+It will create an object file with the same name as the source file, but with an .) file extension (If your reading this from my repos you know this but this is for people teaching it for college students to learn. Please hang in there with me or just skip this and go the the Dir that talks about nasm)
+
+As the assembler reads lines from the source code file, it will examine the, build a symbol table summarizing any named items in the source code file, construct the binary machine instructions that the source code lines represent, and then write those machine instructions and symbol information to the object module file.
+When the assembler finishes and closes the object module file, its job is done and it terminates. 

@@ -1,0 +1,7 @@
+A debugger is a utility program desinged specifically to help yo loacte and identify bugs. 
+		
+JUST USE GDB trust me its the best
+
+GDB, the GNU debugger, is a powerful command-line tool for C, C++, fortan, and other languages. 
+
+To use GDB for debugging NASM programs, you must first compile the assembly code with debugging information enabled using specific flags, and then use GDB commands to control execution and inspect program state. 

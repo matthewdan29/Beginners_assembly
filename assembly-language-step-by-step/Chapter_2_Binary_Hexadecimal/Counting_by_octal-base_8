@@ -1,0 +1,18 @@
+Counting in octal starts out in a very familiar fashion: 1, 2, 3, 4, 5, 6, 7, 10.
+In octal, 10 comes after seven. 
+
+What DEC did not do was invent clever names for the column values. 
+The first column is, of course, the units column. 
+The next column to the left of the units column is the tens, column, just as it is in our own decimal system. 
+The convention in octal has always been to pronounce the numbers as we would in decimal, only with the word octal after them. 
+Each column in a given base has a value base times the column to its right, so the "tens" column in octal is actually the eights column. 
+The column to the left of the tens column is the hundreds column but the hundreds column actually has a value of 8 times8, or 64. 
+The next column to the left has a value of 64 times 8, or 512 and the column left of that has a value of 512 times 8, or 4096. 
+
+THis is why when someone talks about a value of "ten octal" they mean 8; "one hundred octal" means 64. 
+
+A digit in the first column indicates how many units are contained in the octal number. 
+A digit in the next column to the left, the tens column, indicates how many eights are contained in the octal number. 
+A digit in the third column, the hundreds column indicates how many 64s are in the number, and so on. 
+400 octal means that the number four 64s, which is 256 in decimal. 
+

@@ -1,0 +1,3 @@
+If you do not supply the -f option to NASM, it will choose an output file format for you itself. 
+In the distribution versioin of NASM, the default is always bin; if you've compiled your own copy of NASM, you can redefine of "_DEFAULT" at compile time and choose what you want the default to be. 
+Like '-o', the interventing space between '-f' and the output fille format is optional; so '-f elf' and '-felf' are both valid. (Again I'm not so nice If i find out you used '-felf' you will no longer be able to even use excel as a program! Yes if your learning under me you have very strick rules to follow and no I do not forgive (without a bribe LOL))

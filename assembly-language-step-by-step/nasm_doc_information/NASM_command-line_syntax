@@ -1,0 +1,25 @@
+To assemble a file, you issue a command of the form 
+
+		nasm -f <format> <filename> [-o <output>]
+
+For example 
+		nasm -f elf myfile.asm
+
+Will assemble myfile.asm into a 32-bit ELF object file myfile.o And 
+
+		nasm -f bin myfile.asm -o myfile.com
+
+will assemble myfile.asm into a raw binary file 'myfile.com'
+
+To produce a listing file, with the hex codes output from NASM displayed on the left of the orginal sources, use the -l options to give a listing file name, for example: 
+
+		nasm -f coff myfile.asm -l myfile.lst
+
+To get further usage instructions from NASM, try typing 
+		nasm -h
+
+The option --help is an alias for the -h option
+
+Like Unix compiler and assemblers, NASM is silent unless it goes wrong: you won't see any output at all, unless it gives error messages, 
+
+

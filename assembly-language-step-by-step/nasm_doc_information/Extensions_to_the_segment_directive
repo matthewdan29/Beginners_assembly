@@ -1,0 +1,7 @@
+The obj output format extends the SEGMENT (or section) directive to allow you to specify various properties of the segment you are defining. 
+This is done by appending extra qualifers to the end of the segment-definition line. 
+For example: 
+
+			segment code private align=16
+
+defines the segment code, but also declares it to be a private segment, and requires that the protion of it described in this code module must be aligned on a 16-byte boundary. 

@@ -1,0 +1,6 @@
+Addition and subtraction are basically the same as what we know in decimal, with a few extra digits tossed in for flavor.
+The trick is nothing more than knowing your addition tables up to 0FH. 
+This is best done bot by thinking to yourself, "Now, if C is 12 and F is 15, then C + F is 12 + 15, which is 27 decimal but 1Bh." Instead, you should simply think, "C + F is 1BH."
+
+It takes practice to learn to piano, and it takes practice to drive the core skills of assembly language programming down into your synapses where they belong. 
+

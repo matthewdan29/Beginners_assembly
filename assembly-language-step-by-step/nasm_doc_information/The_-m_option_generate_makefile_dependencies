@@ -1,0 +1,5 @@
+This option can be used to generate makefile dependices on stdout. 
+THis can be redirected to a file for futher processing. 
+For example: 
+
+	nasm -M myfile.asm > myfile.dep

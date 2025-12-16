@@ -1,0 +1,18 @@
+The EXPORT format-specific directive defines a global symbol to be exported as a DLL symbol, for use if you are writing a DLL in NASM. 
+You still need to declare the symbol as GLOBAL as well as using the EXPORT directive. 
+
+EXPORT takes one required parameter, which is the name of the symbol you wish to export, as it was defined in your source file. 
+An optional second parameter (separtaed by white space from the first) gives the external name of the symbol:  the name by which you wish the symbol to be known to programs using the DLL. 
+If this name is the same as the internal name, you make leave the second parameter off. 
+
+Further parameters can be given to define attributes of the exported symbol. 
+These parameters, like the second, are separted by white space. 
+If further parameters are given, the external name must also be specified, even if it is the same as the internal name. 
+
+
+For example: 
+
+		export	myfunc
+		export	myfunc TheRealMoreFormalLookingFunctionName
+		export	myfunc myfunc 1234	; export by ordinal 
+		export	myfunc myfunc resident parm=23 nodata

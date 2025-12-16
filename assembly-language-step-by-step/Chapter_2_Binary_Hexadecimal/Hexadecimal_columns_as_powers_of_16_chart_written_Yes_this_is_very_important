@@ -1,0 +1,18 @@
+HEXADECIMAL						POWER OF 16			DECIMAL
+
+1H							= 16^0 =			1 X 16 = 10H
+
+10H							= 16^1 = 			16 X 16 = 100H
+
+100H							= 16^2 = 			256 X 16 = 1000H
+
+1000H							= 16^3 = 			4096 X 16 = 10000H
+
+10000H							= 16^4 = 			65536 X 16 = 100000H
+
+100000H							= 16^5 = 			1048576 X 16 = 1000000H
+
+1000000H						= 16^6 = 			167772 ETC...
+
+Just as in octal, zero holds a place in a column without adding any value to the number as a whole. 
+The decimal values of each column are shown beneath the column, and the sum of all columns is shown in both decimal and hex

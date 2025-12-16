@@ -1,0 +1,14 @@
+With all of these single-column additions committed to memory, you can tackle multicolumn addition. 
+It works pretty mush the same way it does with decimall. 
+Add each column starting from the right, and carry into the next column anytime a single column's sum exceeds 0FH.
+
+Here's something you should take note of: 
+
+	"The most you can every carry out of a single-column addition of two numbers is 1"
+
+You will either carry a 1 out of a column, or carry nothing at all.
+The largest digit is 9, and 9 + 9 = 18. 
+Put down the 8 and carry the 1. 
+Even if you have to add in a carry from a previous column, that will bring you up to 19. 
+Again, you carry a 1 and no more. 
+This is important when you add numbers on paper, or within the silicon of your CPU. 

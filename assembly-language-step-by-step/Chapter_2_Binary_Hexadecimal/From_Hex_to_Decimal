@@ -1,0 +1,54 @@
+Converting hex numbers to decimal is a good deal easier than going the other way. 
+Derive the value represented by each individual column in the hex number, and then add all the column values in decimal. 
+The hex number is 7A2. 
+Start at the right column. 
+This is the units column in any number system. 
+You have 2 units, so enter 2 into your calculator. 
+Not store that 2 into memory. 
+Keep in mind that what you're really doing is keeping a running tally of values of  the columns in the hex number. 
+Move to the next column to the left. 
+Remember that  in the hex, each column represents a value 16 times the value of the column to its right, so the second column from the right is the 16s column. (Refer to "Hexadecimal_columns_as_powers_of_16_chart_written_Yes_this_is_very_important" text if you lose track of the column values.) 
+The 16s column has a A in it. 
+A in hex is decimal 10. 
+The total value of that column, therfore, is 16 X 10, or 160. 
+Perform that multiplication on your calculator and add the product to the 2 that you stored in memory. 
+
+Remember what you're doing: evaluating each column in decimal and keeping a running total. 
+Now move to the thrid column from the right. 
+This one contains a 7. 
+The value of the third column is 16 X 16, or 256. 
+Multiply 256 X 7 on your calculator, and add the product to your running total. 
+Retrieve the running total from your calculator memory. 
+The total should be 1954, which is the decimal equivalent of 7A2H. 
+
+Try C6F0DBH: 
+
+	1) Evaluate the units column. B X 1 = 11 X 1 = 11. 
+
+	2) Evaluate the 16s column. D X 16 = 13 X 16 = 208. Add 208 to your running total
+
+	3) Evaluate the 256s column. 0 X 256 = 0. 
+
+	4) Evaluate the 4096s column. F X 4096 = 15 X 4096 = 61440. 
+
+	5) Evaluate the 65536s column. 6 X 65536 - 393216. 
+
+	6) Evaluate the 1048,576s column. C X 1048576 = 12 X 1048578 = 12582912. 
+
+The running total should be 13037383
+
+Finaly the number: 1A55BEH. 
+
+	1) 14 X 1 = 14
+
+	2) Next is the 16's place. 11 X 16 = 176.
+
+	3) Next is the 16 X 16 = 256s place.  16 X 16 = 256, 256 X 5 = 1280
+
+	4) Next is the 16 X 16 X 16 = 4096s place. 16 X 16 X 16 = 4096, 4096 X 5 = 20480
+
+	5) Next is the 16 X 16 X 16 X 16 = 65536s place. 16 X 16 X 16 X 16 = 65536, 65536 X 10 = 655360 
+
+	6) Next is the 16 X 16 X 16 X 16 X 16 = 1048576s place. 16 X 16 X 16 X 16 X 16 = 1048576, 1048576 X 1 = 1048576
+
+	7) Next you have to add all the values up into 1 sum. It equals 1725886

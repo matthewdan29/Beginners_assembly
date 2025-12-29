@@ -1,0 +1,17 @@
+A named data item that you've defined in your .data or .bss sections, like the 'HexStr' variable from the hexdump1 program 
+
+	mov eax, [HexStr]
+
+What is placed in EAX here is the address given to the variable 'HexStr' when the program is loaded into memory. 
+Like all addresses, it's just a number, but it's determined at runtime rather than at assembly time, as a literal constant numberic address would be. 
+
+A lot of beginners get confused when they see what looks like two displacement terms between the brackets in a single address. 
+The confusion stems from the fact that if NASM sees two (or more) constant values in a memory reference, it will combine them at assembly time into a single dispalcement value. 
+That's what's done below: 
+
+	mov eax, [HexStr+3]
+
+The addresss referred to symbolically by the variable named 'HexStr' is simply added to the literal constant 3 to form a single displacement value. 
+The key characteristic of a displacement term is that it is not in a register. 
+
+

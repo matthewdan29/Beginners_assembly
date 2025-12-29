@@ -1,0 +1,18 @@
+The x86 stack (and most other stack in other computer architectures) is like a old country buffey plate holder.
+Its called LIFO, first in last out, stack. 
+We push chunks of data onto the top of the stack, and they remain on the stack until we pull them off in reverse order. 
+
+The stack doesn't exist in some separate alcove of the CPU. 
+It exists in ordinary memory, and in fact what we call "the stack" is really a way of managing data in memory. 
+The stack is place where we can tuck away one or two 32-bit dounle words for the time being, and come back to them a little later. 
+its primary virtue is that it does not require that we give the stored data a name. 
+We put that data on the stack, and we retieve it later not by its memory address but by its postion. 
+
+When we place something on the stack, we say that we push it; when we retrieve something from the stack, we say that we pop it. 
+The stack grows or shrinks as data is pushed onto it or popped off of it. 
+The most recently pushed item on the stack is said to be at the "top of the stack"
+In the x86 architecture, the top of the stack is marked by a register called the "stack pointer" with the formal name ESP. 
+It's a 32-bit register, and it holds the memory address of the last item pushed onto the stack. 
+
+
+I use the Old country buffey because after mask on the SOUTH SIDE OF CHICAGO my dad would take most of my family even my oldest sister to eat there. LOL Thats how i got super big plus having genes of a heighweight boxer helped a little bit IDK LOL

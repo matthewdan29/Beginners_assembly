@@ -1,0 +1,18 @@
+In assembly lang we can work with both signed and unsigned numeric values. 
+SIgned values, of course, are values that can become negative. 
+An unsigned value is always positive. 
+There are instructions for the four basic arithmetic operations in the x86 instruction set, and these instructions can operate on on both signed and unsigned values. (with multiplication and division, there are separate instructions for signed and unsigned calculations)
+
+The key to understanding the differnece between signed and unsigned numeric values is knowing where the CPU puts the sign. 
+Its not a dash character, but acctually a bit in the ninary pattern that represents the number. 
+The highest bit in the most significant byte of a signed value is the sign bit. 
+If the sign bit is a 1-bit, the number is negative. 
+If the sign bit is a 0 bit, the number is positive. 
+
+Keep in mind through all of this that whether a given binary pattern represnts a signed or an unsigned arithmetic, that high bit of a register value or memory location is considered the sign bit. 
+If you do not intend to perform signed arithmetic, then high bits of the very same values in the very same places will simply be the most significant bits of unsigned values. 
+The signed nature of a avlue lies in how you treat the value, and not in the nature of the underlying bit pattern that represents the value. 
+
+For example, does the binary number 10101111 rewpresent a signed value or unsigned value? 
+The question is meaningless withouut context: if you need to treat the value as a signed value, you treat the high-order bit as the sign bit, and the value is -81. 
+If you need to treat the value as a unsigned value you treat the high bit as just another digit in a binary number and vaule is 175

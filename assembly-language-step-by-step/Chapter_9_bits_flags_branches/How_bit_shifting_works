@@ -1,0 +1,13 @@
+Understanding the shfit instruction requires that you think of numbers being shfited as binary numbers.
+A simpel example would start with register AX containing a value of 0B76FH. 
+Expressed as a binary number, 0B76FH is as follows: 
+
+		1011011101101111
+
+Keep in mind that each digit in a binary number is one bit. 
+If you execute an 'SHL' 'AX', 1 instruction, what you'd find in AX after the shift is the following: 
+
+		0110111011011110
+
+A 0 has been insterted at the right-hand end of the number, and the whole number has been bumped toward the left by one digit. 
+Notice that a 1 bit has been bumped off the left end of the number

@@ -1,0 +1,22 @@
+The register EAX is 32 bits in size. 
+However, you can address the least significant byte of EAX as AL. 
+AL is one byte in size, and by using AL you can bring back the first byte of "EatMsg" this way: 
+
+		mov al, [EatMsg]
+
+AL, of course is contained within EAX - its not separate register. 
+But the name "AL" allows you to fetch only one byte at a time from memory. 
+You can perform a similar trick using the name AX to refer to the lower 2 bytes (16 bits) of EAX: 
+
+		mov ax, [EatMsg]
+
+This time, the characters "E" and "a" are read from memory and placed in the two least significant bytes of EAX. 
+Where the size issue gets tricky is when you write data in a register out to memory. 
+
+You have to tell NASM how many bytes of data to move. 
+This is done by the "size specifier".
+For example: 
+		mov [EatMsg], byte 'G'
+
+Here, you tell NASM that you only want to move a single byte out to memory by using the "BYTE" size specifier. 
+Other size specifiers include "WORD" (16 bits) and "DWORD" (32 bits)

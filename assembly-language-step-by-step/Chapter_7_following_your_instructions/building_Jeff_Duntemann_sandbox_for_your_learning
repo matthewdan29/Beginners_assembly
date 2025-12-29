@@ -1,0 +1,13 @@
+In Jeff duntemann personal prospective, a sandbox is a program intended to be run only in a debugger(I disagree I look at it as a standalone app for personal use like a project but this is a great idea). 
+If you want to see what effects an instrucion has on memory or one of the registers, single-stepping it in Insight will show you vividly. 
+The program doesn't need to return visible results on the command line. 
+It simply has a contain correctly formed instructions. 
+
+In practice, the sandbox idea works this way: you create a makefile that assembles and links a program called sandbox.asm. 
+You create a minimal NASM program in source code and save it to disk as "newsandbox.asm" 
+Anytime you want to play around with machine instructions, you open "newsandbox.asm" and save it out again as "sandbox.asm" and save it out again as "sandbox.asm", overwriting any earlier version of sandbox.asm that may exist. 
+You can add instructions for observation, and use the Linux make utility to generate an executable. 
+Then you load the executable into Insight and execute the instructions one at a time, carefully watching what each one does in the various Insight views. 
+
+It's possible that your experiments will yield a useful combination of machine instructions that's worth saving. 
+In that case, save the snadbox file out as experiment1.asm and you can build that sequence into a "real" program whenever you're ready. 

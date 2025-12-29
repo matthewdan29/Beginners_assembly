@@ -1,0 +1,26 @@
+Labels are used to indicate the places where jump instructions should jump to, and they give names to callable assembly language procedures. 
+
+Here are the most important things to know about labels: 
+
+	A) Labels must begin with a letter, or else with an underscore, period, or question mark. These last three have special meanings to the assembler, so don't use them until you know how NASM interprets them. 
+
+	B) Labels must be followed by a colon when they are defined. 
+
+	C) Labels are case sensitive. 
+
+THe following machine instruction transfers the flow of instruction execution to the location marked by the label "GoHome:"
+
+			jmp GoHome
+
+The colon is only placed where the label is defined, not where it is referenced. 
+Think of it this way: use the colon when you are marking a location, not when you are going there. 
+
+The "_start" label indicates where the program begins. 
+Every Linux assembly language program has to be marked this way, and with the precise label "_start". 
+
+Furthermore, this label must be marked as global at the top of the .text section, as shown. 
+
+This is a requirement of the Linux operating system. 
+Every executable program for Linux has to have a label "_start" in it somewhere, irrespective of the language it's written in: C, Pascal, assembly, no matter.. 
+If the Linux loader can't find the label, it can't load the program correctly. 
+The "global" specifier tells the linker to make the "_start" label visible from outside the program's borders. 

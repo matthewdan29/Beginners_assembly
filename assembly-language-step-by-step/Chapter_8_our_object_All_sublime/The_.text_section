@@ -1,0 +1,3 @@
+The actual machine instructions that make up your program go into the .text section. 
+The .text section contains symbols called labels that identify loactions in the program code for jumps and calls. 
+All global labels must be decleared in the .text section, or the labels cannot be "seen" outside your program by the linker or the loader (linux or windows IDK about mac but pretty sure also)

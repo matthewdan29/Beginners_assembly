@@ -1,0 +1,18 @@
+Data stored inside a CPU register is known as register data, and accessing register data directly is an addressing mode called register addressing. 
+Register addressing is done by simply naming the register you want to work with 
+Here are som entirely legal examples of register data and register addressing: 
+
+	mov	ebp,	esi	; 32-bit
+
+	mov 	bl,	ch	; 8-bit
+
+	add 	di,	ax	; 16-bit
+
+	add	ecx, 	edx	; 32-bit
+
+The last tow examples point up the fact that we're not speaking only of the MOV instrucition here
+The ADD instruction, adds the source and destination operands. 
+The sum replaces whatever was in the destination operand. 
+Irrespective of the instruction, register addressing happens any time data in a register is acted on directly. 
+
+

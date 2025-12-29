@@ -1,0 +1,31 @@
+Immediate data is built right into its own machine instruction. 
+Register data is stored in one of the CPU's collections of internal registers. 
+In constrast, "memory data" is stored somewhere on disk of system memory owned by a program at a 32-bit memory address. 
+
+Only one of an instruction's two operands may specify a memory location. 
+You can move an immediate value to memory, or a memory value to a register, or some other similar combination, but you can;t move a memory value directly to another.
+
+To specify that you want the data at the memory location contained in a register, rather than the data in the register itself, you use square brackets around the name of the register. 
+To move the word in memory at the address contained in EBX into register EAX, you would use the following instruction: 
+
+		mov eax, [ebx]
+
+The square brackes may contain more than the name of a single 32-bit register. 
+For eample you can add a literal constant to a register within the brackest, and NASM will do the math: 
+
+		mov eax, [ebx+16]
+
+The same with adding two general-purpose registers, like so: 
+
+		mov eax, [ebx+ecx]
+
+And, as if that weren't enough, you can add two registers plus a literal constant: 
+
+		mov eax, [ebx+ecx+11]
+
+At the current evolution of the x86 hardware, two registers may be added together to form the effective address, but not three or more. 
+The following are not legal effective address forms: 
+
+		mov eax, [ebx+ecx+edx] ; this is invalid
+
+		mov eax, [ebx+ecx+esi+edi] ; this is invalid

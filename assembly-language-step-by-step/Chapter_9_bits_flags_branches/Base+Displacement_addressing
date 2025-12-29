@@ -1,0 +1,7 @@
+A simple and common addressing scheme is Base + Displacement, and It is demonstrated in the hexdump1 program. 
+The instruction that inserts an ASCII character into the output line looks like this: 
+
+	mov byte [HexStr+edx+2]
+
+This is a perfect example of a case where there are two displacement terms that NASM combines into one. 
+The variable name 'HexStr' resolves to a number (the 32-bit address of 'HexStr') and it is easily added to the literal constant 2, so there is actually only one base term (EDX) and one displacement term. 

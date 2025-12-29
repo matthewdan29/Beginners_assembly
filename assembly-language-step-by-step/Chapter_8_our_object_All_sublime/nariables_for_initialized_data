@@ -1,0 +1,17 @@
+The identifier "EatMsg" in the .data section defines a variable. 
+Specifically, "EatMsg" is a string variable, but as with all cariables, its one of a class of items called "initialized data": something that comes with a value, and not just a box into which we can place a value at some future time. 
+A variable is defined by associationg an identifier with a "data definition directive". 
+Data definition directives look like this: 
+
+		MyByte		db	07h		; 8 bits in size
+
+		MyWord 		dw	0FFFFh		; 16 bits in size 
+
+		MyDouble	dd 	0B00000h	; 32 bits in size
+
+Think of the "DB" directive as "Define Byte". 
+"DB" sets aside one byte of memory for data storage. 
+Think of the "DW" directive as "Define Word". 
+"DW" sets asisde one word (16 bits, or 2 bytes) of memory for data storage. Thik of the "DD" directive as "Define Double"
+"DD" sets aside a double word in memory for storage, typically for full 32-bit memory addresses. 
+

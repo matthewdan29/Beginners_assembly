@@ -1,0 +1,4 @@
+Dealing with bits requires that we have a way of specifying which bits we're dealing with. 
+By convention, bits in assembly languafe are numbered, starting from 0, at the 'least-significant bit' in the byte, word, or other item we're using as a bitmap. 
+The least-significant bit is the one with the least value in the binary number system.
+It's also the bit on the far right if you write the value down as a binary number in the conventional manner. 

@@ -1,0 +1,29 @@
+"Mul" very helpfully sets the Carry flag (CF) when the value of the product overflows the low-order register. 
+If, after a "MUL", you find CF set to 0, you can ignore the high-order register. 
+
+This is worth a quick sand sandbox demonstration. 
+First try a "small" multiplication for which the product will easily fit in a single 32-bit register: 
+
+	mov eax, 447
+
+	mov ebx, 1739
+
+	mul ebx
+
+Ste through the three instructions, and after the "MUL" instruction has executed, look at the Registers view to see the product in "EDX" and "EAX". 
+"EAX" contains 777333, and "EDX" contains 0. 
+Now type info reg in the console view and look at the current state of the various flags. 
+CF has cleared to 0. 
+
+Next, add the following instructions to your sandbox, after the three shown in the proceding example: 
+
+		mov eax, 0FFFFFFFh
+		
+		mov ebx, 03B72h
+
+		mul ebx
+
+Step through them as usual, watching the contents of "EAX", "EDX", and "EBX" in the Registers view. 
+After the "MUL" instruction, type "info reg" in the Console view once more. 
+The Carry flag (CF) has been set to 1. 
+(so have th overflow flag, OF, Sign flag, SF, and Parity flag, PF but thoses are not generally useful in unsigned arithmetic)

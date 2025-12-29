@@ -1,0 +1,60 @@
+One mistake beginners sometimes commit is assuming that you can make a value negative by setting the sign bit to 1. 
+You can simply take the value 42 and make it -42 by setting the sign bit. 
+The value you get will certainly be negative, but it will not be -42.
+
+On way to get a sense for the way negative numbers are expressed in assembly language is to decrement a positive number down into negative territory. 
+Bring up a clean sandbox and enter these instructions: 
+
+		mov eax, 5 
+
+	DoMore: dec eax
+
+		Jmp DoMore
+
+Build the sandbox as susal and load the executable into GDB. 
+If you're sharp you'll notice that there's no way out of this particular sequence of instructions, and yes, this is the legendary "endless loop" that you'll fall into now and then. 
+
+Therefore, make sure you set a breakpoint on the initial "MOV" instruction, and don't just let the program rip. 
+Without breakpoints, what you'll see is the GDB "running text" say stop. 
+When you see the stop you'll know that the program is not paused for stepping, but is running freely. 
+
+Start single-stepping the sandbox and watch EAX in the registers view. 
+If you keep on decrementing EAX, you'll get a sense for what happens and so on. 
+When negative numbers are handled in this fashion, it is called "two complement".
+In x86 assembly language, negative numbers are stored as the two's complement form of their absolute value.
+This is relatively easy for the CPU, and it all happens transparently to your programs, where subtraction is done about the way you'd expect 
+
+There is a machine instruction that will do it for you: "NEG".
+The "NEG" instruction will take a positive value as its operand, and negate that value - that is, make it negative. 
+It does so by generating the two's complement form of the positive value. 
+Load the following instructions into a clean sandbox.asm and single-step them in GDB. 
+Watch EAX in the registers view: 
+
+		mov eax, 42
+
+		neg eax
+
+		add eax, 42
+
+In one swoop, 42 becomes 0FFFFFFD6h, the two complement hexadecimal expression of -42. 
+Add 42 to this value, and watch EAX go to 0
+
+At this point the question may arise: 
+What are the largest pos and neg numbers that can be expressed in one, two, or four bytes? Those two values, plus all the values in between constitute the range of a value expressed in given number of bits. 
+
+You can watch this happen by execyting the following two instructions in a sandbo:
+
+		move eax, 07FFFFFFh
+
+		inc  eax
+
+
+By default, GDB shows all register values in the hex.
+
+The threeformats work this way: 
+
+	A) Hexadecimal format presents the value in hex 
+
+	B) Decimal format presents the value as a signed value, treating the high bit as the sign bit
+
+	C) Unsigned format presents the value as an unsigned value, treating the high bit as just another binary bit in the number as a whole

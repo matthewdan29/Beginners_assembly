@@ -1,0 +1,12 @@
+There is a bewildering array of jump instruction mnemonics, but those dealing with arithmetic relationships sort out well into just six categories, one category for each of the six preceding conditions. 
+Complication arises from the fact that there are two nmemonics for each machine instruction - for example, 'JLE' (Jump if Less than or Equal) and 'JNG' (Jump if not Greater Than). 
+These two nmemonics are synonyms in that the assembler generates the identical binary opcode when it encounters either mnemonic. 
+The synonyms are a convenience to you, the programmer, in that they provide two alternate ways to think about a given jump instruction. 
+In the preceding example, 'jump if less than or equal too' is logiclly identical to 'Jump if not greater than'. 
+Another complication is that there is a separate set of instructions for signed and unsigned arithmetic comparisons. 
+A signed quantity is one in which the high bit of the quantity is considered a built-in flag indicating whether the quantity is negative. 
+If that bit is 1, then the quantity is considered negative. 
+If that bit is 0, then the quantity is considered positive. 
+All you need know to get a high-level understanding of signed arithmetic is that in signed arithmetic, negative quantities are legel and the most significant bit of a value is treated as the sign bit. (if the sign bit is set to 1, then the value is considereed negative.)
+
+Unsigned arithmetic, on the other hand, does not recognize naegative numbers, and the most significant bit is just one more bit in the binary number expressed by the quantity. 

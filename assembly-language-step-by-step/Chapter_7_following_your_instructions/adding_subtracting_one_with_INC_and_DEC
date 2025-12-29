@@ -1,0 +1,23 @@
+Several x86 machine instructions come in pairs. 
+Simplest among those are the "INC" and "DEC", which increment and decrement an operand by one, respectively. 
+Adding one to soemthing or subtracting one from something are actions that happen a lot in computer programming. 
+If you're counting the number of times that the program is executing the loop or counting bytes in the table or doing something that advances or retreats one count at a time, "INC" or "DEC" can be very quick ways to make the actual addition or subtraction happen. 
+
+Both "INC" and "DEC" take only one operand. 
+An error will be flagged by the assembler if you try to use either "INC" or "DEC" with two operand, or without any operands 
+
+Try both by adding the following instructions to your sandbox. 
+Build the sandbox as usal, load the executable into GDB and step through it: 
+
+		mov eax, 0FFFFFFFFh
+		
+		MOV ebx, 02Dh
+
+		dec ebx
+
+		inc eax
+
+Watch what happens to the EAX and EBX registers. 
+Decrementing EBX prdictably turns the value 2DH into value 2CH. 
+Incrementing 0FFFFFFFh, on the other hand rolls over the EAX register to 0, becaus 0FFFFFFFH is the largest unsigned value that can be expressed in a 32-bit reg. 
+Adding 1 to it rolls it over to zero, just as adding 1 to 99 rolls to 100

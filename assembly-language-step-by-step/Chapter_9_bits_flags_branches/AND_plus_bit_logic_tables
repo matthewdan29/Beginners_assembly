@@ -1,0 +1,25 @@
+The AND truth table for Formal Logic.
+
+CONDITION1			OPERATOR			CONDITION2 		RESULT
+
+  False				   AND				   False		   False
+
+  False 			   AND				   False 		   False 
+
+  True				   AND				   False 		   False 	
+  
+  True 				   AND				   True 		   True
+
+
+
+The AND Truth Table for Assembly Language 
+
+BIT 1				OPERATOR			BIT 2			RESULT BIT
+
+0				AND				0			0
+
+0				AND				1			0
+
+1				AND				0			0
+
+1				AND				1			1

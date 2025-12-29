@@ -1,0 +1,17 @@
+'BT' (Bit Test) performs a very simple task: it copies the specified bit from the first operand into the Carry flag (CF). 
+
+'BT' is easy to use. 
+It takes two operands:  the destination operand is the value containing the bit in question; the source operand is the ordinal number of the bit that you want to test, counting from 0: 
+
+	bt <value containing bit>, <bit number>
+
+Once you execute a 'BT' instruction, you should immediately test the value in the Carry flag and branch based on its value. 
+Here's an example: 
+
+	bt eax, 4		; Test bit 4 of AX
+
+	jnc quit		; We're all done if bit 4 = 0
+
+The 'BT' instruction is pretty slow as instructions go - and bit-bangingn is often something you do a great many times inside tight loops, where instruction speed can be significant. 
+
+Creaky old 'TEST' is mush faster, but 'TEST' only tests for 1 bits. 

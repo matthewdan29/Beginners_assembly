@@ -1,0 +1,4 @@
+The single most common activity in assembly language work is getting data from here to there. 
+There are several specialized ways to do this, but only one truly general way: The "mov" instruction. 
+"MOV" can move a byte, word(16 bits), or double word (32 bits) of data  from one register to another, form a register into memory, or from memory into a register. 
+What "mov" cannot do is move data directily from one address in memory to a different address in memory. (To do that, you need two separate MOV instructions one from memory to a register, and another from that register back out to memory.)

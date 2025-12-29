@@ -1,0 +1,9 @@
+The command: 
+
+		info reg
+
+	Gdb's "info" command displays the current status of something, and the "reg" parameter tells Gdb that we want to look at the current state of the registers. 
+You get more than EFlags. 
+By defualt, all of the general-purpose registers and the segment registers are displayed. 
+The math processor registers will not be, and that's good for our purposes. 
+

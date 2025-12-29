@@ -1,0 +1,42 @@
+There are quite a few conditional jump instructions. 
+Their number is increased by the fact that almost every conditional jump instruction has an alter ego: a jump when the specified condition is not set to 1. 
+
+The 'JZ' instruction provieds a good example of jumping on a condition. 
+'JZ' jumps to a new location in the code segment if the Zero flag (ZF) is set to 1. 
+'JZ''s alter ego is 'JNZ' (Jump if Not Zero). 
+'JNZ' jumps to a label if ZF is 0, and falls through if ZF is 1. 
+
+This may be confusing at first, because 'JNZ' jumps when ZF is equal to 0. 
+Keep in mind that the name of the instruction applies to the condition being tested and not necessarily the binary bit value of the flag. 
+In the previous code example, 'JZ' jumped when the 'DEC' instruction decremented a counter to zero. 
+The condition being tested is something connected with an earlier instrucion, not simply the state of ZF.
+
+Think of it this way: a condition raises a flag. 
+"Raising a flag" means setting to 1. 
+When one of numerous instruction forces an operand to a value of zero, the Zero flag is raised. 
+The logic of the instruction refers to the condition, not the flag. 
+
+As an example, lets improve the littel loop shown earlier(Jeff words) by changing the loop logic to use 'JNZ': 
+
+	mov word [RunningSum], 0	; Clear the running total 
+	
+	mov ecx, 17			; We're going to do this 17 times
+
+WorkLoop: 
+	add word [RunningSum], 3	; Add three to the running total
+
+	dec ecx				; SUbtract 1 from the loop counter
+
+	jnz WorkLoop			; If the counter is zero, we're done!
+
+THe 'JZ' instruction has been replaced with a 'JNZ' instruction. 
+That makes much more sense, since to close the loop we have to jump, and we only close the loop while the counter is greater than 0. 
+The jump back to label 'WorkLoop' will happen only while the counter is greater than 0. 
+
+Once the counter decrements to 0, the loop is considered finished. 
+'JNZ' falls through, and the code that follows the loop executes. 
+The point is that if you can position the program's next task immediately after the 'JNZ' instruction, you don't need to use the 'JMP' instruction at all. 
+Instruction execution will just flow naturally into the next task that needs performing. 
+The program will have a more natural and less convoluted top-to-bottom flow and will be easier to read and understand. 
+
+

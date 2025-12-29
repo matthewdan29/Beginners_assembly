@@ -1,0 +1,38 @@
+The "MOV EAX, 42h" instruction in the "MOV CHART FILE" is a good example of using what is called immediate data, accessed through an addressing mode called immediate addressing. 
+Immediate addressing gets its name from the fact that the item being addressed is data built right into the machine instruction itself.
+
+Immediate data is always right inside the instruction being fetched and executed. 
+Immediate data must be of an appropriate size for the operand. 
+You can't move a 16-bit immediate value into an 8-bit register section such as AH or DL. 
+NASM will not allow you to assemble an instruction like this: 
+
+		mov cl, 067EFh
+
+
+CL is an 8-bit register, and 067EFh is a 16-bit quantity. won't go 
+Because its built right into a machine instruction, you might think that immediate data would be quick to access. 
+This is true only to point: feching anything from memory takes mor time then feching
+
+Also keep in mind that only the source operandmay be immediate data. 
+The destination operand is the place where data goes, not where it comes from. 
+Because immediate data consists of literal constants, trying to copy comething into immediate data.
+
+NASM allows some interesting forms of immediate data. 
+For example, the following is perfectly legal, if not necessarily as useful as it looks at first glance: 
+
+		mov eadx, 'WXYZ'
+
+THis is good instruction to load into your sandbox and execute in the debugger. 
+Look at the contents of register EAX in the registers view: 
+
+		0x5a95857
+
+This may seem weird, but look close: the numeric equivalents of the uppercase ASCII characters W,X,Y, and Z have been loaded nose-to-tail into EAX. 
+Each character equivalent is 8 bits in size so four of them fit snuggly into 32-bit register EAX. 
+However... they are backwords. 
+
+The concept of "endianness".
+The x86 architecture is "little endian" meaning that the least significant byte in a multibyte sequence is stored at the lowest address. 
+This applies to registers as well, and make sense once you understand how to refer to units of storage within a register. 
+
+

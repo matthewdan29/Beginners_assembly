@@ -1,0 +1,7 @@
+Again this is something ever programmer should know by heart. 
+
+From out first complete but detailed-challenged statement of the solution, we move toward a more detailed statement of the solution. 
+We do this by defining the pseudo-code statements so that each is more specific about how the action being described is to be done. 
+We repeat this process, adding more details every time, until what we have can be readily translated into actual assembly language instructions. 
+This process, called "Successive refinement" is not specific to assembly language. 
+Its used with all programming languages to one degree or another but it works especially well for assembly. 

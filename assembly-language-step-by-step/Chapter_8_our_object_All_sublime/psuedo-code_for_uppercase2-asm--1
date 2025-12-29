@@ -1,0 +1,7 @@
+Read: set up registers for the "sys_read" kernel call. Call "sys_read" to read a buffer full of characters form stdin Call "sys_read" to read a buffer full of character from stdin. Test for EOF. If we're at EOF jump to Exit 
+
+SCAN: Set up registers as a pointer to scan the buffer. Test the character at buffer pointer to see if it's lowercase. If its not a lowercase character, skip conversion. Convert the character to uppercass by subtracting 20th. Decrement buffer pointer. If we still have characters in the buffer jump to scan. 
+
+Write: Set up registers for the Write Kernel Call. Call "sys_write" to write the processed buffer to stdout. Jump back to Read and get another buffer full of Characters 
+
+Exit: Set up registers for terminating the program via "sys_exit" Call sys_Exit

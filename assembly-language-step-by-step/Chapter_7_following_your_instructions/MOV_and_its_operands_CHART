@@ -1,0 +1,19 @@
+Machine          			Destination 		Source			Operand Notes
+Instruction				Operand			Operand			
+
+Move					EAX, 			42h			Source is immediate data
+
+
+MOV					EBX, 			EDI			Both are 32-bit register
+
+
+MOV 					BX, 			CX			Both are 16-bit register
+
+
+MOV					DL, 			BH			Both are 8-bit register
+
+
+MOV 					[EBP],			EDI			Destination is 32-bit memory data at the address stored in ebp
+
+
+MOV					EDX, 			[ESI]			Source is 32-bit memory data at the address stored in ESI

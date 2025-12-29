@@ -1,0 +1,34 @@
+Assembly-time calculation: 
+
+	Estimates how long it takes to build a product, often using methods like Boothroyd-Dewhurst (tables for handling/insertion), Design for Assembly (DFA)(analyzing part count/complexity), or cycle time formulas (net time/ units produced), incoporating factors like part handling, insertion difficulty, and workstation efficiency to find bottlenecks, balcne lines, or plan production. Adcanced methods use ANN (Artificial Neural Networks) for automated estimation for design data, while basic calculations use manual observation and part counts. 
+
+		KEY METHODS & FORMULAS
+			
+			A) Cycle Time: The most basic metric
+
+				1) cycle Time = net production time / Number of good units
+
+				2) Net production Time excludes planned breaks but includes downtime; Planned production time excludes breaks
+
+			B) Boothroyd-Dewhurst Method: Uses tables to assign time values for handling and inserting each part, summing them for total time. 
+
+			C) Design for assembly (DFA): Focuses on reducing part count and simplifying assembly, often using checklists or software to assign time based on part characteristics. 
+
+			D) Assembly Line Balancing: Divides tasks among workstations to minimize idle time, often using the "Sum of Task Times / Cycle Time" to find the theoretical minimum workstations
+
+					(Only listing advanced methods because thats where I got the most experince in)
+
+			Advanced & Digital Methods
+
+				1) Software tools: Programs like "HSI GmbH's HSmont" use Bill of Materials (BOM) data to automate time assignment. 
+
+				2) Machine Learning: ANNs are trained on existing data to predict assembly times from geometric features, reducing manual input. 
+
+
+	Key Considerations: 
+
+		1) Objective: is it for line balancing, cost estimation, or quoting?
+
+		2) accuracy vs speed: Simple methods are faster; complex ones (ANNs) offer better accuracy but require data 
+
+		3) include/exclude time: be clear about planned stops (breaks, maintence) vs. uplanned downtime (failures) in your definitions. 

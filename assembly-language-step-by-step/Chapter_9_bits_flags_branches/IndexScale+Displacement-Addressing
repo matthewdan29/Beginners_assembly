@@ -1,0 +1,39 @@
+Base + Index addressing is what you'll typically use to scan through a buffer in memory byte by byte, but what if you need to access a data item in a buffer or table where each data item is not a single byte, but a word or a double word? 
+This requires slightly more powerful memory addressing mechinery. 
+As a side note here, the word array is a general term for buffer or a table. 
+Other writers may call a table an array, especially when the context of the discussion is a high-level language, but all three terms cook down to the same definition: a sequence of data items in memory, all of the same size and same interal definitioin. 
+In the programs show so far, theres only been simple tables and buffers consisting of a sequence of one-byte values all in a row. 
+The 'Digits' table in the hexdump1 program is such a table: 
+
+	Digits: db "0123456789ABCDEF"
+
+It's 16 single-byte ASCII characters in a row in memory. 
+You can access the "C" character with 'Digits' this way, using Base + Displacement addressing: 
+
+	mov ecx, 12
+	mov edx, [Digits+ecx]
+
+What if you have a tabkle containing 32-bit values?
+Such a tabel is easy enough to define: 
+
+	Sums: dd "15, 12, 6, 0, 21, 14, 4, 0, 0, 19"
+
+The DD qualifier tells NASM that each item in the table 'Sums' is a 32-bit double word quantity. 
+The literal constants plus a numeric value into each element of the table. 
+The address of the first element (here, 15) in 'Sums' is just the address of the table as a whole, contained in the varibale 'Sums'. 
+
+What is the address of the second element, 12? 
+And how do you access it from assembly code?
+Keep in mind that memory is addressed byte by byte, and not double word by double word. 
+The second entry in the table is at an offset of four bytes into the table. 
+If you tried to reference the second entry in the table using an address [Sums + 1], you would get one of the bytes inside the first table element's double word, which would not be useful. 
+
+This is where the concept of 'scaling' comes in. 
+An address may include a scale term, wheich is a multiplier and may be any of the literal constants 2, 4, or 8. 
+THe product of the index and the scale terms is added to the displacement to give the effecgtive address. 
+This is known as the Index * Scale + Displacement addressing scheme. 
+
+Typically, the scale term is the size of the individual elements in the table. 
+If your table consists of 2-byte word values, the scale would be 2. 
+If your table consists of 4-byte double word values, the scale would be 4. 
+If your table consists of 8-byte quad word values, the scale would be 8. 

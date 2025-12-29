@@ -1,0 +1,9 @@
+MACHINE				EXPLICIT		IMPLICIT OPERAND 		IMPLICIT OPERAND
+INSTRUCTION			OPERAND			(FACTOR 2)			(PRODUCT)
+				(FACTOR 1)
+
+mul				r/m8			AL				AX
+mul 				r/m16			AX				DX and AX
+mul 				r/m32			EAX				EDX and EAX
+
+

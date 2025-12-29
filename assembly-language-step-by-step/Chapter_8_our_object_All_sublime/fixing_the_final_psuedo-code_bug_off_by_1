@@ -1,0 +1,71 @@
+; Set up the registers for the convert buffer step: 
+	
+	mov ecx, esi			; Place the number of bytes read into ecx
+
+	mov ebp, Buff			; Place address of the buffer into ebp
+
+	dec ebp				; Adjust address of buffer by 1
+
+; Go through the buffer and convert lowercase to uppercase characters: 
+
+	scan: 	
+
+		cmp byte [ebp+ecx], 61h	; Test input char against lowercase 'a'
+
+		jb Next 		; If below 'a' in ASCII, not lowercase 
+
+		cmp byte [ebp+ecx], 7Ah	; Test input char against lowercase 'z'
+
+		ja Next 		; if above 'z' in ASCII, not lowercase 
+
+					; At this point, we have a lowercase char
+
+		sub byte [ebp+ecx], 20h	; Subtract 20h to give uppercase...
+
+	Next:	dec ecx	
+
+		jnz Scan
+
+
+The first time through, the value in ECX is the count of characters in the buffer. 
+The sum EBP+ECX points at the EOL character at the buffer's end. 
+The next time through, ECX is decremented to 6, and EBP+ECX points at the "o" in "gazabo". 
+Each tim ewe decrement ECX, we look at the Zero flag by using the "JNZ" instruction, which jumps back to the "Scan" label when the Zero flag is not set. 
+On the last pass through the loop, ECX contains 1, and EBP+ECX points to the "g" in the very first location in the buffer. 
+Only when ECX is decremented to zero does "JNZ" fall throught and the loop end. 
+
+Purist may thing that decrementing the address in EBP befor the Loop begins is a dicey hack. (Personal Matthew note: IT IS its very risky I wrote about it in a file "fake fixes! THAT THE SHIT I DONT LIKE" --cheif keef voice). 
+
+The "proper" way to handle the off-by-one error is to leave EBP pointing at the true start of the buffer, and decrement ECX at the beginning of the loop, rather than the end. 
+Testing ECX against 0 must still be done, but at the end of the loop, with separate 'CMP' instruction. 
+This works fine, and the pointer always points to memory location within 'Buff': 
+
+; Set up the registers for the convert buffer step: 
+
+		mov ecx, esi			; Place the number of bytes read into ecx
+
+		mov ebp, Buff			; Place address of buffer into ebp
+
+; Go through the buffer and convert lowercase to uppercase characters: 
+
+	Scan: 
+	
+		dec ecx				; Derement the char counter
+
+		cmp byte [ebp+ecx], 61h		; Test input char against lowercase 'a'
+
+		jb Next 			; If below 'a' in ASCII, not lowercase
+
+		cmp byte [ebp+ecx], 7Ah		; Test input char against lowercase 
+
+		ja Next				; If above 'z' in ASCII, not lowercase
+
+						; At this point, we have a lowercase 
+
+		sub byte [ebp+ecx], 20h		; Subtract 20h to give uppercase...
+
+	Next: 	cmp ecx, 0			; See if the char counter is at 0
+
+		jnz Scan 			; If not, jump back and loop again
+
+The cost more is that the loop is bigger. That really can be token out but its in the book that I'm writing on. 

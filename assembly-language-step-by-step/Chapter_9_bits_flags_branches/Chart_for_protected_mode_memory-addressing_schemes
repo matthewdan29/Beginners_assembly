@@ -1,0 +1,22 @@
+SCHEME						EXAMPLE						DESCIPTION
+
+[BASE]						[edx]						Base only
+
+[DISPLACEMENT]					[OF3h] or [<variable>]		 Displacement, either literal constant symbolic address
+
+[BASE + DISPLACEMENT]				[ecx + 033h]					Base plus displacement
+
+
+[BASE + INDEX]					[eax + ecx]					Base plus index
+
+
+[INDEX * SCALE]					[ebx * 4]					index times scale
+
+
+[INDEX * SCALE + DISPLACEMENT]			[eax * 8 + 65]				index times scale plus displacment
+
+
+[BASE + INDEX * SCALE]				[esp + edi * 2]					Base plus index time scale
+
+
+[BASE + INDEX * SCALE + DISPLACEMENT]		[esi + ebp * 4 + 9]			Base plus index times scale plus displacement

@@ -1,0 +1,84 @@
+Watching the flags change value after instructions execute is a good way to learn flag etiquette, but once you have a handle on how various instructions change the flags, you can close the console view. 
+The real value of the flags doen't lie in thier values per se, but in how they affect the flow of machine instructions in your programs. 
+
+There is a whole category of machine instructions that "jump" to a different location in your program based on the current value in one of the flags. 
+These instructions are called "conditional jump" instructions, and most of the flags in EFlags have one or more associated conditional jump instructions. 
+
+The conditional jump instructions are the tests. 
+They test the condition of one of the flags, and either keep on going or jump to a different part of your program. 
+The simplest example of a conditional jump instruction, and the one you're likely to use the most, is "JNZ", Jump If Not Zero. 
+The "JNZ" instruction tests the value of the Zero flag. 
+If ZF is set (that is, equal to 1), then nothing happens and the CPU executes the next instruction in sequence. 
+However, if ZF is not set (that is, equal to 0), then execution travels to a new destination in your program. 
+In NASM, a label is a character string followed by a colon, generally placed on a line containing an instruction. 
+
+Load up a fresh sandbox, and type the following instructions: 
+
+		mov eax, 5
+
+	DoMore: dec eax
+	
+		jnz DoMore
+
+Build the sandbox and load it into GDB. 
+Watch the value of EAX in the Registers view as you step into it. 
+Watch what happens in the source code window when you execute the "JNZ" jumps to the label named as its operand if ZF is 0. 
+If ZF = 1, it "falls through" to the next instruction. 
+
+The "DEC" instruction decrements the value in EAX. 
+As long as the value in EAX does not change to 0, the Zero flag remains cleared. 
+And as long as the Zero flag is cleared, "JNZ" jumps back to the label "DoMore". 
+SO for five passes, "DEC" takes EAX down a notch, and "JNZ" jumps back to "DoMore". 
+But as soon as "DEC" takes EAX down to 0, the Zero flag becomes set, and "JNZ" "falls through" to the "NOP" instruction at the end of the sandbox. 
+
+Constructs like this are called loops, and are very common in all programming, not assembly lang. 
+The "JNZ" instruction tests ZF each time throught and knows to stop the loop when the counter goes to 0. 
+We can make the loop a little more useful without adding a lot of complication. 
+What we do need to add is a data item for the loop to work on. 
+Load "kangoaroo.asm" into vim, build it, and then load it into GDB. 
+
+						kangaroo.asm
+
+		section .data
+
+			Snippet db "Kangaroo"
+
+		section	.text
+
+		global  .text
+
+		_start:
+
+			nop 
+		; Put your experiments between the two nops...
+
+			
+			mov ebx, Snippet
+		mov eax, 8
+
+	DoMore: add byte [ebx], 32
+
+		inc ebx
+
+		dec eax
+
+		jnz DoMore
+
+	; Put your experiments between the two nops...
+
+		nop
+
+After eight passes throught the loop, "KANGAROO" has become "kangaroo". 
+How? Look at the "ADD" instruction located at the label "DoMore".
+Earilier in the program, we copied the momery address of "Snippet" into register EBX. 
+The "ADD" instruction adds the literal value 32 to whatever number is at the addresss stored in BX
+
+The loop makes eight passes, one for each letter in "KANGAROO". 
+After each "ADD", the program increments the address in EBX, which puts the next character of "KANGAROO" in the crosshairs. 
+It also decrements EAX, which had been loaded with the number of characters in the variable "Snippet" before the loop began. 
+SO within the same loop, the program is counting up along the length of "Snippet" in EBX, while counting down in EAX. 
+When EAX goes to zero, it means that we've gone through all of the characters in "Snippet", and we're done. 
+
+The operands of the "ADD" instruction are worth a closer look. 
+Putting EBX inside square brackets references the contents of "Snippet", rather than it's address. 
+But more important the "BYTE" size specifier tells NASM that we're only writing a singel byte to the memory addres EBX. 

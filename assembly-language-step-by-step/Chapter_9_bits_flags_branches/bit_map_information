@@ -1,0 +1,7 @@
+A technique called "bit mapping" is widely used in assembly language. 
+Bit mapping assigns special meaning to individual bits within a byte to save space and squeexe the last little bit of utility out of a given amount of memory. 
+
+There is a family of instructions in the x86 instruction set that enables you to manipulate the bits within the bytes by applying Boolean logical operations between bytes on a bit-by-bit basis. 
+These are the 'bitwise logical instructions': 'AND', 'OR', 'XOR', and 'NOT'. 
+Another family of instructions enables you to slide bits back and forth within a single byte or word. 
+These are the most frequently used shift/rotate instructions: 'ROL', 'ROR', 'RCL', 'SHL', and 'SHR'. (Look at my Intel x86 manual repo to find all of them the next intel repo will be posted shortly after this one)

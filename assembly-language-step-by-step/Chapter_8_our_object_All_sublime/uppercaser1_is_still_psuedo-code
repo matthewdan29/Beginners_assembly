@@ -1,0 +1,7 @@
+Theres an issue that mya have occured to you if you know anything at all about low-level file I/O: the Linux "sys_read" kernel call isn't limited to returning a single character at one go. 
+You pass the address of a buffer to "sys_read" and "sys_read" will attempt to fill that buffer with as many characters from the input file as you tell it to. 
+If you set up a buffer 500 bytes in size you can ask "sys_read" to bring in 500 character from stdin and put them in that buffer. 
+A single call to "sys_read" can thus give you 500 characters to work on, all at once. 
+This reduces the amount of time that Linux spends chasing back in fourth between its file system and your program but it also changes the shape of the program in significant ways. 
+You fill the buffer, and then you have to step through the buffer one character at a time, converting whatever is there in lowercase to uppercase. 
+

@@ -1,0 +1,50 @@
+A "string" is just that: a sequence, or string of characters, all in a row in memory. 
+One string variable is defined in "eatsyscall.asm": 
+	
+		EatMsg: db "Eat at Joe's!", 10
+
+The "DB" directive ordinarily sets aside one byte only, but a string may be any length you like. 
+Because there is no data directive that sets aside 17 bytes, or 42, strings are defined simply by associating a label with the place where the string "starts". 
+The "EatMsg" label and its "DB" directive specify one byte in memory as the string's starting point. 
+
+Either single quote (') or double quote (") characters may be used to delineate a string, and the choice is up to you unless you're defining a string value that itself contains one or more quote characters. 
+Notice in eatsyscall.asm that the string caribale "EatMsg" contains a single-quote character used as an apostrophe. 
+Because the string contains a single-quote character, you must delineate it with double quotes. 
+The reverese is also true: if you define a string that contains one or more double-quote characters, you must delineate it with single-quote characters: 
+
+		Yukkkh: db 'He said, "How disgusting!" and threw up.', 10
+
+You may combine several separate substrings into a single string variable by separating the substrings with commas. 
+This is perfiectly legal way to define a string variable: 
+
+		TwoLineMsg: db "Eat at Joe's...", 10, "...Ten million files can't ALL be wrong!", 10
+
+In the cariable "TwoLineMsg", the EOL character in between the two substrings will direct Linux to display the first substring on one line of the console, and the second substring on the next line of the console below it: 
+
+		Eat at Joe's!
+
+		Ten million files can't ALL be wrong!
+
+You can concatenate such individual numbers within a string, but you must remember that, as with EOL, "they will not appear as numbers"
+A string is a string of characters. 
+
+TO show numbers in a string, you must represent them as ASCII characters either as character literals, like "7" or as the nueric equivalents to ASCII characters, like 37h. 
+In ordinary assembly work, nearly all string variables are defined using the "DB" directive, and may be considered strings of bytes. 
+You can define string cariables using "DW" or "DD", but they're handled a little differently than those defined using "DB". 
+Consider these cariables: 
+
+		WordString: dw 'CQ'
+		DoubleString: dd 'Stop'
+
+The "DW" directive defines a word-length variable, and a word (16 bits) may hold two 8-bit characters. 
+Similarly, the "DD" directive defines a double word (32-bit) variable, which may hold four 8-bit characters. 
+The different handling comes in when you load these named strings into registers. 
+Consider these two instructions: 
+
+		mov ax, wordstring
+
+		mov edx, DoubleString
+
+In the first "MOV" instruction, the characters "CQ" are placed into registers AX, with the "C" in AL and the "Q" in AH. 
+In the second "MOV" instruction, the four characters "Stop" are loaded into EDX in little-endian order, with the "S" in the lowest-order byte of EDX, the "t" in the second-lowest byte, and so on. 
+This sort of thing is a lot less common (and less useful ) than using "DB" to define characters strings, and you won't find yourself doing it very often

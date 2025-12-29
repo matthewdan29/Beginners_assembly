@@ -1,0 +1,6 @@
+When you're reading data from a disk file, for example, you need to have a place for the data to go after it comes in from disk. 
+Data buffers like that are defined in the .bss section of your program. 
+You set aside some number of bytes for a buffer and give the buffer a name, but you don't say what values are to be present in the buffer. 
+There's a crucial defferenece between data items defined in the .data section and data items defined in the .bss section add to the size of your executable file. 
+Data items in the .bss section do not.
+Having an empty .bss section does not increase the size of your executable file, and deleting an empty .bss section does not make your executeable file any smaller. 

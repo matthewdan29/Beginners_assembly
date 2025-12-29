@@ -1,0 +1,12 @@
+Linux has a fairly convenient method for displaying text to your screen. 
+The problem is that it only displays text - if you want to display a numberic value from a register as a pair of hex digits, Linux won't help. 
+You first have to convert the numberic value into its string representation, and then display the string representation by calling the 'sys_write' kernel service via 'INT 80h'. 
+
+Converting the hexadecimal numbers to hexadecimal digits isn't difficult, and the code that does the job demonstrates several of the new concepts we're exploring.
+The code is bare-bones core of a hex dump utility, rather like a read-only version of the Bless Hex Editor. 
+When you redirect its input from a file of any kind, it will read that file 16 bytes at a time, and display those 16 bytes in a line, as 16 hexadecimal values separated by spaces. 
+
+The hexdump1 program is at its heart a filter program. 
+The important parts of the program for this discussion are the parts that read 16 bytes from the input buffer and convert them to a string of characters for display to the Linux console. 
+This is the code between the label 'Scan' and the 'INT 80h' exit call. 
+I'll be referring to that block of code in the diescussion that follows (remember this if Jeff talking I'm just writing/typing please type out the program hexdump1.asm)

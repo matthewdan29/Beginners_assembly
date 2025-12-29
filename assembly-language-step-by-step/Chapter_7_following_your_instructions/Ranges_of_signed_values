@@ -1,0 +1,9 @@
+VALUE SIZE		Greatest Neg Value				Greatest Pos Valu
+
+			Decimal 		Hex			Decimal 		Hex
+
+Eight Bits 		-128			80h			127			7Fh
+
+Sixteen Bits		-32768			8000h			327667			7FFFh
+
+Thirty-Two Bits		-2147483648		8000000h		2147483647		7FFFFFFh

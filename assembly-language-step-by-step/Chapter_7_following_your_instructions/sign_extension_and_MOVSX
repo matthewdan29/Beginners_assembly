@@ -1,0 +1,24 @@
+Theres a subtle gotcha to be avoided when you're working with signed values in different sizes.
+The sign bit is the high bit in a signed byte, word, or double word. 
+But what happens when you have to move a signed value into a larger register or memory location?
+
+The x86 CPU provides us with a way out of this trap, in the form of the "MOVSX" instruction. 
+"MOVSX" means "move with sign extension" and it is one of many instructions that were not present in the orifinal 8086/8088 CPUs. 
+
+Load this into sandbox and try it: 
+
+	mov ax, -42
+	movsx ebx, ax
+
+When you move AX into EBX with "MOVSX" the value of EBX will then be shown as -42. 
+What happened is that the "MOVSX" instruction performed "sign extension" on its operands, taking the sign bit from the 16-bit quantity in AX and making it the sign bit of the 32-bit quantity in EBX. 
+
+"MOVSX" is different from "MOV" in that its operands may be of different sizes. 
+"MOVSX" has three possible variations.
+
+The notation here is one you'll see in may assembly language references in describing instruction operands. 
+The notation "r16" is an abbreviation of "any 16-bit register"
+Similarly, "r/m" means "register or memory" and followed by the bit size. 
+For example, "r/m16" means "any 16-bit register or memory location"
+
+With all that said, you may find after solving some problems in assembly language that signed arithmetic is used less often than you think. 

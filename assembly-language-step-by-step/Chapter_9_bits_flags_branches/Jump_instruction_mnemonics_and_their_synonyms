@@ -1,0 +1,20 @@
+MNOMONICS 					SYNONYMS
+JA		Jump if Above			JNBE		Jump if not Below or Equal 
+
+JAE		Jump if Above or Equal		JNB		Jump if Not Below 
+
+JB		Jump if Below 			JNAE		Jump if Not Above or Equal 
+
+JBE		Jump if Below or Equal 		JNA		Jump if Not Above
+
+JE		Jump if Equal 			JZ		Jump if result is Zero
+
+JNE		Jump if not Equal 		JNZ		Jump if result is Not Zero 
+
+JG		Jump if Greater			JNLE		Jump if Not Less Than or Equal 
+
+JGE		Jump if Greater or equal	JNL		Jump if not Less
+
+JL		Jump if Less			JNGE		Jump if Not Greater or Equal 
+
+JLE		Jump if Less or Equal		JNG		Jump if Not Greater

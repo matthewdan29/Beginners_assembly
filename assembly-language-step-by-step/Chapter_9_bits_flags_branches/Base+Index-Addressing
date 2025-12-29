@@ -1,0 +1,39 @@
+Perhaps the most common single addressing scheme is Base + Index, in which the effective address is calculated by adding contents of two GP registers within the brackets. 
+Converting a character in the input buffer from lowercase to uppercase is done by subtracting 20h from it: 
+
+	sub byte [ebp+ecx], 20h
+
+The address of the buffer was earlier placed in EBP, and the number in ECX is the offset from the buffer start of the character being processed during any given pass through the loop. 
+Adding the address of the buffer with an offset into the buffer yields the effective address of the character acted upon by the 'SUB' instruction. 
+
+Why not use Base + Displacement addressing? 
+This instruction would be legal: 
+
+	sub byte [Buff+ecx], 20h
+
+However, if you remember from the program (and it would be worth looking at it again, and reading the associated text), we had to decrement the address of 'BUFF' by one before beginning the loop. 
+Indeed we could, and it would work. 
+THe centeral loop of the uppercaser2 program would then look like this: 
+
+	; Set up the registers for the process buffer step: 
+		mov ecx, esi		; Place the number of bytes read into ecx
+		mov ebp, Buff		; Plcae address of buffer into ebp
+	;	dec ebp 		; *No longer needed *
+
+	; Go Through the buffer and vonvert lowercase to uppercase characters: 
+	   Scan: 
+		cmp byte [buff-1+ecx], 61h ; Test input char against lowercase 'a'
+
+		jb Next 		; If below 'a' in ASCII, not lowercase 
+		cmp byte [Buff-1+ecx], 7Ah	; Test input char against lowercase 'z'
+		ja Next 		; If above 'z' in ASCII , not lowercase
+					; At this point, we jave a lowercase char
+		sub byte [Buff-1+ecx], 20h	; Subtract 20th to give uppercase...
+	Next: 	dec ecx			; Decrement counter 
+		jnz Scan 		; If character remain, loop back 
+
+The initial 'DEC EBP' instruction is no longer necessary.
+NASM does the math, and the address of 'Buff' is decremented by one within the effective address expression when the program loads. 
+This is actually the correct way to code this particular loop. 
+
+Understand how effective address calculation works. 

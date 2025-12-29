@@ -1,0 +1,38 @@
+So what does a program require to be assembled by NASM?
+In truth, not much. 
+"newsandbox.asm" is the source code for what Jeff use as starter sandbox. 
+It presents more, in fact, than NASM technically requires, but nothing more than it needs to be useful as a sandbox. 
+
+NASM will in fact assemble a source code file that contians no instructions mnemonics at all -- though in fairness, the instructionless executable will not be run by "Linux" (Its in quotes becuase I'm writing this on a windows 11 OS not my first of second choice for this type of work not even third).
+What we do need is a starting point that marked as global -- here, the label "_start". 
+We also need to define a data section and a text section as shown. 
+The data section holds named data items that are to be given initial values when the programs runs. 
+The old "Eat at Joe's" ad message form the first program was a named data item in the data section. 
+The text section holds program code. 
+Both of these sections and needed to create an executable. 
+
+The ".bss" section holds unitialized data -- that is, space for data items that are given no initial values when the program begins running. 
+These are empty buffers, basically, for data that will be generated or read from somewhere while the program is running. 
+
+To use "newsandbox.asm", create a session in VIM called sandbox, and load the "newsandbox.asm", file into that session. 
+Save it out immediatley as "sandbox.asm", so that you don't modify "newsandbox.asm". 
+
+There are two NOP instructions in sandbox.asm, and they are there to make it easier to watch the program in the debugger. 
+To play around with machine instructions, place them between the two comments. 
+Build the executable with Make, and load the executable into Insight: 
+
+		gdb sandbox
+
+Set a breakpoint at the first instruction you place between the comments, and click Run. 
+Execution will begin, and stop at your breakpoint. 
+To observe the effects of that instruction, click the Step Asm buttom. 
+Here's why the second NOP instruction is there: when you single-step an instruction, there has to be an instruction after that instruction for execution to pause on. 
+If the first instruction in your sandbox is the last instruction, execution will "run off the edge" on your first single step and your program will terminate. 
+When that happens, GDB registers and Memory views will go blank, and you won't be able to see the effects of that one instruction (IDK about that for pure GDB I never ran into that in view mode). 
+What happens in this case is that your program attempted to execute a location past the end of the text section. 
+Linux knows how long your program is, and it won't allow you to execute any instructions that were not present in your program when it was loaded. 
+
+There's no lasting harm in that, of course. 
+Linux is very good at dealing with misbehaving and malformed programs, and nothing you are likely to do by accident will have any effect on Linux itself.
+You can avoid generating the segmentation fault by selecting run -> kill from the GDB terminal. 
+

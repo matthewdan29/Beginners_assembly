@@ -1,0 +1,18 @@
+"DIV": it divides one value by another and gives you a quotient and a remainder. 
+we are doing integer not decimal arithmetic here, so there is no way to express a decimal quotient like 1.34 or 4.42. 
+
+If you divide a 16-bit value by another 16-bit value, you will never get a quotient that will not fit in a 16-bit register. 
+Nonetheless, it would be useful to be able to divide vary large numbers, so intel engineers created something very like a mirror image of "MUL": you place a dividend value in "EDX" and "EAX", which means that it may be up to 64 bits in size. 
+64 bits can hold 18,000,000,000,000,000 (i rounded down). 
+The divisor is stored in "DIV"'s only explicit operand which may be a register or in memory. 
+The quotient is returned in "EAX", and the remainder in "EDX". 
+
+That's the situation for a full, 32-bit division. 
+As with "MUL", "DIV"s implicit operand depend on the size of the explicit operand, here acting as the divisor. 
+There are three "sizes" of DIV operations.
+
+The "DIV" instruction does not affect any of the flags. 
+However division does have a special problem: Using a value of 0 in either the dividend or the divisor is undefined, and will generate a LINUX arithmetic exception that terminates your program. 
+This makes it important to test the value in both the divisor and the dividend before executing "DIV", to ensure you haven't let any zeros into the mix
+
+In the x86 architecture dividing zero by anything is always an error

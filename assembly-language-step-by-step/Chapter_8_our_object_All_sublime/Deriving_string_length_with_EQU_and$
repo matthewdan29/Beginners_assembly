@@ -1,0 +1,63 @@
+Beneath the definition of "EatMsg" in the eatsyscall.asm file is an instresting construct: 
+
+	EatLen: equ $-EatMsg
+
+This is an example of a larger class of things called "assembly-time calculations". 
+What we're doing here is calculating the length of the string variable "EatMsg", and making that length value accessible through the label "EatLen". 
+At any point in your program, if you need to use the length of "EatMsg", you can use the label "EatLen". 
+
+A statement containing the directive "EQU" is called an "equate". 
+An equate is a way of association a value with a label. 
+Any time the assembler encounters an equate during an assembly, it will swap in the equate's value for its name. 
+For example: 
+
+		FieldWidth equ 10
+
+The preceding tells the assembler that the label "FieldWidth" stands for the numeric value 10. 
+Once that equate is defined, the following two machine instructions are exactly the same: 
+
+		mov eax, 10
+
+		mov eax, FieldWidth
+
+There are two advantages to this: 
+
+		1) An equate makes the instruction easier to understand by using a descriptive name for a value. we Know what the value 10 is for here; it's the width of a field. 
+
+		2) An equate makes programs easier to change down the road. If the field width changes from 10 to 12 at some point, we need only change the source code file at one line, rather than everywhere we access the field width. 
+
+Once your programs become larger and more sophisticated, you may find yourself using a particular value dozens or hundreds of times within a single program. 
+
+Combining assembly language calculation with equates allows some wonderful things to be done very simply. 
+As I'll explain shortly, to display a string in Linux, you need to pass both the address of the string and its length to the operating system. 
+You can make the length of the string an equate this way: 
+
+		EatMsg db "Eat at Joe's!", 10 
+		
+		EatLen equ 14
+
+This works, becuase the "EatMsg" string is in fact 14 characters long, including the EOL character; but suppose Joe sells his diner to Ralphm and you swap in "Ralph" for "Joe".
+You have to change not only the ad message, but also its length: 
+
+		EatMsg db "Eat at Ralph's!", 10
+
+		EatLen equ 16
+
+With an assembly-time calculation, you simply change the definition of the string variable, and its length is automatically calculated by NASM at assembly time. 
+
+How? This way: 
+
+		EatLen: equ $-EatMsg
+
+It all depends on the magical "here" token, expressed by the humble dollar sign. 
+As explained earlier, at assembly time NASM chews through your source code files and builds an intermediate file with a .o extension. 
+The $ token marks the spot where NASM is in the intermediate file. 
+The label "EatMsg" marks the beginning of the advertising slogan string. 
+Immediately after the last character of "EatMsg" is the label "EatLen".
+Labels, remember, are not data, but locations - and in the case of assembly language, addresses. 
+When NASM reaches the label "EatLen", the value of $ is the location immediately after the last character in "EatMsg". 
+The assembly-time calcualtion is to take the location represented by the $ token (which, when the calucaltion is done, contains the location just past the end of the 'EatMsg' string) and subtract from it location of the beginning of the "EatMsg" string. 
+End - Beginning = Length. 
+
+This calculation is performed every time you assemble the file, so anytime you change the contents of "EatMsg", the value "EatLen" will be recalculated automatically. 
+You can change the text within the string any way you like, and never have to worry about changing a length value anywhere in the program. 

@@ -1,0 +1,28 @@
+A few notes on things you might not completely understand at this point: 
+
+	A) "Buff" is an uninitialized variable, and therfore location is in the .bss section of the program. "Buff" has no initial value, contains nothing until we read a character from stdin and store it there. 
+
+	B) When a call to "sys_read" returns a 0, "sys_read" has reached the end of the file it's reading from. If it returns a positive value, this value is the number of character it has read from the file. In this case, since we only requested one character, "sys_read" returns either a count of 1, or a 0 indicting that we're out of characters. 
+
+	C) The "CMP" instruction compares its two operands and sets the flags accordingly. The conditional jump instruction that follows each "CMP" instruction takes action based on the stat of the flags. 
+
+	D) The "JB" (Jump If below) instruction jumps if the preceding "CMPs" left operand is lower in value than its right operand. 
+
+	E) The "JA" (Jump if Above) instruction jumps if the preceding "CMP's" left operand is high in value that its right operand. 
+
+	F) Because a memory address (like "Buff") simply points to a location in memory of no particular size, you must place the qualifier "BYTE" between "CMP" and its memory operand to tell NASM that you want to compare two 8-bit values. In this case, the two 8-bit values are an ASCII character like "w" and a hex value like 7Ah
+
+Running the executable program in done by using I/O redirection. 
+The command line for uppercase1 looks like this: 
+
+
+			./uppercase1 > <outputfile> < <inputfile>
+
+
+Both <inputfile> and <outputfile> can be any text file. 
+You can also try the below example 
+
+			./uppercase1 > allupper.txt < uppercase1.asm
+
+
+The file allupper.txt will be created when you run the program, and it will be filled with the source code for the program, and it will be filled witth the source code for the program, with all characters forced to uppercase. 

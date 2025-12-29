@@ -1,0 +1,5 @@
+The last bit shifted out of the left end of the binary number is bumped into a temporary bucket for bits called the carry flag, generally abbreviated as CF. 
+Keep in mind when using shfit instrctions that a low tof different instructions use the Carry flag not only the shift instructions. If you bump a bit into the Carry flag with the intent of testing that bit later to see what it is, test it before you execute another instruction that affects the carry flag.
+This includes all the arithmetic instructions, all the bitwise logical instruftions, all the other shift instructions too. 
+
+If you shift a bit into the Carry flag and then immediately exectue another shift instruction, that first bit will be bumped off the end

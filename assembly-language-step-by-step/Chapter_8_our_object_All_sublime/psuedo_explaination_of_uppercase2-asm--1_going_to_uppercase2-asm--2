@@ -1,0 +1,10 @@
+This (uppercase psuedo-code 1 file) adds everything you need to read a buffer from disk, scan and convert the characters in the buffer, and then write the buffer back out to disk. (Of course, the buffer has to be enlarged from one character to some useful size, like 1024 characters)
+The gist of the buffer trick is to set up a pointer into the buffer, and then examine and convert the character at the address expressed by the pointer. 
+Then you move the pointer to the next character in the buffer and do the same thing, repeating the process until you've dealt with all the characters in the buffer. 
+
+Scanning a buffer is a very good example of an assembly language loop. 
+At each pass through the loop we have to test something to determine whether we're finished and should exit the loop. 
+The "something" in this case is the pointer. 
+We can set the pointer to the beginning of the buffer and test to see when it reaches the end, or we could set the pointer to the end of the buffer and work our way forward, testing to see when we reach the beginning of the buffer. 
+
+Both approachesz will work, but starting at the end and working our way forward toward the beginning of the buffer can be done a little more quickly (I see that but you can always add to a list from the back like a FIFO but a FILO is perfect) and with fewer instructions.  

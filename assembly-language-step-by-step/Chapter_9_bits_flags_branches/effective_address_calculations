@@ -1,0 +1,12 @@
+All but the first two involve a little arithmetic among two or more terms within the brackets that signify an address. 
+This arithmetic is called 'effective address calculation', and the result of the calulation is the 'effective address'. The term is 'effective address' in that it means that address that will ultimately be used to read or write memory, irrespective of how it is expressed. 
+Effective addresss calculation is done by the instruction, when the instruction is executed. 
+
+The effective address in the Base schemem is simply the 32-bit quantity stored in the GP register betwenn the brackets. 
+No calculation is involved, but what you see in the source code is not a literal or symbolic address. 
+So although the instruction is coded with a register name between the brackets, the address that will be sent out to the memory system when the code executes is stored inside the register. 
+
+The only case in which the effective address is right there on the line with the instruction mnemonic would be a literal address within the brackets. 
+This is also never done, because it's extremely unlikely that you will know a precise 32-bit numeric address at assembly time. 
+Most of the time there's some arithmetic going on. 
+In the Base + Index scheme, for example, the contents of the two GP register between the brackets are added when the instruction is executed to form the effective address. 

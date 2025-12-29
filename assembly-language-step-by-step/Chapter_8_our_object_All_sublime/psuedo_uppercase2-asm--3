@@ -1,0 +1,15 @@
+Read: Set up registers for the 'sys_read' kernel call. Call 'sys_read' to read a buffer full of characters from 'stdin'. Store the number of characters read in 'esi' Test for the 'EOF' (eax = 0). If we're at 'EOF', jump to Exit
+
+Scan: Compare the byte at [ebp_ecx] against 'a'. If the byte is below 'a' in the ASCII sequence, jump to the Next. Compare the byte to [ebp+ecx] against 'z'. If the byte is above 'z' in the ASCII sequence, jump to Next. Subtract 20h from the byte at [ebp+ecx]. 
+
+Next: Decrement ecx by one. Jump if not zero to Scan. 
+
+Write: Set up registers for the Write Kernel call. Call 'sus_write' to write the processed buffer to 'stdout'. Jump back to Read and get another buffer full of characters. 
+
+Exit: set up registers for terminating the program via 'sys_exit'. Call 'sys_exit'.
+
+This refinement recognizes that there is not one test to be made, but two. 
+Lowercase characters represent a range in the ASCII sequence, and range have beginnings and ends. 
+We have to determine if the character under examination falls within the range. 
+Doing that requires testing the character to see if it's either below the lowest character in the lowercase range ("a") or above the highest character in the lowercase range ("z"). 
+If the character in question is not lowercase, no processing is required, and we jump to the code that bumps the pointer to the next character.  

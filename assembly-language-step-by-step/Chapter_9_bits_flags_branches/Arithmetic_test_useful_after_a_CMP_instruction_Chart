@@ -1,0 +1,29 @@
+CONDITION		PASCAL		UNSIGNED		JUMPS		SIGNED		JUMPS
+			OPERATOR	VALUES			WHEN 		VALUES		WHEN
+
+Equal 			=		JE			ZF=1		JE		ZF=1
+
+Not Equal		< >		JNE			ZF=0		JNE		ZF=0
+
+Greater Than		> 		JA			CF=0,ZF=0	JG		ZF=0 or SF=OF
+
+Not Less that				JNBE			CF=0 & ZF=0	JNLE		ZF=0 || SF=OF
+or equal to
+
+
+Less than		<		JB			CF=1		JL		SF<>OF
+
+
+Not Greater
+than or equal to			JNAE			CF=1		JNGE		SF<>OF
+
+
+Greater than
+or equal to		>=		JAE			CF=0		JGE		SF=OF
+
+
+Not Less Than				JNB			CF=0		JNL		SF=OF
+
+
+Less Than or
+equal to		<=		JBE			CF=1 || ZF=1	JLE		SF=1 || SF<>OF

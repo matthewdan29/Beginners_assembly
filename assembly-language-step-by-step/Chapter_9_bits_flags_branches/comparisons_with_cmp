@@ -1,0 +1,22 @@
+One major use of flags is in controlling loops. 
+Another is in comparisons between two values. 
+Your programs will often need to know whether a value in a register or memory is equal to some other value. 
+Further, you may want to know if a value is greater than a value or less than a value if it is not equal to the value. 
+There is a jump instruction to satisfy every need, nut something has to set the flags for the benefit of the jump instruction. 
+The 'CMP' (CoMPare) instruction is what sets the flags for compison tasks. 
+'CMP''s use is straightforward and intuitive. 
+The second operand is compared with the first, and several flags are set accordingly: 
+
+	cmp <op1>, <op2>		; Sets OF, SF, ZF, AF, PF, and CF
+
+The sense of the comparison can be remembered if you simply recast the comparison in arithmetic terms: 
+
+	Result = <op1> - <op2>
+
+'CMP' is very mush a subtraction operation whereby the result of the subtraction is thrown, away, and only the flags are affected. 
+The second operand is subtracted from the first. 
+Based on the results of the subtraction, the other flags are set to appropriate values. 
+
+After a 'CMP' instruction, you can jump based on serveral arithmetic conditions. 
+
+The conditions: 'EQUAL', 'not equal', 'Greater than', 'Less Than', 'Greater than or equal to ', and 'less than or equal too'. 

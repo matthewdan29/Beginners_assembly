@@ -1,0 +1,19 @@
+Most machine instructions, "MOV" included, have one or more operands. 
+Consider the machine instructions below: 
+
+		mov eax, 1
+
+There are two operands in the preceding instruction. 
+The first is "EAX", and the second is the digit 1. 
+By convention in assembly language, the first (left most) operand belonging to a machine instruction is the destination operand. 
+The second operand from the left is the source operand. 
+
+With the "MOV" instruction, the sense of the two operands is pretty literal: the source operand is copied to the destination operand. 
+
+Three different flavors of data may be used as operands: 
+
+		1) memory data 
+
+		2) register data 
+
+		3) immediate data 

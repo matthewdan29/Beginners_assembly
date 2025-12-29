@@ -1,0 +1,9 @@
+Most flags are not terribly useful, especially when you're first starting out as a programmer. 
+The Carry flag (CF) and the Zero flag (ZF) will be 90% of your involcement in flags as a beginner, with the Direction flag (DF), Sign flag (SF), and Overflow flag (OF) together making up an additional 99.98%. 
+IT MIGHT BE A GOOD IDEA TO REREAD THAT PART OF CHAPTER 7 NOW, just in case your grasp of flag etiquette has gotten a little rusty. 
+
+As explained earlier, 'JZ' jumps when ZF is 1 whereas 'JNZ' jumps when ZF is 0. 
+Most instructions that perform some operation on an operand (such as 'AND', 'OR', 'XOR', 'INC', 'DEC', and all arithmetic instructions) set ZF according to the results of the operation. 
+On the other hand, instructions that simply move data around (such as 'MOV', 'XCHG', 'PUSH', and 'POP') do not affect ZF or any of the other flags. (Obviously, 'POPF' affects the flags but popping the top-of-stack value into them.)
+One exception is the 'NOT' instruction, which performs a logical operation on its operand but does not set any flags - even when it causes its operand to become 0. 
+Before you write code that depends on flags, 'check your instruction reference' to ensure that you have the flag etiquette down correctly for that instruction 

@@ -1,0 +1,15 @@
+A kernel services call gate is a hardware-managed gate in memory (like the GDT (Global Descriptor Table)) that acts as a secure, controlled doorway for less previlieged user-mode programs (ring 3) to eecute highly provilieged code in the kernel (Ring 0). 
+Its specific type of descriptor that allows a CALL FAR instruction in user space to trigger a privilege level change and jump to a kernel function, handleing stack switching and parameter passing automatically, which is essential for secure system calls but largely replaced by faster methods like sysenter in modern OSes 
+
+
+Call gate:
+	Is a mechanism in intel's x86 architecture for changing the privilege level of a process when it executes a predifined function call using a CALL FAR instruction. 
+Call gates are intended to allow less previleged code to call code with a higher privilege level. 
+This type of mechanism is essential in modern operating systems that employ memory protection since it allows user applications to use kernek functions and system calls in a way that can be controlled by the OS
+
+Call gates use a special selector value to reference a descriptor accessed via the global descriptor table or the local descriptor table, which containes the infomation needed for the call across privilege boundaries. 
+this is similar to the mechanism used for interrupts. 
+
+Global Discriptor Table (GDT): 
+	Is a core part of Intel's x86 architecture that helps manage how memory is accessed and protected. It plays a key role in defining memory segments and their attributes: the base address, the size, and access privileges like executablilty and writablility. 
+The GDT helps isolate memory between application software and the operating system

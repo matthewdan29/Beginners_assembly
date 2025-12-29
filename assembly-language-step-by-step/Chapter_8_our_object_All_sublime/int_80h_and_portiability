@@ -1,0 +1,2 @@
+Making calls to Linux kernel services as in this section is indeed specific to the Linux implementation of Unix. 
+other Implementatioon handle kernel calls different ways. 

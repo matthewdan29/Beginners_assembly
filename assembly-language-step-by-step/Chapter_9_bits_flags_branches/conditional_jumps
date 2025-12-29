@@ -1,0 +1,48 @@
+When executed, a conditional jump tests something - usually one, occasionally two or much more rarely, three of the flags in the EFlags register. 
+If the flag or flags being tested happen to be in particular state, execution will jump to a label sowewhere else in the code segment; otherwise, it simply falls through to the next instruction in sequence.
+
+This two-way nature is important. 
+A conditional jump instruction either jumps or it falls through. 
+It can not jump to one of two places, or three.
+Whether it jumps or not depends on the current value of a very smalll set of bits within the CPU. 
+
+There is a flag that is set to 1 by certain instructions when the result of that instruction is zero: the Zero flage (ZF). 
+The 'DEC' (DECrement) instruction is a good example.
+'DEC' subtracts one from its operand. 
+If by that subtraction the operand becomes zero, DF is set to 1. 
+Once of the conditional jump instructions, 'JZ' (Jump if Zero), tests ZF. 
+If ZF is found set to 1, then a jump occurs, and execution transfers to the label after the ZF mnemonic. 
+If ZF is found to be 0, then execution falls through to the next instruction in sequence. 
+This may be the commonest conditional jump in the entire x86 instruction set. 
+its often used when you're counting a register down to zero while executing a loop, and when the count register goes to zero by virture of the 'DEC' instruction, the loop ends, and execution picks up again right after the loop. 
+
+Here's a simple example, using instructions you should already understand: 
+
+	mov word [RunningSum], 0	; Clear the running total 
+
+	mov ecx, 17			; We're going to do this 17 times
+
+WorkLoop: 
+	add wor [RunningSUm],3		; Add three to the running total 
+
+	dec ecx				; SUbtract 1 from the loop counter
+
+	jz SomewhereElse		; Subtract 1 from the loop counter
+
+	jmp WorkLoop			
+
+
+Before the loop begins, we set up a value in ECX, which acts as the count register and contains the number of times we're going to run through the loop. 
+The body of the loop is where something get done on each pass through the loop. 
+In this example it's a single 'ADD' instruction, but it could be dozens or hundreds of instruction long. 
+
+After the work of the loop is accomplished, the count register is decremented by 1 with a 'DEC' instruction. 
+Immediately afterward, the 'JZ' instruction tests the Zero flag. Decrementing ECX from 17 to 16, or from 4 to 3, does not set ZF, and the 'JZ' instruction simply falls through. 
+The instruction after 'JZ' is an unconditional jump instruction which obediently and consistenly takes execution back to the 'WorkLoop' label every time. 
+
+Now, Decrementing ECX from 1 to 0 does set ZF, and that's when the loop ends. 
+'JZ' finally takes us out of the loop by jumping to 'SomewhereElse' and execution leaves the loop. 
+
+If you're sharp enough, you may realize that this is a lazy-loop(just made it up but ya it is). (That doesn't mean some engineers havent tried it and used it). 
+
+What we're really looking for each time through the loop is when a condition - the Zeroe flage isn't set, and there's an instruction for that too. 

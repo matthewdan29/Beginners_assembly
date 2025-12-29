@@ -1,0 +1,15 @@
+To tell the signed jumps apart from the unsigned jumps, the mnemonics use two different expressions for the relationship between two values: 
+
+	1) 'Signed Values' are thought of as being greater than or less than. For example, to test whether one signed operand is greater than another, you would use the 'JG' (Jump if Greater) mnemonic after a 'CMP' instruction.
+
+	2) 'Unsigned Values' are thought of as being 'above' or 'below'. For example, to tell whether one unsigned operand is greater than (above) another, you would use the 'JA' (Jump if Above) mnemonic after a 'CMP' instruction. 
+
+Any mnemonics containing the words 'above' or 'below' are for unsigned values, where any mnemonics containing the words 'greater' or 'less' are for signed values. 
+Notice that some of the jump instructions require one of two possible flag values in order to take the jump, while other require both of two flag values.
+
+Several of the signed jumps compare two of the flags against one another. 
+'JG', for example, will jump when either ZF is 0, or when the Sign flag (SF) is equal to the Overflow flag (OF). 
+
+Some people have trouble understanding how the 'JE' and 'JZ' mnemonics are synonyms, as are 'JNE' and 'JNZ'. 
+Think again of the way a comparison is done within the CPU: The second operand is subtracted from the first, and if the result is 0 (including that the two operands were in fact equal), then the Zero flag is set to 1. 
+That's why 'JE' and 'JZ' are synonyms: both are simply testing the state of the Zero flag. 

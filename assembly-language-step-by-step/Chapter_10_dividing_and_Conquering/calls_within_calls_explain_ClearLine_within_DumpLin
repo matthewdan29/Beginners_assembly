@@ -1,0 +1,34 @@
+(NOTE: ".poke"-- In older programming context like BASIC, "POKE <address>, <value>" was an instrctuion to store a value in memory)
+
+Within a procedure you can do anything that you can do within the main program itself. 
+This includes calling other procedures from within a procedure, and makeing "INT 80h" calls to Linux Kernel services. 
+There's a simple example in hexdump2: The 'ClearLine' procedure calls the 'DumpChar' procedure to "clear" the hex dump line varibale 'DumpLin': 
+			
+			ClearLine: 
+				pushad			; Save all caller's GP registers
+				mov edx, 15		; We're going to go 16 pokes, counting from 0
+			.poke:  move eax, 0		; Tell DumpChar to poke a '0'
+				call DumpChar		; IInsert the '0' into the hex dump string 
+				sub edx, 1		; DEC doesn't affect CF!
+				jae .poke		; Loop back if EDX >= 0
+				popad			; Restore all caller's GP registers 
+				ret 			; Go home
+
+Basically, what 'ClearLine' does is make a special-case use of the 'DumpChar' procedure. 
+When filled with data and displayed to the console, the 'DumpLin' varibale looks like this: 
+	75, 6D, 70, 32, 2E, 61, 73, 6D 0A, 09, 6E, 61, 73, 6D, 20, 2D |ump2.asm...nasm - |
+
+Each two-character hex value, and each ASCII character in the ASCII column on the right, was inserted by a single call to 'DumpChar' to "fill" the 'DumpLin' variable. 
+At that point it can be displayed. 
+After "DumpLin" is displayed to the console, hexdump2 continues its loop and begins filling 'DumpLin' again. 
+Every 16 calls to 'DumpChar', hexdump2 displays 'DumLin' to the console ... exectp for the last time. 
+
+A file being dumped to the console might not be a precise multiple of 16 bytes long, so the final display of 'DumpLin' could be a partial line of two, three, nine, eleven, or however many characters less than sixteen. 
+When a partial line is displayed, the last several bytes in the line dump may be "old" data sent to the console on the previous display of 'DumpLin'. 
+To avoid this 'DumpLin' is cleared to zero values immediately after each display. 
+This is what 'ClearLine' does. 
+After all to 'ClearLine', 'DumpLin' looks like this: 
+
+		00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 | ................ |
+'ClearLine' does the simple and obvious thing: It calls 'DumpChar' 16 times, each time passes 'CumpChar' the value 0 in EAX. 
+'DumpChar' "pokes" and ASCII equivalent of both the hex value 00 and an ASCII period to represent the 0 value in all positions in the ASCII column. 

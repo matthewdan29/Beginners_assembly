@@ -1,0 +1,66 @@
+How can you always remember that you already used a label such as 'Scan' (as seen in program hexdump2.asm) on line 187 of a 2732-line program?
+
+You will forget and it will be sooner or later (especially if you're crunching buffers and tables a lot) you'll try to use the label 'Scan' again. 
+NASM will call you on it with an error. 
+
+This is a common enough problem especially with (especially with obviously useful labels such as 'Scan') that NASM's authors created a feature to deal with it: local labels. 
+Local labels are based on the fact that nearly all labels in assembly work (outside of names of subroutines and major sections) are "local" in nature, by which Jeff (auther) mean that they are only referenced by jump instructions that are very close to them - perhaps only two or three instructions away. 
+Such labels are ususally parts of tight loops and are not referenced from far away in the code, and are often referrenced from only onle place. 
+Here's an example, from the main body of hexdump2.asm: 
+
+	Scan: 	
+		xor eax, eax			; Clear EAX to 0
+		mov al, byte[Buff+ecx]		; Get a byte from the buffer into AL
+		mov edx, esi			; Copy total counter into EDX
+		and edx, 0000000Fh		; Mask out lowest 4 bits of char counter
+		call DumpChar			; Call the char poke procedure
+
+	; Bump the buffer pointer to the next character and see if buffer's done: 
+		inc esi 			; Increment total chars processed counter
+		inc ecx				; Increment buffer pointer
+		cmp ecx, ebp			; Compare with # of chars in buffer
+		jb .modTest			; If we've processed all chars in buffer...
+		call LoadBuff			; ...go fill the buffer again
+		cmp ebp, 0			; If ebp=0, sys_read reached EOF on stdin
+		jbe Done			; If we got EOF, we're done
+
+	; see if we're at the end of a block of 16 and need to display a line: 
+	.modTest: 
+		test esi, 0000000Fh		; Test 4 lowest bits in counter for 0
+		jnz Scan 			; If counter is *not* modulo 16, loop back
+		call PrintLine			; ...otherwise print the line
+		call ClearLine			; Clear hex dump line to 0's
+		jmp Scan			; Countinue scanning the buffer
+
+Note that the label '.modTest' has a period in front of it. 
+This period marks it as local label. 
+Local labels are local to the first 'nonlocal' label (that is, the first label not prefixed by a period; we call these global) that precedes them in the code. 
+In this particular case, the global label to which '.modTest' belongs is 'Scan'. 
+The block shown above is the portion of the main body of the program that scans the input file buffer, formats the input data into lines of 16 bytes, and displays those lines to the console. 
+
+In what way does a global label "own" a local label? It's a question of visibility within the source code: a local label cannot be referenced 'higher' in the source code file than the global label that owns it, which again, is the first global label above it in the file. 
+
+In this case, the local label '.modTest' cannot be referenced above the global label 'Scan'. 
+This means that there could conceivably be a second local label '.modTest' in the program, on the "other side" of 'Scan'. 
+As long as a global label exists between two local labels with the same name, NASM has no trouble distinguishing them. (I look at this as a veriable in python's loops I know its a reach but think about how python throw away i veriables after a loop is done)
+Local labels may also exist within procedures. 
+In another example from 'hexdump2.asm', there is a local label '.poke' in the "ClearLine" procedure. 
+It belongs to the 'ClearLine' label, and thus cannot be referenced from any other procedure elsewhere in the program or library. (procedure names are global labels (think of exten <label> in C++/python))
+This isolation within a single procedure isn't immediately obvious, but it's true, and stems from the fact that "below" a precedure in a program or library there is always either another precedure or the "_start" label at the beginning of the main program. 
+It
+s obvious onve you seen it drawn out. 
+
+Some notes on local labels: 
+
+	A) Local labes within precedures are at least local to the precedures in which they are defined. You may, of course have global lables within precedures ,which limits the visibility of local labels even further. 
+
+	B) It's perfectly legal and often helpful to define global labels that are never referenced, simply to provide ownership of local labels. If you're writing a utility program that executes in straightforward fashion without a lot of jumping or long-distance looping back, you may go a long way without needing to insert a global label. Jeff (me too on a person programming level) to use global labels to set off major functionsal parts of a program (mainly vector stuff), whether those labels are ever referenced or not. This enables me to use local labels freely within those major functional modules. 
+
+	C) Local labels, unfortunately, are not accessible as breakpoints from the command-line interface of the GDB debugger. IDK why this is, but GDB refuses to set a breakpoint on a local label form the command line (and from WSL windows too LOL). Of course, you can set a breakpoint on any line containing a machine instruction from the source code window of Insight (I dont use insight so IDK) irrespective of labels (Thats really useful really). In general, use the command-line interface of GDB only when you have to; it has peculiar limitations (On a personal level I extremely disagree with this statement)
+
+	D) If you're writing dense code with a lot of intermixed global and local labels, be careful that you don't try to 'JMP' to a local lable on the other side of a global label. NASM won't warn you if there is a local label with the same name on your side of a global label and you try to jump to a local label on the other side of the global label. Bugs will happen in program. Like any tool, local labels have to be used carefully to be of greatest benifit
+
+	E) Local labels and all jumps to them should occur within a single screen of code. See the local label without moving the screen.
+
+
+

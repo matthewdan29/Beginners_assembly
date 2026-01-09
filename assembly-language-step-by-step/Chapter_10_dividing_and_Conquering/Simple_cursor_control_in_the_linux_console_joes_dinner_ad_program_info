@@ -1,0 +1,62 @@
+We are going to start the explain of 'eatterm.asm' aka joe's diner ad. 
+First starts by clearing the Linux console and then centering the ad text on the cleared display. 
+This program will be made twice, first with several portions expressed as procedures, and later with the same portions expressed as macros. 
+The first Procedures one is called 'eatterm.asm'
+
+The linux console can be controled by sending it 'escape sequences' embedded in the stream of text traveling from your program to stdout. 
+
+The simplest example of an escape sequence for controllingh the console clears the entire console display to blanks (basically, space characters). 
+In the etterm program, this sequence is a string variable called 'ClearTerm': 
+
+		ClearTerm: db 27, "[2J"		;<ESC>[2J
+
+The escape sequence is four characters long. 
+It begins with 'ESC', a nonprintable character that we usually describe by its decimal value in the ASCII table, 27. (Or hex, which is 1Bh)
+Immediatly following the 'ESC' character are the three printable characters '[2J'. 
+They're printable, but they're not printed because they follow 'ESC'. 
+THe console watches for 'ESC' characters, and interprets any characters following 'ESC' specially, according to a large and very complicated scheme. 
+Particular sequences represent particular commands to the console. 
+You can enbed escape sequendes in the middle of printable text by careful arrangement of 'DB' directives in the '.text' sections of your programs. 
+ALl of the trickiness in moving the cursor around the Linux console involves embedding thos 'X' and 'Y' parameters in the escape sequence. 
+
+The default sequence as defined in 'eatterm.asm' is called 'Posterm': 
+
+	PosTerm: db 27, "[01; 01H" ; <ESC[<Y>;<X>]>; 
+
+As with 'ClearTerm' it begins with an 'ESC' character. 
+Sandwiched between the '[' character and the 'H' character are the two parameters. 
+They 'Y' value comes first, and is separated from the 'X' value by a semicolon. 
+Note well that these are not binary numbers, but two ASCII characters representing numeric digits - in this case, ASCII 48 (0) and ASCI 49 (1). 
+You can't just poke the binary value "1" as ASCII 49. 
+The console doesn't understand the binary value '1' as ASCII 49 . 
+Binary values for the 'X' and 'Y' positions must first be converted to thier ASCII equivalents and then inserted into the escape sequence. 
+THis is what the 'GotoXY' procedure does. 
+Binary values are converted to their ASCII equivalents by looking up the ASCII characters in a table. 
+THe 'Digits' table presents two-digit ASCII representations of numeric values from 0 through 80.
+Values under 10 have leading 0s, as in 01, 02, 03, and so on. 
+Here's where them magic happens inside 'GoToXY':
+
+		; Poke the Y digits: 
+			mov bl, al			; Put Y value into scale term EBX
+			mov cx, word [Digits+ebx*2]	; Fetch decimal digits to CX
+			mov word [PosTerm+2], cx	; Poke digits into control string
+		; Poke the X digits: 
+			mov bl, ah			; Put X value into scale term EBX
+			mov cx, word [Digits+ebx*2]	; Fetch decimal digits to cx
+			mov word [PosTerm+5], cx	; Poke digits into control string
+
+The X,Y values are passed in the two 8-bit registers AL and AH. 
+Each is placed in a cleared EBX that becomes a term in an effective address starting at 'Digits'. 
+Because each element of 'Digits' table is two characters in size, we have to scale the offset by two. 
+
+The trick is bringing down both ASCII digits with one memory reference, and placing them in the 16-bit register CX. 
+With the two ASCII digits in CX, we then poke them both simultaneously into their proper position in the escape sequence string.
+The 'Y' value begins at offset 2 into the string, and the 'X' value begins at offset 5. 
+Once the 'PosTerm' string has been modified for a particular X,Y coordinate pair, the string is sent to stdout, and interpreted by the console as an escape sequence that controls the cursor position. 
+The next character sent to the console will appear at the new cursor position, and subsequent characters will follow at subsequent positions until and unless another cursor control sequence is sent to the console. 
+
+When you run programs that issue cursor control codes, make sure that your console window is larger than the maximum 'X' and 'Y' values that your cursor will take on; otherwise the lines will fold and nothing will show up quite where you intended it to. 
+The eatterm program has a "Digits" table good up to 80 X 80. 
+If you wnt to work across a larger display, you have to expand the 'Digits' table with ASCII equivalents of two-digit values up to 99. 
+Because of the way the table is set up and referenced, you can only fetch two-digit values, and thus with the code shown here you're limited to a 99 X 99 character console. 
+ 

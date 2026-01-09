@@ -1,0 +1,30 @@
+You can pass a literal constant value as an argument to a macro, as the row value is passed to the macro "WriteCtr" in the eatmacro program. 
+You can also pass a register name as an argument. 
+This is legal and a perfectly reasonable invocation of "WriteCtr": 
+
+	mov al, 4
+	WriteCtr al, AdMsg, ADLEN
+
+inside the 'WriteCtr' macro, NASM substitues the name of the AL register for the %1 parameter, so
+
+	GotoXY bl, %1			; Postion the cursor for display
+
+becomes
+	
+	GotoXY bl, al 
+
+Note well that all the usual rules governing instruction operand apply. 
+Parameter %1 can only hold an 8-bit argument, because ultimately %1 is loaded into an 8-bit register inside 'GotoXY'. 
+You cannot legally pass register EBP or CX to 'WriteCtr' in parameter '%1', because you cannot directrly move a 32-bit or a 16-bit register into an 8-bit register. 
+
+Similarly, you can pass bracketed address as an argument: 
+
+	WriteCtr [RowValue], AdMsg, ADLEN
+
+This assumes, of course that 'RowValue' is named caribale defined as an 8-bit data item. 
+If a macro parameter is used in an instruction requiring a 32-bit argument (as are 'WriteCtr''s parameters %2 and %3), then you can also pass labels representing 32-bit addresses or 32-bit numeric values. 
+
+When a macro is incoked, its arguments are separated by commas. 
+NASM drops the arguments into the macro's parameters in order, from left to right. 
+If you pass two arguments to a macro with three parameters you will get an error. 
+If you pass more arguments to a mcaro than there are parameters to receive the argruments, the extraneous arguments are ignored meaning the extra is forgoten by NASM

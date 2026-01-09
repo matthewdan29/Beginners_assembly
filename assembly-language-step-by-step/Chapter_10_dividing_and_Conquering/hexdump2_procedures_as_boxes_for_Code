@@ -1,0 +1,50 @@
+Hexdump2 adds is a second display column in which any printable ASCII characters (letters, numbers, symbols) are shown in their "true" form, with nonprintable characters represented by a space-holder character. 
+This spcae-holder character is typically an ASCII period character, but that's merely a convention; it could be anything at all. 
+
+You can display a hex dump of any Linux file using hexdump2, invoking it the way below: 
+
+	$./hexdump2 < (filename)
+
+
+The I/O redirection operator < takes whatever data exists in the file you name to its right and pipes that data into standard input. 
+The hexdump2 program takes data from standard input and prints it out in hex dump format, 16 bytes to a line, for as many lines as it takes to show the entire file. 
+
+Makefiels are pure text, so there aren't a lot of nonprintable characters in the dump. 
+Notice, however, that tab and EOL, the two nonprintable characters generally presents in Linux text files, are clearly visible, both in hex form in the left column and as periods in the right column. 
+This is useful, because when the file is shown as pure text on the console, tab characters and EOL characters are invisible. 
+Havine a hex dump of a file shows you precisely where any tab and EOL characters fall in the file, and how many of them exist in any particular place. 
+Given the complexity of hexdump2 it may be useful to show you how the program works through pseudo-code before we get deep into the mechanics of how a procedure mechanism ooperates internally. 
+Here is how the program works, from a height: 
+
+	as long as there is data available from stdin, do the following: 
+		Read data from stdin 
+		Convert data bytes to a suitable hexadecimal/ASCII display form 
+	Insert formatted data bytes into a 16-byte hex dump line
+		Every 16 bytes, display the hex dump line 
+
+This is a good example of an early pseudo-code iteration, when you know roughly what you want the program to do but are still a little fuzzy on exactly how to do it. 
+It should give you a head-start understanding of a much mor detailed pseudo-code that follows(I raw dog it a little):
+
+		Zero out the byte count total (ESI) and offset counter (ECX)
+		Call LoadBuff to fill a buffer with first batch of data from stdin
+			test number of bytes fetched into the buffer from stdin 
+				If the number of bytes was 0, the file was empty; jump to Exit
+	Scan: Get a byte from the buffer and put it in AL 
+		Derive the byte's position in the hex dump line string 
+		call DUmpChar to poke the byte into the line string 
+		increment the total counter and the buffer offset counter
+		Test and see if we've processed the last byte in the buffer: 
+			If so, call LoadBuff to fill the buffer with data from stdin
+			Test number of bytes fetched into the buffer from stdin 
+				If the number of bytes was 0, we hit EOF; jump to Exit
+		Test and see if we've poked 16 bytes into the hex dump line 
+		if so, call printline to display the hex dump line 
+	Loop back to scan 
+	exit: shut down the program gracefully per linux requirements
+
+Unlike the examples of pseudo-code presented in Chapter 8, there are explicit references to procedures here. 
+I think that they may be almost self-explanatory from context, which is the sign of a good (his words) procedure. 
+For example, "Call 'LoadBuff' means" execute a procedure that loads the buffer"
+Thatas what 'LoadBuff' does and that's all 'LoadBuff' does. 
+You don't have to confront all the details of how 'Loadbuff' does its work. 
+This makes it easier to grasp the larger flow of logic expressed by the program as a whole  

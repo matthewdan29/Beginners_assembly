@@ -1,0 +1,34 @@
+Key take aways for major differences, on library modules and what they lack: 
+
+	A) Exteranl modules do not contain a main program and hence have no start address. 
+
+	B) External modules do not return a to Linux
+
+First take a look at hexdump3.asm
+It does precisely the same things as hexdump2. 
+Its a lot shorter than hexdump2 from a source code standpoint, because most of its machinery has been outsourced. 
+You dont know yet - and you dont have to. 
+NASM will put off resolving the addresses of the missing procedures as long as you list all the missing procedures using the "EXTERN" directive. 
+
+External declarations of multiple items may be put on a single line, separated by commas, as in hexdump3.asm: 
+
+	Extern ClearLine, DumpChar, PrintLine
+
+There does not have to be a single 'EXTERN' directive. 
+Several may exist in a module; each can have one.
+
+
+To make hexdump3 link into a functioning executable program, we havt to create an external library modula for all of its procedures. 
+All thats needed are the procedures and thier data in the proper sections, and the necessary 'GLOBAL' declarations, as shown in the file 'textlib.asm'
+
+There are two lines of global identifier declarations, each line with its own 'GLOBAL' directive. 
+As a convention in my own work (Jeff voice I do it the same too, but I do one each line if its all on one page like a glob), he separate declarations of procedures and named data items, and give each their own line: 
+
+	GLOBAL ClearLine, DumpChar, Newlines, PrintLine		; Procedures
+	GlOBAL DumpLin, HexDigits, BinDigits
+
+Any proedure or data item that is to be exported must be declared on the line after a 'GLOBAL' directive. 
+You don't have to declare anything in the module global. 
+A module can have "private" produres and named data items that can only be referenced from inside the module. 
+Making these items private is in fact the default: just don't declare them global. 
+Equates can be exported from modules, though this is an innovation of the NASM assembler and not necessarily true to all assemblers.

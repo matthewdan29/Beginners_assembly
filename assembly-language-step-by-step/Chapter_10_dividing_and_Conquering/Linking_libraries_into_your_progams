@@ -1,0 +1,26 @@
+The make files are fairly simple. 
+Here for example, is the makefile for the hexdump2 program: 
+
+		hexdump2: hexdump2.o
+			ld -o hexdump2 hexdum2.o
+		hexdump2.o: hexdump2.asm 
+			nasm -f elf -g -F stabs hexdump2.asm
+
+The linker invocation converts hexdump2.o into the executable file hexdump2, and that's all it has to do. 
+Adding library file complicates the picture slightly.  
+The linker now must do some actual linking of multiple files. 
+Addtional library files in the .o format are added to the linker invocation after the name of the main program's linkable file. 
+There can be any (reasonable) number of .o files in a link step. 
+To build hexdump3, we only need two. 
+Here is the makefile for hexdump3: 
+
+		hexdump3: hexdump3.o
+			ld -o hexdump3 hexdump3.o ../textlib/textlib.o
+		hexdump3.o: hexdump3.asm 
+			nasm -f elf -g -F stabs hexdump3.asm
+
+The textlib.o file is simply placed on the linker invocation line after the .o file for  the program itself. 
+There is one wrinkle in the preceding makefile: the library file is on a path relative to the directory containing the hexdump3 project. 
+Placing "../textlib/" in front of the textlib.o filename allows the linker to reach "up, across, and downstream" through the filesystem into the project directory for the library itself. 
+Otherwise, you'd have to place textlib.o  in the same directory as hexdump3, or else copy it to a directory under usr/lib, which is on the default search path. 
+A directory under usr/lib would actually be a very good place for it, one its finish.

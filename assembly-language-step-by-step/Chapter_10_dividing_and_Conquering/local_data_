@@ -1,0 +1,15 @@
+Local data, in contrast to global data, is data that is accessible only to a particular procedure or in some cases a library. 
+When procedures have local data, it's almost always data that is placed on the stack when a procedure is called. 
+
+The 'PUSH' instructions place data on the stack. 
+When a part of your code calls a procedure with the 'CALL' instruction, it can pass data down to that procedure by using 'PUSH' one or more times before the 'CALL' instruction. The procedure can then access these 'PUSH'ed data items on the stack. 
+However, a word of warning: The procedure cn't just pop those data items off the stack into registers, because 'the return address is in the way'. 
+
+Remember that the first thing 'CALL' does is push the address of the next machine instruction onto the stack. 
+WHen your procedure gets control, that return address is at the top of the stack (TOS,) ready for the inevitable 'RET' instruction to use to go home. 
+Anything pushed onto the stack by the caller before the 'CALL' instruction is above the return address. 
+THese items can still be accessed using ordinary memory addressing and the stack pointer ESP. 
+You cannot however, use 'POP' to get to them without popping and repushing the return address. 
+It is absolutely crucial once you begin calling library procedures written in C or other higher-level languages (C is a mid level that is closer to low level thing Java or python).
+For now, simply understand that global data is defined in the .data and .bss sections of your program, whereas local data is placed on the stack for the "local" use of a particular call to a particular procedure. 
+Local data takes some care and discipline to use safely. 

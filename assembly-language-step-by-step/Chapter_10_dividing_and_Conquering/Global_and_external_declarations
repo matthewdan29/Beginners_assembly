@@ -1,0 +1,14 @@
+Procedure 'external': The assembler is told that a given label will have to be found outside the program somewhere, in another module, later. 
+The promise that you make to NASM looks like this: 
+
+	Extern MyProc
+
+Here you've told the assembler that the label 'MyProc' represents a procedure and that it will be found somewhere exteranal to the current module. 
+That's all the assembler needs to know to withhold its error message; and having done that, the assembler's part in the bargain is finished. 
+
+The procedure 'global', meaning that other modules anywhere else in the program may freely reference the procedure 
+Declaring a procedure global is no more complex than declaring it external: 
+
+	GLOBAL MyProc
+
+In short: a procedure declared 'GLOBAL' where it is defined may be referenced from anywhere its label is declared 'EXTERNAL'

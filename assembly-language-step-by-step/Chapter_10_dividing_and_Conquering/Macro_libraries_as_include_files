@@ -1,0 +1,9 @@
+Macro libraries are used by "including" them in your programs source code file. 
+The means to do this is the "%INCLUDE" directive. 
+The '%INCLUDE' directive precedes the name of the macro library: 
+
+		%include "mylib.mac"
+
+If the macro file you wnat to include in a program is not in the same directory as your program you may need to provide a full qualifed pathname as part of the '%INCLUDE' directive: 
+
+		%include ".../macrolibs/mylib.mac"

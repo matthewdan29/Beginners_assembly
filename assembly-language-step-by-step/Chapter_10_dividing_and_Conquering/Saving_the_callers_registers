@@ -1,0 +1,64 @@
+Once you start writing significaant programs in assembly, you'll realize that you can never have enough registers, and you can't just create more when you need them. 
+Registers have to be used carefully, and you'll find that within any significant program, all registers are generally in use all of the time. 
+
+Jumping out into a procedure from inside your main program carries a specific and subtle problem. 
+You can call a procedure from anywhere -- which means that you wont always know what registers are already in use when the procedure is called. 
+Registers are the primay way that callers passs vaules into procedures and the primary way that procedures return values to callers. 
+A procedure needs registers to work, and so do other proceudres and the main program. 
+No procedur can assume that EAX or EBP or any other register will always be "free" any time that it's called. 
+This is why well-written procedures always save the values of any registers that they modify before they begin loading new values into registers, or making other changes to data in registers. 
+If a procedure only examines a register value, then this saving doesn't need to be done. 
+For example a procedure may assume that a certain register contains a counter value that it needs to index into a table, and it can use that register freely as long as no changes to its value are made. 
+However, whenever a register is changed by procedure, it should be saved, and then restored before the procedure executes 'RET' to go back to the caller. 
+
+Saving the caller's register values is done with 'PUSH': 
+		push ebx
+		push esi 
+		push edi
+
+Each 'PUSH' instruction pushes a 32-bit register value onto the stack. 
+Thos values will remain safely on the stack until they are popped back into the same register just prior to returning the to the caller: 
+
+	pop edi 
+	pop esi 
+	pop ebx
+	ret
+
+The caller's values must be popped from the stack in the reverse order from how they were pushed. 
+
+The CPU will obediently pop them into any registers in any order you specify, but if you get the order wrong, you will essentially be changing the caller's register instead of saving them. 
+What had been in EBX may now be in EDI.
+THe value of CX was pushed onto the stack, but the next instruction was 'POP DX'.
+What had been in CX was not in DX. 
+If you're pushing register values to preserve them, the order of the pushes and pops is absolutely critical. 
+IN some cases a procedure uses most or all of the general-purpose registers, and there is a pair of instructions that will push and pop all GP registers at one go. 
+(The value of ESp is a special case, and even though its value was pushed onto the stack, 'PUSHAD' discards the copy of ESP popped from the stack when it executes)
+
+In every case where you weigh wheather one instruction takes more time to execute than another, you must consider how many times that instruction is executed. 
+If an instruction is within a tight loop that executes sequentially tens of thousands or millions of times, instruction speed is important. 
+On the other hand, if an instruction is executed only a few times over the course of a programs run, its speed is at best a minor consideration. 
+'ClearLine' executes only once for every 16 bytes that hexdump2 processes; and even using 'PUSHAD' and POPAD, its execution time is a fraction of the time taken by the 'INT 80h' call to Linux kernel services that precedes it, in the 'PrintLine' procedure. 
+
+'PrintLine' is the same way: the time it takes to execute is "swamped" nu the time required by the 'INT 80' call to 'sys_write' that it makes, so using 'PUSHAD' and "POPAD" in no way affects the percedure to pass a value back in a register, the procedure cannot use 'PUSHAD' and "POPAD". 
+IN such cases, you simply have to discern which registers must be preserved for the caller, and which registers have to carry some results back on return. 
+
+EBP has a mission, too: it carries back the number of bytes loaded into 'BUFF' by the 'INT 80h' call to "sys_read". 
+The call to 'sys_read' requests the number of bytes specified by the 'BUFFLEN' equate near the beginning of the program. 
+However, becuase few files will be exact multiples of 'BUFFLEN' long, the number of byres in the last batch of data brought form 'stdin' will be less than "BUFFLEN". 
+This value is also considered global, and is used by the main program to determine when the current buffer has been completely processeed. 
+Note that the caller can preserve its own registers, and this is done sometimes. 
+For example, consider this sequence of instructions: 
+
+		push ebx
+		push ebx
+		call CalcSpace
+		pop edx
+		pop ebx
+
+This is really no different, funtionally, from preserving the registers inside the procedure. 
+However, ther may be more than one call to 'CalcSpace' within the program. 
+There may be dozens oof calls, or hundreds, and even such call requires five instructions instead of only one. 
+If preserving registers is done within the proceudre the preservation requires only five instructions, period, irrespective of how may places in the code call the procedure.
+
+Ther are no hard-and-fast rules about know which registers to preserve. 
+You need to know how the registers are being used at any given point in the program, and code accordingly. 

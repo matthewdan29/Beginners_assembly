@@ -1,0 +1,54 @@
+Macros are for the most part a straight text-substitution trick, but text substitution has some intreseting and sometimes useful wrinklles. 
+One of these is the ability to pass parameters to a macro when the macro is invoked. 
+For example in eatmacro there's an invocation of the macro "WriteCtr" with three parameters: 
+
+		12, AdMsg, ADDLEN
+
+The literal constant 12 is passed 'into' the macro and used to specify the screen row on which the centered text is to be displayed -- in this case, line 23 from the top. 
+You could replace the 12 with 3 or 16 or any other number less than the number of lines currently displayed in the Linux console. 
+(If you attempt to position the cursor to a line that doesn't exist in the console, the results are hard to predict. 
+Typically the text shows up on the bottom line of the display. )
+The other two parameters are passed the address and length of the string to be displayed. 
+
+Macro parameters are, again, artifacts of the assembler. 
+They are not pushed on the stack or set into a shared memory area (as with 'COMMON') or anything like that. 
+The parameters are simply placedholders for the actual values (called 'arguments') that you pass to the macro through its parameters. 
+
+Take a closer look at the 'WriteCtr' macro to see how this works: 
+
+	%macro WriteCtr 3			; %1 = row; %2 = String addr; %3 = String length
+		push ebx			; Save caller's EBX
+		push edx			; Save caller's EDX
+		mov edx, %3			; Load string length into EDX
+		xor ebx, ebx			; Zero EBX
+		mov bl, SCRWIDTH		; Load the screen width value to BL 
+		sub bl, dl 			; Calc diff. of screen width and string length
+		shr bl, 1			; Divide difference by two for X value
+		GotoXY bl, %1			; Position the cursor for display
+		WriteStr %2, %3			; Write the string to the console 
+		pop edx				; Restore caller's EDX
+		pop ebx				; Restore caller's EBX
+	%endmacro
+
+Parameters is another area of NASM differs radically from MASM. 
+MASM allows you to use symbolic names -  such as word "Row" or "StringLength" to stand for parameters. 
+NASM relies on a simpler system that declares the number of parameters in the definition of the macro, and then refers to each paramter by number within the macro, rather than by some symbolic name. 
+
+In the definition of macro 'WriteCtr', the number 3 after the name of the macro indicates that the assembler is to look for three parameters. 
+THis number must be present - as 0 - even when you have a macro with no parameters at all. 
+Every macro must have a parameter count.
+Down in the definition of the macro, the parameters are referenced by number. 
+Therefore, "%1" indicates the first paramters used after the invocation of the macro name "WriteCtr" ; "%2" indicates the second parameter, counting from left to right; "%3" indicates the third parameter; and so on. 
+
+The actual values passed into the parameters are referred to as arguments. 
+Don't confuse the actual values with the parameters. 
+
+Macro parameters are a kind of label, and they may be referenced anywhere within the macro - but only within the macro. 
+In "WriteCtr", the "%3" parameter is referenced as an operand to a 'MOV' instruction. 
+The argument passed to the macro in "%3" is thus loaded into register EDX. 
+
+Macro arguments may be passed as parameters to other macros. 
+This is what happens within 'WriteCtr' when 'WriteCtr' invokes the marco 'WriteStr'. 
+'WriteStr' takes two parameters, and 'WriteCtr' passes its parameters "%2" and "%3" to 'WriteStr' as its arguments
+
+

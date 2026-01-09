@@ -1,0 +1,20 @@
+Working with NASM can create programs large enough that you will encounter this error below. 
+
+	error: short jump is out of range
+
+This error occurs when a conditional jump instruction is too far from the label that it refereces, where "too far" means too many locations away in memory. 
+This only applies to conditional jumps; the unconditional jump instruction 'JMP' is not subject to this error. 
+The problem arises because of the different ways that NASM can generate a binary opcode for a particular conditional jump instruciton. 
+
+There is a thrid kind of jump called a 'far jump' which involves leaving the current code segment entirely for whatever reason. 
+
+The problem really lies with the difference between short jumps and near jumps. 
+Given that 90% or more of the conditional jump instructions you'll write target program locations only a few instructions away, it makes sense for NASM to generate opcodes for short jumps by default. 
+In fact, NASM generatesopcodes for short jumps unless you explicitly tell it to use near jumps. 
+A near jump is specified using the 'NEAR' qualifier: 
+
+	jne Scan 		; Short jump, to within 127 bytes in either direction 
+	jne near Scan		; Near jump, anywhere in the current code segment 
+
+The fix is easy: for any jump that NASM calls 'Out of Range' insert the 'NEAR' qualifier between the mnemonic and the target label. 
+Leave the other alone. 

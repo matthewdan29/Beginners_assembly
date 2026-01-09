@@ -1,0 +1,15 @@
+The very fundamental control sequences like clearing the display and moving the cursor and probably universal, and will liekly work identically on any Linux console you might find.
+To ensure that everything works, your programs would have to probe the console to find out what terminal spec it supports, and then issue escape sequences accordingly. 
+In knosole (IDK never used it but this is what jeff said one of very few things in this book I haven't tried along with raw mode(but technicaly I use raw mode all the time))  the following escape sequence turns the console background green:
+	
+	GreenBack: db 27, "[42m"
+
+This is ture in Konsole. 
+How universial this sequence and others like it are IDK (He also doen't know LOL)
+THe big thing that tell you "I made it" is programming to create full-screen text applications that "paint" a form on the console, complete with data entry fields, and then allow the user to tab from one field to another, entering data in each field. 
+This is made diabolically difficult in Linux by the need to access individual keystrokes at the console keyboard, through something called 'raw mode'. 
+
+The standard Unix way to deal with the console is a C library called ncurses, and while ncurses may be called from assembly, it's ugly things indeed. 
+A better choice for assembly programmers is a much newer library written specifically for NASM assembly language, called LinuxAsmTools. 
+It was written by THE JEFF OWENS!!!, and it does nearly all of what ncurses does without C's brute-force calling conventions and boatloads of C cruft(that should tell you a lot about what your working with). 
+

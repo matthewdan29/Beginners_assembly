@@ -1,0 +1,52 @@
+Right near the beginning of the main program block in hexdump2 is a machine instruction: 
+The label "LoadBuff": 
+		LoadBuff: 		Fills a buffer with data from stdin via INT 80h sys_read
+refers to a procedure. 
+As you might have gathered 'CALL LoadBuff' simply tells the CPU to go off and execute a procedure named "LoadBuff", and then come back when "LoadBuff" finishes runing. 
+'LoadBuff' is a good first example of a procedure because it's fairly straight-line in terms of its logic, and it uses instructions and concepts already discussed. 
+Like assembly language programs generally, a procedure like 'LoadBuff' starts executing at the top, runs sequentially through the instructions in its body, and at some point ends. 
+The end does not necessarily have to be at the very bottom of the sequence of instructions, but the "end" of a procedure is always the place where the procedure goes back to the part of the program that called it. 
+THis place is wherenver you see 'CALL''s alter ego 'RET' (from "return"). 
+
+		LoadBuff: 
+			push eax		; Save caller's EAX
+			push ebx 		; Save caller's EBX
+			push edx		; Save caller's EDX
+			mov eax, 3		; Specify sys_read call
+			mov ebx, 0		; Specify FIle descriptor 0: Standard Input
+			mov ecx, Buff		; Pass offset of the buffer to read to 
+			mov edx, BUFFLEN	; Pass number of bytes to read at one pass
+			int 80h 		; Call sys_read to fill the buffer
+			mov ebp, eax		; Save # of bytes read from file for later
+			xor ecx, ecx		; Clear buffer pointer ECX to 0
+			pop edx			; Restore caller's EDX
+			pop ebx			; Restore caller's EBX
+			pop eax			; Restore Caller's EAX
+			ret			; And return to caller
+
+In a very simple example like 'LoadBuff','RET' is a the very end of the sequence of instructions in the procedure. 
+However, 'RET' may be anywhere in the procedure, and in some situations you may find it simplest to have more than on 'RET' in a procedure. 
+Which 'RET' actually takes execution back to the caller depends on what the procedure does and what circumstances it encounters, but that's immaterial. 
+Each 'RET' is an "exit point" but to the code that called the procedure, and all 'RET' instructions within a procedure to execution back to the very same location: the instruction immediately after the 'CALL' instruction that invoked the procedure. 
+The important points of procedure structure are these: 
+
+	A) A procedure must begin with a label, which is (as you should recall) an identifier followed by a colon. 
+
+	B) Somewhere within a procedure, there must be at least one 'RET' instruction
+	
+	C) There may be more than one 'RET' instruction. Execution has to come back from a procedure by way of a "RET" instruction, but there can be more than one exit door from a procedure. Which exit is taken depends on the procedure's flow of execution, but with conditional jump instructions you can have exits anywhere it satifsies the requirements of the procedur's logic. 
+
+	D) a procedure may use 'CALL' to call another procedure.
+
+The means by which 'CALL' and 'RET' operate may sounds fimiliar: 'CALL' first pushes the address of the 'next' instruction after itself onto the stack. 
+Then 'CALL' transfers execution to the address represented by the label that names the procedure -- in this case, 'LoadBuff'. 
+The instructions contained in the procedure execute. 
+Finally, the procedure is terminated by the instrution 'RET'. 
+The 'RET' instruction pops the address off the top of the stack and transfers execution to that address. 
+Because the address pushed was the address of the first instruction after the 'ca;;' instruction, execution continues as though 'CALL' had not changed the flow of instruction execution at all. 
+
+This should remind you strongly of how software interrupts work. 
+The main difference is that the coller does know the exact address of the code it wishes to call. 
+Apart from that, it's very close to being the same process. 
+Note, however, that 'RET' and 'IRET' are not interchangeable. 
+'CALL' works with 'RET' just as 'INT' works with 'IRET'. 

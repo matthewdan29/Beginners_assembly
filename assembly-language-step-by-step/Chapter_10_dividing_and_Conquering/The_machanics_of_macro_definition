@@ -1,0 +1,18 @@
+A macro definition looks a little like a procedure definition, framed between a pair of special NASM directives: '%MACRO' and "%ENDMACRO". 
+Note that the "%ENDMACRO" directive is on the line after the last line of the macro. 
+Don't make the mistake of treating "%ENDMACRO" like a label that marks the macro's last line. 
+One minor shortcoming of macros vis-a-vis procedures is that macros can have only one entry point. 
+A macro, after all is a sequence of code lines that are inserted into your program in the midst of the flow of execution. 
+You don't call a macro and you don't return from it. 
+The CPU runs through it just as the CPU runs through any sequence of instructions. 
+Many or most procedures may be expressed as macros with a little care. 
+In 'eatmacro.asm' the program from 'eatterm.asm' converts all the procedures to macros so that you can see differenced between the two approaches. 
+
+Compare the macros in eatmacro with their procedure equivalents in eaterm. 
+Thy've shed their 'RET' instructions (and for thos macros that invoke other macros, their 'CALL' instructions), but for the most part they consist of almost precisely the same code. 
+Macros are invoked simply by nameing them.
+Again, don't use the "CALL" insturction. 
+Just place the macro's name on a line: 
+			ClrScr
+
+The assembler will handle the rest

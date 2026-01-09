@@ -1,0 +1,7 @@
+Just like in higher level programming languagues use the full name of the method meaning. 
+Use the global label such as 'Scan' and the local label such as '.modtest'
+The results should look like this below. 
+
+	jne Scan.modTest
+
+Yes just like in C/C++ or even in that coffee lang called Java 

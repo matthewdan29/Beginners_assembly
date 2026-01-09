@@ -1,0 +1,13 @@
+Calling procedures from within procedures requires you to pay at least a little attention to one thing: stack space. 
+Remember that each procedure call pushes a 32-bit return address onto the stack. 
+This return address is not removed from the stack until the 'RET' instruction for that procedure executes. 
+If you execute another 'CALL' instruction before returning from a procedure, then the second 'CALL' instruction pushes another return address onto the stack. 
+If you keep calling procedures from within procedures, then one return address will pile up on the stack for each 'CALL' until you start returning from all those nested procedures. 
+
+However, you can still get in trouble by misusing an advanced programming technique called recursion. 
+In recursion, a procedure calls itself to get its work done. 
+For every call to itself a recursive procedure must eventually execute a "RET". 
+Even if the recursive procedure calls itself dozens of hundreds of times, as long as the 'CALL' instruction balance the 'RET' instructions, nothing bad will happen. 
+ON a modern PC, an assembly language procedure can call itself a million times in a second or less. 
+At that point the stack collides with the code and Linux hands you a segmentation fault. 
+

@@ -1,0 +1,18 @@
+The mechanism for calling and returning from procedures is built right into the CPU and is independent of any given assembler product. 
+Major assemblers provide another complexity-management tool: 'macros'. 
+Macros are a different breed of cat entirely.
+Whereas procedures are implemented by using 'CALL' and "RET" instructions built right into the instruction set, macros are a trick of the assembler and do not depend on any particular instruction or group of instructions. 
+
+A macro is a label that stands for some sequence of text lines. 
+This sequence of text lines can be (not necessarily) a sequence of instructions. 
+When the assembler encounters the macro label in a source code file, it replaces the macro label with the text lines that the macro label represents. 
+This is called 'expanding' the macro, because the name of the macro (occupying one text line) is replaced by several lines of text, which are then assembled just as though they had appeared in the source code file all along. 
+You might think of a macro as an include file that's built into the source code file. 
+It's a sequence of text lines that is defined once, given a descriptive name, and then dropped into the source code repeatedly as needed by simply using the name. 
+
+The source code as stored on disk has a definition of the macro, backeted between the "%MACRO" and "%ENDMACRO" directives. 
+Later in the file, the name of the macro appears several times. 
+When the assembler processes this file, it copies the macro definition into a buffer somewhere in memory. 
+As it assembles the text read from disk, the assembller drops the statements contained in the macro into the text wherever the macro name appears. 
+The disk file is not affected; the expansion of the macros occurs only in memory. 
+

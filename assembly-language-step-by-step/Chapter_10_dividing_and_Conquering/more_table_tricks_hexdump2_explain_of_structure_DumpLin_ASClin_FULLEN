@@ -1,0 +1,64 @@
+The hexdump2 program works very much like the hexdump1 program but it has a few more tricks in its black bag. 
+One worth noting lies in the definition of the hex dump line varibale 'DumpLin': 
+
+		DumpLin: 	db " 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 "
+		DUMPLEN		EQU $-DumpLin
+		ASCLin: 	db " |................| ", 10
+		ASCLEN		EQU $-ASCLin
+		FULLLEN		EQU $-DumpLin
+
+What we have here is a variable decleared in two parts. 
+Each part may be used separately, or the two parts may be used together.
+The first section of 'DumpLin' is the string containing 16 hex digits. 
+It length is defined by the 'DUMPLEN' equate. 
+
+The second section of 'DumpLin' is the ASCII column, and it has its own label, 'ASCLin'. 
+A program that only needed the ASCII column could use the 'ASCLin' variable all by itself, along with its associated length equate, 'ASCLEN'. 
+Now, necause the two sections of 'DumpLin' are adjacent in memory, referencing 'DumpLin' allows you to reference both sections as a unit - for example, when you want to send a line to stdout via 'INT 80h'. 
+In this case, the equate that calculates the length of the whole line is 'FULLLEN'. 
+
+It's useful to have separate names for the two sections because data is not written to or read from the two sections in anything like the same ways. 
+Take a look at the following 'DumpChar' procedure: 
+
+		DumpChar: 
+			push ebx			;Save caller's EBX
+			push edi 			; Save caller's EDI
+		; First we insert the input char into the ASCII portion of the dump line
+			mov bl, byte [DotXlat+eax] 	; Translate nonprintables to '.'
+			mov byte [ASCLin+edx+1], bl	; Write to ASCII portion
+		; Next we insert the hex equivalent of the input char in the hex portion 
+		; of the hex dump line: 
+			mov ebx, eax			; Save a second copy of the input char
+			lea edi, [edx*2+ebx]		; Calc offset into line string (ECX X 3)
+		; Look up low nybble character and insert it into the string: 
+			and eax, 0000000Fh		; Mask out all but the low nybble
+			mov al, byte [HexDigits+eax]	; Look up the char equiv. of nybble
+			mov byte [DumpLin+edi+2], al	; Write the char equiv. to line string
+		; Look up high nybble character and insert it into the string: 
+			and ebx, 000000F0h		; Mask out all the but second-lowest nybble
+			shr ebx, 4			; Shift high 4 bits of byte into low 4 bits
+			mov bl, byte [HexDigits+ebx]	; Look up char equiv. of nybble
+			mov byte [DumpLin+edi+1], bl	; Write the char equiv. to line string
+		; Done
+			pop edi				; Restore caller's EDI
+			pop ebx				; Restore caller's EBX
+			ret 				; Return to caller
+
+Writing to the ASCII column is very simple, because each character in the ASCII column is a sigle byte in memory, and the effective address of any one position in 'ASCLin' is easy to calculate: 
+
+			mov byte [ASCLin+edx+1], bl 	; Write to ASCII portion
+
+Each postion in the hex dump portion of the line, however, consists of three characters: a space followed by two hex digits. 
+COnsidered as a table, addressing a specific entry in 'DumpLin' requires a scle of 3 in the effective address calculation: 
+
+		lea edi, [edx*2+edx]			; Calc offset into line string (EDX X 3)
+
+The two parts of the hex dump line are dealt with very differently from a data manipulation standpoint, and only act togeather when they are sent to stdout. 
+It's useful, then, to give each of the two sections its own label. 
+Structs in C are handled very much the same way "under the skin".
+
+The 'DotXlat' table is another example of character translation, and as with all such translation tables, expresses the rules needed to display all 256 different ASCII values consistently in a table line: 
+
+		A) All printable characters translate as themselves
+
+		B) All nonprintable characters translate as ASCII periods. 

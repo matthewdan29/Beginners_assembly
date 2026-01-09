@@ -1,0 +1,38 @@
+By now you're used to thinking of code as living in the .text section, and data as living in the .data or .bss sections. 
+In almost all cases this is a good way to organize things, but there's no absolute requirement that you separate code and data in this way. 
+It's possible to define data within a procedure using NASM's pseudo-instructions, including DB, DW, and DD. 
+Jeff created a useful procedure that shows how this is done, and its a good example of when to do it. 
+The 'Newlines' procedure enables you to issue some number of newline characters to stdout, specified by a value passed to the subroutine in EDX: 
+
+;--------------------------------------------------------------------------------------------
+; Newlines: 			Sends bewteen 1-15 newlines to the linux console
+; UPDATED: 			1/2/26
+; IN: 				EDX: # of newlines to send, from 1 to 15
+; RETURNS: 			Nothing
+; MODIFIES: 			Nothing. All caller registers preserved.
+; CALLS: 			Kernel sys_write
+; DESCRIPTION			The number of newline characters (0Ah) specified in EDX is sent to stdout using INT 80h
+; 				sys_write. This procedure demostrates placing constant data in the procedure definition
+; 				itself, rather than in the .data or .bss sections. 
+
+Newlines: 	
+	Pushad			; Save all caller's registers 
+	cmp edx, 15		; Make sure caller didn't ask for more than 15
+	ja .exit		; if so, exit without doing anything
+	mov ecx, EOLs		; Put address of EOLs table into ECX
+	mov eax, 4		; Specify sys_write
+	mov edx, 1		; Specify stdout 
+	int 80h			; Make the kernel call
+.exit	popad			; Restore all caller's registers
+	ret			; Go home
+EOLs db 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10
+
+THe table EOLs contains 15 EOL characters. 
+If you recall, when the EOL character is sent to stdout, the console interprets it as a newline, in which the cursor position of the console is bumped down one line. 
+The caller passes the desired number of newlines in EDX. 
+The 'NewLines' procedure first checks to ensure that the caller hasn't requested more newlines than there are EOL characters in the table, and then plusg the address of the EOLs table and the requested number into a convential call to 'sys_write' using 'INT 80h'. 
+Basically, 'sys_write' displays the first ECX characters of the EOLs table to the console, which interprets the data as ECX newlines. 
+
+Having the data right in the procedure means that it's easy to cut and paste the procedure definition from one program into another without leaving the essential table of EOL from one program into another without leaving the essential table of EOL characters behind. 
+Because the only code that ever uses the 'EOLs' table is the Newlines procedure itself, there's no benefit to placing the EOLs table in the more centreally visible .data section. 
+And although the 'EOLs' table is not local in the technical sense it looks local, and keeps your .data and .bss sections from becoming a little more cluttered with data that is referenced from only a single precedure.  

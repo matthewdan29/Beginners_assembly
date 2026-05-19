@@ -1,0 +1,11 @@
+A 'string' is any contiguous group of bytes in memory, of any arbitrary size, that your operating system allows. (For linux, that can be big).
+The primary defining conceopt of an assembly language string is that its component bytes are right there in a row, with no interruptions. 
+That's pretty fundamental. 
+Most higher-level languages build on the string concept in several ways. 
+In C, a string has no length byte in front of it. 
+Instead, a C string is said to end when a byte with a binary value of 0 is encoountered. 
+This will be important in assembly work, much of which relates intimately to C and the standard C library, where C's string-handling machinery lives. 
+Assembly strings are just contiguous regions of memory. 
+They start at some specified address, continue for some number of bytes, and stop. 
+THere is no length counter to indicate how many bytes are in the string, and no standard boundary characters such as binary 0 ti indicate where a string starts or ends. 
+

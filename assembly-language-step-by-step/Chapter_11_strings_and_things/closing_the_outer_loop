@@ -1,0 +1,23 @@
+'JCXZZ' indicates when both loops are finsihed. 
+Closing the outer loop is done a little differently from closing the inner loop. 
+
+	.DoLn:	mov bl, CHRTLEN		;Each line will consist of 32 chars
+	.DoChr: stosb			;Note that there's no REP prefix
+		jcxz AllDone		;When the full set is printed, quit
+		inc al			;Bump the character value in AL up by 1
+		dec bl			;Decrment the line counter by one
+		loopnz .DoChr		;Go back & do another char until BL goes to 0
+		add edi COLS-CHRTLEN	;Move EDI to start of next line
+		jmp .DoLn		;Start display of the next line
+
+The inner loop is considered complete when we've displayed one full line of the ASCII table to the screen. 
+BL governs the length of a line, and when BL goes to zero, a line is finished. 
+'LOOPNZ' then falls through to the 'ADD' instruction that modifies EDI. 
+
+We modify EDI to jump from the address of the end of a completed line in the display buffer to the start of the next line at the left margin. 
+This means we have to 'wrap' by some number of characters from the end of the ASCII table line to the end of the visible screen. 
+The number of bytes this requires is provided by the assembly-time expression 'COLS-CHRTLEN'. 
+This is basically the difference between the length of one ASCII table line and width of the virtual screen.
+The result of the expression is the number of bytes that must be moved further into the display bufffer to arrive at the start of the next line at the left screen margin. 
+But after that wrap is accomplished by modifying EDI, the outer loop's work is done and we close the loop. 
+This time, we do it unconditionally by way of a simple 'JMP' instruction. 

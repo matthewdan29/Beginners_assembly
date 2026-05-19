@@ -1,0 +1,11 @@
+Assembly strings have no boundary values or length indicators. 
+They can contain any values at all, including binary 0. 
+You should think of strings in terms of the register values that define them. 
+
+You've got a string when you set up a register to point to one. 
+And once you point to a string the length of that string is defined by the value that you place in register ECX. 
+
+Assembly strings are wholly defined by values you place in registers 
+There is a set of assumptions about strings and registers baked into the silicon of the CPU. 
+When you execute one of the string instructions, The CPU uses thos assumptions to determine which area of memory is reads from or writes to. 
+

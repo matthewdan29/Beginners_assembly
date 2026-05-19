@@ -1,0 +1,11 @@
+'REP' simplifies string processing from the programmer's perspective, because it brings the instruction loop inside the CPU. 
+you can use the 'STOSB' instruction without 'REP'. 
+THe work involves setting up the instruction loop outside the CPU and making sure it's correct. 
+
+With 'REP STOSB', you can only store the same value into the destination string. 
+Whatever you put into AL before executing 'REP STOSB' is the value that is fired into memory ECX times. 
+'STOSB' can be used to store different values into the destination string by firing it semiautomaticlly, and changing the value in AL between each squeeze of the trigger. 
+You lose a little time in handling the loop yourself, outside the CPU, becuase a certain amount of time is spent in fetching the loops instruction bytes from memory. 
+Still, if you keep your loop as tight as you can, you don't lose an objectionable amount of speed, especially on modern processors, which make very effective use of cache and don't fetch instructions from memory every time they're executed. 
+
+

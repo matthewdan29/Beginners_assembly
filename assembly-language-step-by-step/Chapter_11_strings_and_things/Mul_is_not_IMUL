@@ -1,0 +1,40 @@
+The 'Ruler' procedure uses 'MUL' as well, to calculate and X,Y position in the display buffer where 'STOSB' can begain placing the ruler characters. 
+The algorithm for dtermining the offset in bytes into the buffer for any given X and Y values looks like this below: 
+		
+	offset = ((Y * width in characters of a screen line) + X)
+
+Preety obviously, you have to move Y lines down in the screen buffer, and then move X bytes over from the left margin of the screen to reach you X,Y position. 
+The calculation is done this way inside the 'Ruler' procedure: 
+
+	mov edi, VidBuff		; Load video address to EDI 
+	dec eax 			; Adjust Y value down by 1 for address calculation
+	decc ebx 			; Adjust X value down by 1 for address calculation 
+	mov ah, COL			; move screen width to AH 
+	mul ah 				; Do 8-bit multiply AL*AH to AX
+	add edi, eax			; Add Y offset into vidbuff to EDI 
+	add edi, ebx			; Add X offset into vidbuf to EDI 
+
+The two 'DEC' instructions take care of the fact that X,Y positions in this system are 1-based; tha is, the upper-left corner of the screen is position 1,1 rather than 0,0 as they are in some X,Y coordinates systems. 
+Think of it this way: if you want to display a ruler begining in the very upper-left corner of the screen, you have to write the ruler characters starting at the very beginning of the buffer, at no offset at all. 
+For calculation's sake, then, the X,Y values thus have to be 0-based. 
+For an 8-bit multiply using 'MUL', one of the factoors in implicit: AL contains the Y value, and the caller passes 'Ruler' the Y value in EAX. 
+We palce the screen width in AH, and then multiply AH times AL with 'MUL'.
+The product replaces the values in both AH and AL, and is accessed as the value in AX. 
+Adding the product and X value (passed to 'Ruler' in BL) to EDI gives you thr precise memory address where the ruler characters must be written.
+
+'MUL' is not 'IMUL'  -- most of the time. 
+'MUL' and 'IMUL' are sister oinstructions that both perform multiplication. 
+'MUL' treats its operand values as unsigned, whereas 'IMUL' treats them signed. 
+This differeence does not matter as long as both factors remain positive in a signed context. 
+In practical terms for an 8-bit multiply, 'MUL' and 'IMUL' work identically on values of 127 or less. 
+At 128 everything changes. 
+Values above 127 are considered negative in an 8-bit signed context. 
+'MUL' considers 128 to be .... 128. 
+'IMUL' considers 128 to be -1. 
+You could replace the 'MUL' instruction with 'IMUL' in Ruler, and the proc would work identically until you passed it a screen dimension greater than 127. 
+Then, suddenly, 'IMUL' wouold calculate a product that is nominally negative... but only if you're treating the value as a signed value. 
+A negative number treated as unsigned is a very large positive number, and a memory reference to the address represented by EDI plus that anomalous value will generate a segmentation fault. 
+Try it, no harm done, its a good lesson. 
+'IMUL' is for signed values. 
+For memory address calculation, leave it alone and be sure to use 'MUL' instead. 
+

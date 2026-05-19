@@ -1,0 +1,25 @@
+Understanding the Linux stack requires at least a perfunctory understanding of virtual memory. 
+Linux has always used a virtual memory mechanism to manage the physical memory in your computer. 
+Linux can set aside a region of memory anywhere in your computer's physical memory system, and then say "You should consider the first address of this block of memory 08048000h, and perform all memory addressing accordingly". 
+
+Away in the background, the Linux kernel accepts every single memory-addressing attempt made by any program's code, and translates that virtural address into a physical memory address somewhere in RAM. 
+This involoves a lot of fast work with physical memory tables and even 'Fake' physical memory in RAM with storage on a hard drive. 
+But the bottom line is that your program gets its own little memory universie ,and may assume that whatever memory it has is truly its own. 
+Where precisely that memory exists in the physical memory system is unknown to your program, and unimportant. 
+For x86-based linux systems, this block of memory always begins at 08048000h. 
+For there, it run all the way up tp 0Bfffffffh.
+Not every virtual address in that 3GB virtual address space maps to a physical address. 
+In fact, a linux program's virtual memory space is divided into two blocks. 
+The low block begins at 08048000h and contains your program code, along with the data defined in the .data and .bss sections. 
+It's only as big as it needs to be, given the code and data that you define; it's quite small - perhaps a few hundrads bytes. 
+The high block can be thought of almost in reverse: it begins in high memory and runs down toward low memory. 
+THe actual address boundaries of this high block are not always the same. 
+However, the high end of this block cannot be higher than 0Bfffffffh. 
+This high block is your program's stack. 
+The apparent immensity of unused space in between the two blocks is an illusion. 
+If your program needs additional memory from that empty middle area, it simply needs to attempt to address that additional memory and Linux will grant the request - unless the request iis for any of several arcane reasons judged excessive or defective. 
+Then Linux may deny the request and terminate the program for misbehavior.
+In general, your program code and data will be down somewhere near 08048000h. 
+Your stack will be up somewhere near 0BFFFFFFFh. 
+
+

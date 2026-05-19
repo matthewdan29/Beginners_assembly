@@ -1,0 +1,30 @@
+'CLD' - Is instruction for CPU Clear Directing FLag, sets the direction flag (DF) in the 'FLAGS' register. READ BELOW
+
+CLD, it constrols something critical in string instruction work, which is the direction in memory that the string operation takes. 
+
+Most of the time that you'll be using 'STOSB', you'll want to run it "uphill" in memory -- that is, from a lower memory address to a higher memory address. 
+In 'ClrVid', you put the address of the start of the video refresh buffer into addresses. 
+Each time 'STOSB' fires a byte into memory, EDI is incremented to point to the 'next higher' byte in memory. 
+This is the logical way to work it. 
+'STOSB' can just as easily begin at a high address and move downward in memory. 
+On each store into memory, EDI can be decremented by 1 instead. 
+Which way that 'STOSB' fires  - uphill toward successively higher addreses, or downhill toward successively lower addreses -- is govenrend by one of the flags in the EFlag register. 
+This is the "Direction flag", DF. 
+DF's sole job in life is to control the direction of action taken by certain instructions that, like 'STOSB', can move in one of two directions in memory. 
+Most of these are string instructions. 
+
+The sense of DF is this: when DF is set (that is, when DF has the value 1), 'STOSB' and its fellow string instructions work downhill, from higher to lower address. 
+When DF is cleared (that is, when it has the value 0), 'STOSB' and its siblings work uphill, from lower to higher addresses. 
+This in turn is simply the direction in which the EDI register is adjusted: When DF is set, EDI is decremented during string instruction execution. 
+When DF is cleared, EDI is incremented. 
+
+The direction flag defaults to 0 (uphill) when the CPU is reset. 
+It is generally changed in one of two ways: with the 'CLD' instruction or with the 'STD' instruction. 
+'CLD' clears DF to 0, and 'STD' sets DF to 1. 
+Because DF's default state is cleared to 0, and all of the string instructions in the 'vidbuff1' demo program work uphill in memory, it's not technically necessary to include a 'CLD' instruction in the 'ClrVid' procedure. 
+However, other parts of a program can change DF, so it's always a good idea to place the appropriate 'CLD' or 'STD' right before a string instruction. 
+People sometimes get confused and think that DF also governs whether ECX is incremented or decemented by the string instructions. 
+Not so!
+Nothing in a string instruction ever increments ECX. 
+ECX holds a count value, not a memory address. 
+you place a count in ECX and it counts down each time that a string instruction fire.

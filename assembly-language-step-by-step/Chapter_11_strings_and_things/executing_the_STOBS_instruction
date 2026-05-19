@@ -1,0 +1,37 @@
+Once you set up these three registers, you can safely execute the 'STOBS' instruction.  
+When you do this what happens: 
+	1) The byte calue in AL is copied to the memory address stored in EDI
+
+	2) EDI is incremented by 1, such that it now points to the next byte in memory following the one just written to
+
+One copy of AL is copied to onle location in memory. 
+The EDI register is adjusted so that it will be ready for the next time 'STOSB' is executed. 
+
+One very important point to remember is that ECX is not decemented by 'STOSB'.
+ECX is decemented autoamtically only if you put the 'REP' prefix in front of 'STOBS'. 
+Lacking the 'REP' refix, you have to do the decementing yourself, either explicitly through 'DEC' or through the 'LOOP' instruction. 
+
+So you can't make 'STOSB' run automaticlly without 'REP'. 
+However you can if you like execute other instructions before executing another 'STOSB'. 
+As long as you do not disturb EDI or ECX. 
+Then when you execute 'STOSB' again, another copy of AL will go out to the location pointed to by EDI, and EDI will be adjusted yet again. (You have to remember to decement ECX somehow).
+Note that you can change the value in AL if you like. 
+
+However, this is like the difference between a simiautomatic weapon and a fully automatic weapon, which fires rounds continually as long as you hold the trigger down. 
+To make 'STOSB' fully automatic, just hang the 'REP' prefix ahead of it. 
+What 'REP' does is simple: its sets up the tightest of all tight loops completely inside the CPU and fires copies of AL into memory repreatdly, incrementing EDI by 1 each time and decementing ECX by 1, until ECX is decemented down to 0. 
+THen it stops, and when the smoke clears you'll see what your entire destination string, has been filled with copies of AL. 
+
+In the 'vidbuff1.asm' program, the code to clear the display buffer is in the 'ClrVid' procedure. 
+The pertinent lines are shown below: 
+
+	cld 			; Clear DF; we're counting up-memory
+	mov al, FILLCHR		; Put the buffer filled char in AL 
+	mov edi, VidBuff	; Point destination index at buffer 
+	mov ecx, COLS*ROWS 	; Put count of chars stored into ECX
+	rep stosb		; Blast chars at the buffer 
+
+The 'FILLCHR' equate is by default set to 32, which is the ASCII space character. 
+You can set this to fill the buffer with some other character, though how useful this may be is unclear. 
+Note also that the number of charcters to be written into memory is calculated by NASM at assembly time as 'COLS' times 'ROWS'. 
+This enables you to change the size of your virtual display without changing the code that clears the display buffer. 

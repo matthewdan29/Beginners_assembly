@@ -1,0 +1,3 @@
+Sometimes you have to break the rules. 
+In addition to changing the value in EAX between executions of 'STOSB', you can change the 'destination address' as well. 
+As a result, you can store data to several different areas of memory within a single very tight loop. 

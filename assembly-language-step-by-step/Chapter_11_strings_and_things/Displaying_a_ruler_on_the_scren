@@ -1,0 +1,27 @@
+The 'Ruler' procedure displays a repeating sequence of ascending digits starting from 1, of any length, at some selectiable location on your screen. 
+In nother words, you can display a string of digits anywhere you'd like.
+
+This might allow you to determine where in the horizontal dimension of the console window a line begins or some character falls. 
+The 'Ruler' procedure enables you to specify how long the displayed ruler is, in digits, and where on the screen it will be displayed. 
+
+A typical call to 'Ruler' would look something like this below: 
+
+	mov eax, 1		; Load Y position to AL 
+	mov ebx, 1 		; Load X position to BL 
+	mov ecx, COLS-1		; Load ruler length to ECX
+	call Ruler 		; Write the ruler to the buffer 
+
+This invocatino places a ruler at the upper-left corner of the display, beginning at position 1,1. 
+The length of the ruler is passed in ECX. 
+Here, you're specifying a ruler one character shorter than the display is wide. 
+This provides a ruler that spans the full visible width of your virtual text display
+
+Why on character shorter?
+Remember that there is an EOL character at the end of every line. 
+This EOL character isn't visible directly, but it's still a character and requires a byte in the buffer to hold it. 
+The 'COLS' equate must always take this into account: if you wnat an 80-character wide display, 'COLS' must be set to 81. 
+If you want a 96-character wide display, 'COLS' must be set to 97.
+If you code a call to 'Ruler' as shown above, NASM will do some assembly-time math and always generate ruler that spans the full (visible) width of the text display.
+
+Over and above the 'LOOP' instructions, there's a fair amount of new assembly technology at work here that could stand explaining. 
+

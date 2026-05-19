@@ -1,0 +1,22 @@
+There are two kinds of strings in x86 assembly work: 
+	1) Source strings - are strings that you read from 
+
+	2) Destination strings - are strings that you write to. 
+
+The difference between the two is only a matter of registers; source strings and destination strings can overlap. 
+In fact, the very same region of memory can be both a source string and a destination string,, at the same time. 
+Here are the assumptions that the CUP makes about strings when it executes a string instruction in 32-bit protected mode: 
+
+	A) A source string is pointed to by ESI. 
+
+	B) A destination string is pointed to by EDI.
+
+	C) The length of both kinds of strings is the value you place in ECX. How this length is acted upon by the CPU epends on the specific instruction and how it's being used. 
+
+	D) Data coming from a source string or going to a destination string must begin the trip from, end the trip at, or pass through register EAX 
+
+The CPU can recongnize both a source string and destination string simultaneously, because ESI and EDI can hold values indepedently of one another. 
+However, because there is only one ECX register the length of source and destination strings must be identical when they are used simultaneously, as in copying a source string to a destination string. 
+On way to remember the defference between source strings and destination strings is by their offset registers. 
+ESI means " Extended source index" and EDI means "Extended destination index" 
+Extended, of course means that they're 32 bits in size, compared to their 26-bit register portions SI and DI. 

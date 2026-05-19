@@ -1,0 +1,12 @@
+'VidBuff' is just a region of memory into which you can write characters and Character strings with ordinary assembly language instructions. 
+However, nothing will appear on your monitor until you send the buffer to the Linux console. 
+
+This is easy enough. 
+The procedure 'Show' makes a single call to the 'sys_write' kernel service via 'INT 80h', and sends the entire buffer to the console at once. 
+The EOL characters embedded in the buffer every 'COLS' bytes are treated as EOL character always are by the console, and force a new line to begin immediately after each EOL. 
+Becuase all the lines are the same length, sending 'VidBuff' to the console creates a rectanglar region of text that will display correctly on any terminal window that is at leaast 'COLS' by 'ROWS' in size. 
+
+Whats important is that your prgrams call 'Show' whenever you want a screen update. 
+This can be done as often as you want, whenever you want. 
+On modern Linux PCs, the update happens so quickly as to appear instantaneous. 
+There's no reason you shouldn't call 'Show' after each write to 'VidBuff'

@@ -1,0 +1,8 @@
+There are three different "sizes" of the 'STOS' string instruction: byte, word, and double word. 
+'STOSB' is the byte-size version demonstrated in 'Ruler'. 
+'StOSW' stores the 16-bit value in AX into memory, and 'STOSD' stores the 32-bit value in EAX into memory. 
+'STOSW' and 'STOSD' work almost the same way as 'STOSB'. 
+The major difference lies in the way EDI is changed after each memory transfer operation. 
+For 'STOSW', EDI changes by two bytes either up or down depending onthe state of DF. 
+For "STOSD", EDI changes by 4 bytes, again either up or down depending on the state of DF. 
+

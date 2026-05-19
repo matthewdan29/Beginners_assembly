@@ -1,0 +1,12 @@
+Once all the registers are set up correctly according to the assumptions made by 'STOSB', the real work of showchar program is performed by two instruction loops, one inside the other. 
+The inner loop, shown here, is by far the mor interesting of the two: 
+
+	.DoChr:	stosb			; Note that there's no REP prefix
+		jcxz AllDone		; When the full set is printed, quit
+		inc all			; Bump the character value in AL up by 1
+		dec bl 			; Decrement the line counter by one
+		loopnz .DoChr		; Go back & do another char until BL goes to 0
+
+Without 'REP' to pull the loop inside the CPU, you have to set the loop up yourself. 
+Keep in mind what happens each time 'STOSB' fires: The character in AL is wriiten to memory location pointed to by EDI, and EDI is incremented by 1. 
+At the other end of the loop, the 'LOOPNZ' instruction decrements ECX by 1 and closes the loop. 

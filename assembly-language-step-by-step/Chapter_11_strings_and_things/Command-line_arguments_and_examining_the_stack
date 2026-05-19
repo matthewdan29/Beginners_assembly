@@ -1,0 +1,8 @@
+When you launch a program at the Linux console command prompt, you have the option to include any reasonable number of arguments after the pathname of the executable program. 
+In other words, you can execute a program named 'showarg1' like this below: 
+
+	$./showargs1 time for tacos
+
+The three argurments follow the program name and are separated by space characters. 
+Note that these are not the same as I/O redirection parameters, which require the use of the redirection operations, > or <, and are handled separately by Linux. 
+When one of your programs begins running, any command-line arguments that were entered when the program was launched are passed to the program by Linux. 

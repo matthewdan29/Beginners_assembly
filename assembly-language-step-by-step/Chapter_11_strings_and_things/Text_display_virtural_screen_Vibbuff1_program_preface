@@ -1,0 +1,13 @@
+The best way to cement all that string background information in your mind is to see some string instructions at work. 
+In the program 'Vidbuff1.asm' Jeff implemented an interesting mechanism using string instructions: a simple virtual text display for the Linux console. 
+
+However, we can pull a few scurvy tricks, and learn (a burte force LOL it is bro I'm sorry jeff) a few things by pulling them. 
+One is to create our own text video refresh buffer in memory as a named variable, and periodically write it out to the Linux console via 'INT 80h'. 
+Our PCs have gotten very fast since the DOS era, and text video buffers are not large. 
+A 25 X 80 text display buffer is only 2000 characters long, and the whole thing can be sent to the console with a single 'INT 80h sys_write' call. 
+The buffer appears instantaneously, at least as far as any human observer can discern. 
+Placing text in the buffer is a simple matter of calculating the address of a given row and column position in the buffer, and writing ASCII character values into the buffer variable starting at the address. 
+After each modification of the buffer variable,  you can update the console display by writing the entire buffer to the console via 'INT 80h'. 
+Jaded experts might call this "brute force" (IT IS you just like trying every number for a lock encryption LOL) but it's easy to understand. 
+It doesn't give you control over character color or attributes (underlining blinking, and so on) but it will give you basic understanding of the x86 string instructions. 
+Look over the code in 'vidbuff1.asm'. 

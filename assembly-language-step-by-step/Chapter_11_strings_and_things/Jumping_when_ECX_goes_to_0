@@ -1,0 +1,6 @@
+'JCXZ' is a special branching instruction created specifically to help with loops like in the Showchar program. 
+'JCXZ' is yet another variety of 'JMP' instruction, but one that doesn't watch any of the flags or decrement any registers. 
+Instead, 'JCXZ' watches the ECX register. when it sees that ECX has just gone to zero, it jumps to the specified label. 
+If ECX is still nonzerom then execution falls through to the next instruction in line. 
+In the case of the inner loop shown previously, 'JCXZ' branches to the "close up shop" code when it sees that ECX has finally gone to 0. 
+

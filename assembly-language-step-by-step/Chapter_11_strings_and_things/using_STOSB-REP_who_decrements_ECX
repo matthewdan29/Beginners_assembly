@@ -1,0 +1,10 @@
+When you use 'REP STOSB' (or 'REP' with any of the string instructions), ECX is decemented automatically, by 1, for each memory access the instruction makes. 
+And once ECX gets itself decremented down to 0, 'REP STOSB' detects that ECX is now 0 and stops firing into memory. 
+Control them passes on to the next instrution in line. 
+But take away 'REP', and the automatic decementing of ECX stops. 
+So also, does the automatic detection of when ECX has been counted down to 0. 
+Something has to decement ECX, as ECX governs how many toimes the string instructions accesses memory. 
+If 'STOSB' doesn't do it - you guessed it - you have to do it somewhere else, with another instruction. 
+The obvious way to decement ECX is to use "DEC ECX"; and the obvious way to determine whether ECX has been decemented to 0 is to follow 'DEC ECX' insturction with a 'JNZ' (Jump if Not Zero) instruction. 
+'JNZ' test the Zero flag, ZF, and jumps back to the 'STOSB' instruction until ZF becomes true. 
+And ZF becomes true when a 'DEC' instrucion causes its operand (ECX) to become 0.

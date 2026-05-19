@@ -1,0 +1,12 @@
+Showchar, its not as useful as the 'Ruler' procedure, but it makes its point and is eay to understand.
+The Showchar program clears the sceen, displays a ruler on line 1, and below that shows a table containing 224 of 256 ASCII characters, neatly displayed in seven lines of 32 characters each. 
+The table includes the "high" 127 ASCII characters, including foreign-language characters, line-draw characters, and miscellaneous symbols. 
+
+The showchar program introdcues a couple of new concepts and instructions, all related to program loops. 
+All procedures and macros it invokes are prestend in the program file. 
+It also uses the following two equates not present in the program. 
+	
+	CHRTROW	equ 2		; Chart begins 2 lines from top of the display
+	CHRTLEN	equ 32		; Each chart line shows 32 characters 
+
+GO read the sample program "Showchar_sample_program.asm"

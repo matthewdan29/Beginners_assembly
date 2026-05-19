@@ -1,0 +1,22 @@
+There is one problem: 'AAA' clears the high nybble to 0. 
+This means that adding '1' and '1' doesn't quite equal '2', the displayable digit. 
+Instead, AL becomes binary 2, which in the IBM-850 character set is dark "smiley face" character. 
+To make the contents of AL a displayable ASCII digit again, we have to add 30h to AL. 
+This is easy to do: just add 0 to AL, which has a numeric value of 30h. 
+So, adding 0 takes 02h back up to 32h, which is the numeric equivalent of the ASCII digit character 2. 
+This is the reason for the "ADD AL, '0'" instruction that immediately follows 'AAA'. 
+This sounds peculiar, but remember that '0' is the number 30h, not binary 0. 
+
+There's a lot more to BCD math, much of it involves BCD operations across multiple columns. 
+Example, when you want to perfrom multiple-column BCD math, you have to take carries into account, which involvees careful use of the Auxiliary Carry flag, AF. 
+There are also the (instructions explain below for reference): 
+
+	AAD intructions ( it converts two unpacked BCD digits in 'AH' and 'AL' into a single binary value in AL, preparing for a binary division of decimal numbers effectively transforming 'AL + (10 * AH) ' into 'AL', clearing 'AH')
+
+	AAM intructions ( It adjusts the binary result in the 'AX' register after multiplying two unpacked Binary Coded Decimal (BCD) numbers, converting the 8-bit production into two base-10 BCD digits (quotient in 'AH', remainder in 'AL') It's used after 'MUL' on unpacked BCD values, effectively dividing 'AL' by 10, making it useful for base-10 arithmetic, with an undocumented feature allowing modification of the divisor for other bases)
+
+	AAS instructions ( Its instruction adjusts the 'AL' register to hold a valid unpacked BCD (Binary Coded Decimal) digit after a binary subtraction of unpacked BCD values, typically following a 'SUB' instruction; it handles borrows by decrementing 'AH', setting 'CF' and 'AF' flags if needed, and clears the upper bits of 'AL' to zero, making results suitable for decimal arithmetic in 16-bit)
+
+instructions for adjusting AL after BCD divides, multiplies, and subtracts, respectively. 
+The same general idea applies: all the BCD adjustment instructions force the standard binary arithmetic instructions to come out right for valid BCD operands. 
+

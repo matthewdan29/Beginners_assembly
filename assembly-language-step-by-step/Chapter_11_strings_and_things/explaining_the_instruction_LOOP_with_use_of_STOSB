@@ -1,0 +1,35 @@
+With all that in mind, consider the following assembly language instruction loop. 
+Note that its split into three parts by inserting two blank lines: 
+
+	DoChar:	stosb		;Note that there's no REP prefix
+		
+		add al, '1' 	; Bump the character value in AL up by 1
+		aaa		; Adjust AX to make this a BCD addition 
+		add al, '0'	; Basically, put binary 3 in AL's high nybble 
+		
+		dec ecx		; Decrement the count by 1...
+		jnz DoChar	; ...and loop again if ECX > 0
+
+Ignore the block of three instructions in the middle for the time being. 
+What those three instructions do is: change AL in between each store of AL into memory. 
+Look instead to see how the loop runs. 
+'STOSB' fires, AL in modified, and then ECX is decemented. 
+The 'JNZ' instruction tests to see whether the 'DEC' instruction has forced ECX to zero. 
+If so, the Zero flag, ZF is set, and the loop will terminate. 
+But until ZF is set, the jump is made back to the label 'DoChar', where 'STOSB' fires yet again. 
+There is a simpler way, using an instruction 'LOOP'. 
+The "LOOP" instruction combines the decementing of ECX with a test and jump based on ZF. 
+It looks like this below: 
+
+	DoChar: stosb 		; Note that there's no REP prefix
+		add al, '1' 	; Bump the character value in AL up by 1
+		aaa		; Adjust AX to make this a BCD addition 
+		add al, '0'	; Make sure we have binary 3 in AL's high nybble 
+		loop DoChar	; Go back & do another char until ECX goes to 0
+
+The 'LOOP' instruction first decements ECX by 1. 
+It then checks the Zero flag to see if the decement operation forced ECX to zero. 
+If so, it falls through to the next instruction. 
+If not (that is, if ZF remains 0, indicating that ECX was still greater than 0), then 'LOOP' branches to the label specified as its operand. 
+The loop keeps looping the 'LOOP' until ECX counts down to 0. 
+At that point, the loop is finished, and execution falls through and continues with the next instruction following 'LOOP'. 

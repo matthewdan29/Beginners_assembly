@@ -1,0 +1,6 @@
+The 'Ruler' procedure is a good example of using 'STOSB' without the 'REP' prefix. 
+We have to change the value in AL every time we store AL to memory, and thus can't use 'REP STOSB'. 
+Note that nothing is done to EDI or ECX while changing the digit to be displayed, and thus the values stored in those registers are held over for the next execution of 'STOSB'. 
+'Ruler' is alos a good example of how 'LOOP' works with 'STOSB' to adjust ECX downward and return control to the top of the loop. 
+'LOOP', in a sense, does outside the CPU what 'REP' does inside the CPU: adjust ECX and close the loop. 
+Try to keep that straight when using any of the string instructions. 

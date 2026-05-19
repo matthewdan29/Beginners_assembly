@@ -1,0 +1,36 @@
+The 'STOSB' instruction is a facinating item, nut for sheer action packed into a single line of assembly code there's nothing than can touch the 'MOVS' instructions. 
+Like 'STOS', 'MOVS' comes in three "sizes": for handling bytes (MOVSB), 16-bit words(MOVSW), and 32-bit double words (MOVSD). 
+For working with ASCII character, MOVSB is the one to use. 
+The giest of the "MOVSB" instruction is this: a block of memory data at the address stored in ESI is copied to the address stored in EDI. 
+The number of bytes to be moved is placed in the ECX register. 
+ECX counts down after each byte is copied, and the addresses in ESI and EDI are adjusted by one. 
+For 'MOVSW', the ESI/EDI addresses are adjusted by two after each word is copied, and for 'MOVSD', they are adjusted by four after each double wod is copied. 
+These adjustements are either increments or decements, depending on the state of DF. 
+In all three cases, ECX is decremented by one each time a data item goes from the source address to the detination address. 
+Remember that ECX is counting memory transfer operations, not address bytes. 
+The DF register affects 'MOVSB' the same way it affects 'STOSB'.
+'MOVSB' can operate either semiautomatically or automatically, just as with 'STOSB'.
+If the 'REP' prefix is added to 'MOVSB'. 
+Look at the precedure called "WrtLn" it copies a string to a given X,Y location. 
+
+
+	cld 			; Clear DF for up-memory write 
+	mov edi, VidBuff	; Load destination index with buffer address 
+	dec eax 		; Adjust Y value down by 1 for address calculation 
+	dec ebx 		; adjust X value down by 1 for address calculation 
+	mov ah, COLS		; Move screen width to AH
+	mul ah			; Do 8-bit multiply AL*AH to AX
+	add edi, eax		; Add Y offset into Vidbuff to EDI
+	add edi, ebx		; Add X offset into vidbuf to EDI 
+	rep movsb		; Blast the string into the buffer 
+
+The code for calculating the offset into 'VidBuff' from the X,Y values using 'MUL' is the same s that in Ruler. 
+In the main program section of 'vidbuff1', some additional calculation is performed to display a string centered in the visiable buffer, rather than at some specific X,Y location: 
+
+	mov esi, Message	; Load the address of the message to ESI 
+	mov ecx, MSGLEN		; and its length to ECX
+	mov ebx, COLS		; and the screen width to EBX
+	sub ebx, ecx		; Calc diff of message length and screen width 
+	shr ebx, 1		; Divide difference by 2 for X value 
+	mov eax, 24		; Set message row to Line 24
+	call WrtLn		; Display the centered message

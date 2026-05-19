@@ -1,0 +1,48 @@
+Once the correct offset into the buffer for the ruler's beginning is calculated and placed in EDI (and once we set up initial values for ECX and EAX), we're ready to start making rulers. 
+
+Immediately before the 'STOSB' instruction, we load the ASCII digit '1' into AL. 
+Note that the instruction 'MOV AL', '1' does not move the binary numeric value 1 into AL!
+The '1' is an ASCII character (by virtue of being within single quotees) and the character '1' (the "one" digit) has a numeric value of 31h, or 49 deciimal. 
+
+This becomes a problem immediately after we store the digit '1' into video memory with 'STOSB'.
+After digit '1' we need to display digit '2' -- and to do that we need to change the value stored in AL from '1' to '2'. 
+Ordinarily, you can't just add '1' to '1' and get '2'; 31h + 31h will give you 62h, which (when seen as an ASCII character) is lowercase letter b, not '2'! 
+However, in this case the x86 instruction set comes to the rescue, in the form of a somewhat peculiar instruction call 'AAA', Adjust AL after BCD addition. 
+What 'AAA' does is allow us, in fact, to add ASCII character digits togeather, rather than numeric values. 
+'AAA' is one of a group of instructions called the BCD instructions, so called because they support arithmetic with Binary Coded Decimal (BCD) values. 
+
+A BCD value is a 4-bit value, occupying the low nybble of a byte. 
+It express values between 0 and 9 only. 
+
+The value 31h is a valid BCD value, because the low nybble contains 1. 
+BCD is a 4-bit numbering system, and the high nybble is ignored. 
+In fact all of the ASCII digits from '0' through '9' may be considered legal BCD values, because in each case the characters' low 4 bits contain a valid BCD value. 
+The 3 stored in the high four bits of each ASCII digit is ignored. 
+
+So, if there where a way to perform BCD addition on the x86 CPUs, adding '1' and '1' would indeed give us '2' because '1' and '2' can be manipulated as legal BCD values. 
+
+'AAA' gives us that ability to perform BCD math. 
+'AAA' is in fact a sort of fudge factor, in that you execute 'AAA' after performing an addition using the normal addition instruction 'ADD'. 
+'AAA' takes the results of the 'ADD' instruction and forces them to come out right in terms of BCD math. 
+
+'AAA' basically does these two things: 
+
+	A) It forces the value in the low 4 bits of AL (which could be any value from 0 to F) to value between 0 and 9 if they were greater than 0. This is done by adding 6 to AL and then forcing the high nybble of AL to 0. Obviously if the low nybble of AL contains a valid BCD digit, the digit in the low nybble is left alone. 
+
+	B) If the value in AL had to be adjusted, it indicates that there was carry in the addition, and thus AH inremented .
+Also the carry flag, CF, is set to 1, as is the Auxiliary Carry flag, AF. Again, if the low nybble of AL contained a valid BCD digit when 'AAA' was executed, then AH is not incremented, and the two Carry flags are cleared (forced to 0), rather than set. 
+
+'AAA' thus facilitates base 10 (decimal) addition on the low nybble of AL. 
+After AL is adjusted by 'AAA', the low nybble contains a valid BCD digit and the high nybble contains 0. 
+This allows us to add ASCII digits such as 1 and 2 using the 'ADD' instruction. 
+'Ruler' does this immediately after the 'STOSW' (stores a byte, word, or doubleword from the AL, AX, or EAX register into the destination operand. The destination operand is a memory location, the address of which is read from either the ES:EDI or  ES:DI register. The ES segment cannot be overriden with a segment override prefix. After the byte, word, or doubleword is transferred  from the register to the memory location, the (E)DI register is incremented or decremented according to the setting of the DF flag in the EFLAGS register. If the DF flag is 0, the register is incremented; if the DF flag is 1, the regster is decemented.) instruction: 
+	
+	add al, '1'		; Bump the character value in AL up by 1
+	aaa			; Adjust AX to make this a BCD addition
+
+If prior to the addition the contents of AL's low nybble were 9, adding 1 would make the value 0AH, which is not legel BCD. 
+'AAA' would then adjust AL by adding 6 to AL and clearing the high nybble. 
+Adding 6 to 0A would result in 10, so once the high nybble is cleared, the new value in AL would be 0. 
+Also,, AH would have ben incremented by 1. 
+In the 'Ruler' procedure we're not adding multiple decimal columns, but simply rolling ovber a count in a single column and dispalying the number in that column to the scren. 
+Therefor, we just ignore the incremented value in AH and use AL alone. 

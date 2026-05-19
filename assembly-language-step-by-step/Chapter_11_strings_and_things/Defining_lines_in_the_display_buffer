@@ -1,0 +1,14 @@
+Clearing 'VidBuff' to space characters isn't quite the end of the story, however. 
+To render correctly on the terminal programs that display the Linux console, display data must be divided into lines. 
+Lines are delimited by the EOL character, ASCII 10. 
+A line begins at the start of the buffer, and ends with the first EOL charcter. 
+The next line begins immediately after the EOL character and runs until the next EOL character, and so on. 
+
+When text is written piecemeal to the console, each line may be a different length. 
+In out virtual display system, however, the entire buffer is written to the console in one 'INT 80h' swoop, as a sequence of lines that are all the same length. 
+This means that when we clear the buffer, we also have to insert EOL characters where we wish each displayed line to end. 
+
+This is done in the remainder of the 'ClrVid' procedure. 
+What we have to do is write an EOL character into the buffer every 'COLS' bytes. 
+This is done with a very tight loop. 
+If you look at the second portion of 'ClrVid', you may notice that the loop in question isn't quite ordinary. 

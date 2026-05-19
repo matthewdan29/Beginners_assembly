@@ -1,0 +1,33 @@
+When Linux loads your programs into memory, it typically clears unititialzed varibales to binary zeros. 
+This is good, but binary zeros do not display correctly on the Linux console. 
+To look "blank" on the console, the display buffer memory must be cleared to the ASCII space character. 
+This means writing th value '20h' into memory from the beginning of the buffer to its end. 
+
+Such things should always be done in tight loops. 
+The obvious way is to put the display buffer address into EDI, the number of bytes in your refresh buffer into ECX, the ASCII value to clear the buffer to into AL, and then code up a tight loop this way: 
+	Clear:	move byte [edi], AL 		; Write the value in AL to memory 
+		inc edi 			; Bump EDI to next byte in the buffer 
+		dec ecx				; Decrement ECX by one position 
+		jnz Clear 			; And loop again until ECX is 0
+
+This will work. 
+It's even tolerably fast, especially on newer CPUS's but all of the preceding code is equivalent to the following one single instruction: 
+	
+	rep stosb
+
+Really. 
+The 'STOSB' instruction is the simplest of the x86 string instructions, and a good place to begin. 
+There are two parts of the instruction as I show it above, a situation we haven't seen before. 
+'REP' is a new type of critter, called a prefix and it changes how the CPU treats the instruction mnemonic that follows it. 
+We'll get back to 'REP' shortly. 
+Right now, lets look at 'STOSB' itself. 
+The mnemonic means 'STOre String by Byte'. 
+Like all the string instructions, 'STOSB' makes certain assumptions about some CPU registers. 
+It works only on the destination string, so ESI is not involoved. 
+However, these assumptions must be respected and dealt with: 
+
+	A) EDI must be loaded with the address of the destination string (Think: EDI, for destination index)
+	
+	B) ECX must be loaded with the number of times the value in AL is to be stored into the string
+
+	C) AL must be laoded with the value to be stored into the string

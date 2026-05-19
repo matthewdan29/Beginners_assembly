@@ -1,0 +1,11 @@
+Our virtual text display buffer is nothing more than a region of raw memory set aside in the .bss section, using the 'RESB' directive. 
+The size of the buffer is defined by two equates, which specify the number of rows and columns that you want. 
+By default its set to 25 rows and 80 columns. 
+You can change the 'COLS' and 'ROWS' equates to define buffers as large as 255 X 255, though if your terminal window isn't that large, your results will be unpredictable. 
+Changing the dimensions of your text display is done by changing one or both of these equates. 
+Whatever other changes must be made to the code are handled automatically. 
+Note that this has to be done at assembly time, as many of the calculations are assembly-time calculations done by NASM when you build the program. 
+
+You do not have to match the size of the terminal window precisely to the 'ROWS x COLS'. 
+If yu maximize the terminal window your text display will appear starting in the upper-left corner of the screen.
+

@@ -1,0 +1,19 @@
+Before a program ends its execution by returning control to the startup/shutdown code, its stack frame must be destroyed. 
+The stack must be clean before we destroy the stack frame and return control. 
+THis simply means that any temporary values that we may have pushed onto the stack during the programs run must be gone. 
+All that is left on the stack should be the callers EBP, EBX, ESI, and EDI values. 
+If EDI was the last of the callers values that was saved on the stack, ESP (the stack pointer)  must be pointer to that saved EDI value or there will be trouble. 
+Once the stack is clean, to destroy the stack frame we must first pop the callers register values back into their registers, ensuring that the pops are in the correct order. 
+Handing back the callers EBX value in EDI will still crash your program
+With that done, we undo the logic we followed in creating the stack frame: 
+			First) We restore the callers ESP by moving the value from EBP into ESP, 
+			Last) pop the callers EBP value off the stack (as in the example below): 
+
+				mov esp, ebp
+
+				pop ebp
+
+The stack frame is gone, and the stack and important registers are now in the same state that they were in when the startup code handed control to our program. 
+It's now safe to execute the 'RET' insturction that sends control to the C library's shutdown code. 
+
+

@@ -1,0 +1,32 @@
+Pulling numbers that range from 0 to 2 billion until you find one less than 62 will take a long time. 
+Clearly, you need a different approach. 
+The one Jeff took treats the 31 bit value returned by 'rand()' as a collection of random bits. 
+Jeff extract a subset of those bits just large enough to meet my needs. 
+Six bits can express values from 0 to 63, so jeff took the highest-order six bits from the original 31 bit value and use those to specify random characters. 
+Simply shift the 31 bit value to the right until all bits but the highest order six bits have been shifted off the right end of the value into oblivion. 
+The same trick works with any number of bits. 
+All you have to do is select by how many bits to shift. 
+I've created a procedure with multiple entry points, where each entry point selects a number of bits to select from a random value: 
+	
+	pull31: mov ecx, 0		; For 31 bit random, we don't shift
+		jmp pull
+	pull16 mov ecx, 15		; For 16 bit random, shift by 15 bits 
+		jmp pull
+	pull8: mov ecx, 23		; For 8 bit random, shift by 23 bits 
+		jmp pull 
+	pull7: mov ecx, 24		; For 7 bit random, shift by 24 bits 
+		jmp pull 
+	pull6: mov ecx, 25		; For 6 bit random, shift by 25 bits 
+		jmp pull
+	pull4: mov ecx, 27		; For 4 bit random, shift by 27 bits 
+	pull:  push ecx			; rand() trashes ECX; save shift value on stack 
+	call rand 			; Call rand() for random value; returned in EAX
+	pop ecx				; Pop stashed shift value back into ECX
+	shr eax, cl 			; Shift the random value by the chosen factor
+					; Keep in mind that part we want is in CL
+	ret				; Go home with the random number in EAX
+
+To pul a 16 bit random number, call pull16. 
+To pull an 8 bit random number, call pull8. and so on. 
+The logic here should be easy to follow: you select an shift value, put it in ECX, push ECX onto the stack, call 'rand()', pop ECX from the stack, and then shift the random number by the value in CL - which, of course is the lowest eight bits of ECX. 
+

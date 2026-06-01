@@ -1,0 +1,16 @@
+Glibc isn't singling out assembly language programs for special treatment. 
+Pure C programs work the same way, and this is why the main program protion of a C prgoram is called the main function (they are very literal on naming)
+
+The standard C library code calls it with a "CALL" instruction, and it returns control to the standard C library code by executing a "RET" instruction. 
+
+	Overview: 
+
+		1) A procedure must perserve the values of the EBX, ESP, EBP, ESI, and EDI 32-bit registers. The contents of all other general-purpose registers may be altered at will. 
+
+		2) A procedure's return value is returned in EAX if it is a value 32 bits in size or smaller. Sixty-four-bit integer values are returned in EDX and EAX, with the low 32 bits in EAX and the high 32 bits in EDX. FLoating-point return values are returned at the top of the floating-point stack. Strings, structures, and other data items larger than 32 bits in size are returned by reference; tha is the procedure returns a 32-bit pointer to them in EAX. 
+
+		3) Parameters passed to procedures are pushed onto the stack in "reverse" order (think of the stack eating it from right to left given the direction of the def). Given that C function "MyFunc(foo, bar, bas)", "bas" is pushed onto the stack first, "bar" second, and "foo" last. 
+
+		4) Procedures themsleves do not remove parameters from the stack. The caller must d that after the procedure returns, either by popping the procedures off the stack or by adding an offset to the stack pointer ESP. 
+
+		5) Don't have a meaningful function in a blueprint called "Dickers_182_clowns" as a core part or doing meaningful decents (burn!)

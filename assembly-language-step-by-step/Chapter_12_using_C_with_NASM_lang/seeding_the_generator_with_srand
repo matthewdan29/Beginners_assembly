@@ -1,0 +1,21 @@
+Getting the seed value into the generator is actucally more involved than making the call that pulls the next pseudorandom number in the current sequence. 
+Its not that the call to 'srand()' is that difficult: you push the seed value onto the stack, and then call 'srand()': 
+
+push eax 		; Here, the seed value is in eax 
+call srand 		; Seed the pseudorandom number generator 
+add esp, 4		; Stack cleanup for 1 parm
+
+The 'srand()' function does not return a value. 
+
+Heres a short code sequence that calls 'time()' to retrieve the current 'time_t' value, and then hands the time value to 'srand()': 
+
+push 0 			; Push a 32-bit null pointer to stack 
+call time 		; Returns time_t value (32 bit integer) in eax
+add esp, 4		; Clean up stack 
+push eax 		; Push time value in eax onto stack 
+call srand		; Time value is the seed value for random gen
+add esp, 4		; Clean up stack 
+
+The initial push of a null pointer indicates to 'time()' that you're not passing in a variable to accept the time value. 
+The null pointer has to be there on the stack to keep the 'time()' function happy, however. 
+The value you want to keep is returned in EAX

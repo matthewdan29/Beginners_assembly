@@ -1,0 +1,41 @@
+Once a file is opened for reading, you can read text lines from it sequentially with the 'fgets()' function. 
+Each time you call 'fgets()' on an open text file, it will read one line of the file, which is defined as all the characters up to the next EOL ("newline") character, which in the Unix world always indicates the end of a text line. 
+
+Set up calls to 'fgets()' this way: 
+
+	1) Push the file handle returned from 'fopen()' onto the stack. 
+	2) Push the character count limit value. This must be the atucal integer value, and not a pointer to the value
+	3) Finally, push the address of the character buffer into which 'fgets()' should store the characters that it reads from the file. 
+
+The code for the help system is relatively simple and demonstrates both 'fopen()' and 'fgets()': 
+
+	diskhelp: 
+		push OpenCode 		; Push pointer to open-for-read code 'r'
+		push ebx		; Pointer to name of help file is passed in ebx
+		call fopen		; Attempt to open the file for reading
+		add esp, 8		; Clean up the stack 
+		cmp eax, 0		; fopen returns null if attempted open failed 
+		jne .disk		; Read help from disk file...
+		call memhelp		; ...esle from memory if theres help file on disk
+		ret
+	.disk: 	mov ebx, eax		; Save handle of opened file in ebx
+	.rdln: 	push ebx		; Push file handle on the stack 
+		push dword HELPLEN	; Limit line length of text read 
+		push HelpLine		; Push address of help text line buffer
+		call fgets 		; Read a line of text from the file 
+		add esp, 12		; Clean up the stack 
+		cmp eax, 0		; A returned null indicates error or EOF
+		jle .done		; If we get 0 in eax, close up & return
+		push HelpLine		; Push address of help line on the stack
+		call printf		; Call printf to display help line
+		add esp, 4		; Clean up the stack 
+		jmp .rdln
+	.done: 	push ebx		; Push the handle of the file to be closed 
+		call fclose		; Closes the file whose handle is on the stack 
+		add esp, 4		; Clean up the stack 
+		ret 			; Go home 
+
+WHen the procedure 'diskhelp' is called, the caller passes a pointer to the name of the help file to read in EBX. 
+The code then attempts to open this file. 
+It the attempt to open the help file fails, a very short "fail-safe" help message is displayed from strings stored in the .data section of the program. 
+Never leave the user staring at a mute cursor, wondering whats going on (even though if you gotten this far you use tools on linux that does that LOL)

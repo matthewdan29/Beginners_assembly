@@ -1,0 +1,17 @@
+One of the odder provision fo the C calling conventions is that a program may not arbitrarily change all general-purpose registers. 
+The reigsters that cannot be chaanged by a linux application linked to C functions are EBX, ESP, ESI, and EDI. 
+You will notice that boiler.asm saves these registers ont the stack when the program begins, and then restores them from the stack before giving control back to Linux. 
+
+One very important but non-obvious conclustion you must draw from this requirement to save EBX, ESP, EBP, ESI, and EDI is that the other general-purpose registers may be trashed. 
+And not only by you. 
+WHen you call procedures written by other poeple, those procedures may alter the values iun EAX, ECX, and EDX. 
+The stack pointer ESP is a special case and needs special care of a sort not applicable to other registers. 
+What this means for you is that you cannot assume that a counter value you are tracking in ECX will be left untouched when you call a C library function such as "printf()". 
+
+If you're using ECX to count passes through a loop that calls a library function or any function that you yourself didn't write you must save your value of ECX on the stack before you call the library function and restore it after the library function returns 
+The same applies to EAX and EDX. 
+If you need to keep thier values intact acros a call to a library function, you must save them to the stack before the library function is called. 
+Conversely, the important properties of EBX, EBP, ESI, and EDI means that these registers will keep their values when you make C library calls. 
+What is binding on you is binding on the C library as well. 
+Library functions that must use these registers save and restore them without any attention from you. 
+

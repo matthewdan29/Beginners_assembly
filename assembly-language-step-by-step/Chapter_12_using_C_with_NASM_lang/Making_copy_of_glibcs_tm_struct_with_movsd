@@ -1,0 +1,35 @@
+Its sometimes handy to keep a separate copy of a 'tm' structure, edpecially if you're working with several date/time values at once. 
+After you use 'localtime()' to fill the C library hidden 'tm' structure with date/time values, you can copy that structure to a structure allocated in the '.bss' section of your program. 
+Doing such a copy involves the straightforwad use of the 'REP MOVSD' (Repeat mov string Duouble) insturction. 
+'MOVSD' is an almost magical thing: Once you set up pointers to the data area you want to copy, and the place you want to copy it to, you store the size of the area in ECX and let 'REP MOVSD' do the rest. 
+In one operation it will copy an entire buffer from one place in memory to another. 
+To use 'REP MOVSD', you place the address of the source data that is, the data to be copied into ESI. 
+You move the address of the destination location where the data is to be placed in EDI. 
+The number of items to be moved is placed in ECX. 
+You then make sure that the Direction flag, DF, is cleared and executed 'REP MOVSD':
+
+		mov esi, eax		; Copy address of static 'tm' from EAX to ESI
+		mov edi, tmcopy		; Put the address of the local 'tm' copy in EDI 
+		mov ecx, 9		; A 'tm' struct is 9 dwords in size under Linux
+		cld			; Clear 'df' to 0 so we move up-memory
+		rep movsd		; Copy static 'tm' struct to local copy
+
+Here, we're moving the C library's 'tm' structure to a buffer allocated in the '.bss' section of the program. 
+The 'tm' structure is nine double words 36 bytes in size, so we have to reserve that much space and give it a name: 
+
+		TmCopy resd 9		; Reserve 9 32-bit fields for time struct 'tm'
+
+The preceding code assumes that the address of the C library's already filled 'tm' structure is in EAX, and that a 'tm' structure 'TmCopy' has been allocated. 
+Once executed, it will copy all of the 'tm' data from its hidey-hole inside the C runtime library to your freshly allocated buffer. 
+The 'REP' prefix puts 'MOVSD' in automatic-rifle mode. 
+That is, "MOVSD" will keep moving data from the address in ESI to the addres in EDI, conting ECX down by one with each move, until ECX goes to zero, then stops.
+One frequently made mistake is forgetting that the count in ECX is the count of data items to be moved, not the number of bytes to be moved
+By virtue of the D on the end of the mnemonic. 
+"MOVSD" moves double words, and the value you place in ECX must be the number of 4-bytes to be moved. 
+So, in moving nine double words, 'MOVSD' actually transport 36 bytes from one location to another but you're counting double words here, bot bytes. 
+The program in "timetest.asm" knits all of these code snippets together into a demo of the major Unix time features. 
+There are many more time functions to be studied in the C library, and with what you now know about C function calls, you should be able to work out calling protocals for any of them. 
+
+If you ever move to other Unix implementations outide the GNU sphere, keep in mind that the 'time_t' value may already have ome other definition that a 32 bit integer. 
+At this time, glibc defines 'time_t' as a 32 bit integer, and you can calculate time defferences between two 'time_t' values simply by subtracting them at least until year 2038. 
+For other, non-GNU implementations of unix, its best to use the 'defftime()' function in the C library to return a difference between two 'time_t' values. 

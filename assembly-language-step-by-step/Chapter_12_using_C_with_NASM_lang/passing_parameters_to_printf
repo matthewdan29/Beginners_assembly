@@ -1,0 +1,53 @@
+The real challenge in working with "printf()". is knowing how to pass it all the parameters that it needs to handle any particular string display. 
+It can take as few parameters as one base string, or as many parameters as you need, including additional strings, characters values, and numeric vlues of various sorts. 
+All parameters to C library functions are passed on the stack. 
+This is done either directly, by pushing the parameter value itself on the stack, or indirectly, by reference, by pushing the 32-bit address of the parameter onto the stack. 
+For 32-bit or 64-bit data values, we push the values themeselves onto the stack. 
+For larger data items such as strings and arrays, we push a pointer to the items onto the stack. 
+
+When multiple parameters are passed to "printf()", they all have to be pushed onto the stack, and in a vary particular order: from right to left, as they would appear if yuo were to call "printf()" from code written in C. 
+The base string is considered the leftmost parameter and is always pushed onto the stack last. 
+A simple example from C will help here: 
+
+	printf('%d + %d = %d .. for large values of %d.' , 2, 2, 5, 2); 
+
+The base string is enclosed in quotes and is the first paramter. 
+After the string are several numeric paramters. 
+There must be one numeric value for each of the '%d' formatting codes embedded in the base string. 
+The order in which these items must go onto the stack starts from the right and reads toward the left: 2, 5, 2, 2, with the base string pushed last. 
+In assembly, it's done this way: 
+	
+	push 2
+	push 5
+ 	push 2
+	push 2
+	push mathmsg
+	call printf
+	add esp, 20
+
+The identifier "mathmsg" is the base string, and its address is pushed last of all the parameters. 
+Remember that we dont push the string itself onto the stack. 
+We push the strings address, and the C library code will follow the address and fetch the strings data using its own machinery (It MATH!)
+The 'Add' instruction at the end of the sequence represents what you'll hear described as "cleaning up the stack"
+Each time we push something onto the stack with a "PUSH" instruction, the stack pinter ESP moves toward low memory by a number of bytes equal to the size of whatever was pushed. 
+In our case here, all parameters are exactly four bytes in size. 
+Five such paramters thus represt 20 bytes of change in ESP for the sake of making the call. 
+After the call is done, ESP must be moved back to where it was before we started pushing paramters onto the stack. 
+By adding 20 to the value in ESP, the stack pointer moves back up-memory by 20 bytes and will then be where it was before we began to set up the "printf()" call. 
+If you for get to clean up the stack, or if you clean it up by the wrong number of bytes, your program will almost certainly throw a segmentation fault. 
+
+Merging several text strings into the base string is done more or less the same way using the '%s' code instead of "%d": 
+
+	push dugons 		; Rightmost arg is pushed first 
+	push mammals 		; Next arg to the left 
+	push setbase 		; base string is pushed last 
+	call printf		; Make the printf() call 
+	add esp, 12		; Stack cleanup: 3 pams x 4 bytes = 12
+
+The strings reqiored for the "printf()" call are defined in the .data section of the program: 
+
+	MammalMsg db 'Does the set of %s contain the set of %s?', 10,0
+	Mammals db   'mammals', 0
+	Mammals db   'dugongs', 0
+
+You should be careful to ensure that all of your string parameters are properly terminated with a binary 0, which is the only way that glibc functions like 'puts()' and 'printf()' know where the string data ends. 

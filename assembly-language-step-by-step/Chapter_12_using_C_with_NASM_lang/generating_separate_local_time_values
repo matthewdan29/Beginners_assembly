@@ -1,0 +1,19 @@
+The function 'localtime()', and given a 'time_t' value, it will break out the date and time into the fields of a 'tm' structure. 
+	Here's the code to call it: 
+		push OldTime		; Push address of calendar time value
+		call localtime		; Return pointer to static time sturture in eax
+		add esp, 4		; Stack cleanup for 1 parm
+
+Here, 'oldTime' is a 'time_t' value.
+Given this value, 'localtime()' returns in EAX much in the manner of 'ctime()' apointer to a 'tm' structure within the C library somewhere. 
+By using this pointer as a base address, you can access the fields in the structure. 
+That trick lies in knowing the offset into 'tm' for the individual time/date field that you want, and using that offset as a constant displacement from the address base. 
+THe code below displays the year field from a 'tm' structure to the console using 'printf'. 
+Note that the first instruction indexes into 'tm' by 20 bytes, which is the offset of the year field from the beginning of the structure: 
+		mov edx, dword [eax+20]	; Year value is 20 bytes offset into tm
+		push edx		; Push value onto the stack 	
+		push yrmsg		; Push address of base string 
+		call printf		; Display string and year value with printf
+		add esp, byte 8		; Stack cleanup: 2 parms X 4 bytes = 8
+
+By using the displacements shown you can access all the other components of the time and the date in the 'tm' structure, each stored as 32-bit integer value.

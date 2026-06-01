@@ -1,0 +1,20 @@
+The C library contains a function, 'ctime()', that will return a pointer to a formatted string representation of a given 'time_t'. 
+It returns a pointer to a string buried somewhere in the runtime library. 
+The first field is a three-character code for the day of the week, followed by a three-character code for the month and a two-space field for the day of the month. 
+THe time follows, in 24 hour format, and the year brings up the rear. 
+For good measure the string as returned by 'ctime()' is terminated by a newline
+	Here's how you call 'ctime()': 
+
+		push OldTime		; Push *address* of calendar time value
+		call ctime		; Return pointer to ASCII time string in eax
+		add esp, 4		; Stack cleanup for 1 parm
+
+You pass 'ctime()' the address of a 'time_t' value. 
+You're used to passing 32-bit integer values by pushing the values themselves onto the stack say, for display by 'printf()'. 
+A 'time_t' value is currently, under Linux, represented as a 4-byte integer, but there is no guarantee that it will always be thus. 
+To keep its options open, the C library requires a pointer to the current time, rather than a time value itself. 
+You push a pointer to the 'time_t' value that you want to represent as a string, and then call 'ctime()'. 
+What 'ctime()' returns is a pointer to the string, which it keeps somewhere inside the library. 
+You can use that pointer to display the string on the screen via 'printf()' or to write it to a text file. 
+
+

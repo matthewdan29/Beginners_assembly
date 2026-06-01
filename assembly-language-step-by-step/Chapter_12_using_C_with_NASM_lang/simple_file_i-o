@@ -1,0 +1,18 @@
+The final program presented in this repo is nominally about working with disk-based text files. 
+It puls together a lot of assembly tricks and features that is explained earlier and adds a few more. 
+If you can read it and follow the flow of the logic, you have gotten everything from this repo that I (via jeff writting) set out to teach you. 
+Its mor like a "real" program than anything else in this book in that it works with command-line arguments, writes output to a disk file, and does other useful things that any utility you will set out to build will likely require 
+
+The Program 'textfile.asm' creates and fills a text file with text. 
+You can specify the number of lines to be filled in the file, as well as text for the lines. 
+If you don't specify text for the file, the program will generate a line of randomly chosen characters and use that instead. 
+Invoking the program is done like the example below: 
+	
+	$ ./textfile 150 Time for tacos!
+
+This invocation woould create a new file and write the text "Time for tacos!" to the file 150 times before closing the file. 
+If the file 'testeroo.txt' already exists, it will be overwritten from the beginning. 
+If you don't type anything after the line count number, the program will fill the file with random alphanumeric characters. 
+If you don't type an integer as the first argument, textfile will display an error message. 
+If you only type the program name and press Enter, textfile will display several lines explaining what it is and how to use it. 
+

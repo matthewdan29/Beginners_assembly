@@ -1,0 +1,36 @@
+Instead of outputting formatted data in a character stream, 'scanf()' takes a steam of character data from the keyboard and converts it to numeric data stored in a numeric valiable. 
+'scanf()' works very well, and it understands a great many formats. 
+The 'scanf()' function takes the characters typed by the user and converts them to the integer value that the characters represent. 
+'scanf()' will take the two ASCII characters '4' and '2' entered successively and convert them to the base 10 numeric value 42 after user presses Enter. 
+Alas does not work with 'scanf()'. 
+if you want a prompt, you must display the prompt before calling 'scanf()' using 'printf()'. 
+To keep the prompt and data entry on the same line, make sure you don't have an EOL character at the end of your prompt string. 
+The 'scanf()' function automatically takes character input from standard input. 
+There's no need to pass it the file handle 'stdin', as there is with 'fgets()'. 
+There is a separate glibc function, 'fscanf()', to which you do have to pass a file handle but for integer data entry theres no hazard in using 'scanf()'. 
+
+	Here's how to use the 'scanf()' routine: 
+
+		1) Make sure that you have declared 'extern scanf' along with your other external declarations at the top of the '.text' section. 
+
+		2) Declare a memory variable of the proper type to hold the numeric data read and converted by 'scanf()'. My examples here are for integer data, so you would create such a variable with either the 'DD' directive or the 'RESD' directive.  If you're going to keep several separate values, you'll need to declare one variable per value entered. 
+
+		3) To call 'scanf()' for entry of a single value, first push the address of the memory variable that will hold the value. 
+
+		4) Push the address of the format string specifying what format that data will arrive in. For integer values, this is typically the string '%d'. 
+
+		5) Call 'scanf()'
+
+		6) Clean up the stack. 
+
+The code for typicall 'scanf()' call would look like this: 
+
+		push InVal	; Push the address of the integer buffer 
+		push Iformat	; Push the address of the integer format string
+		call scanf	; Call scanf to enter numeric data
+		add esp, 8	; stack cleanup: 2 parms x 4 bytes = 8
+
+The "charsin.asm" program shows how to set up prompts alongside a data entry field for accepting both string data and numeric data from the user through the keyboard. 
+After accepting the data, the program displays what was entered, using 'printf()'
+One shortcoming of the demo program as is that it has no validation for entry of numbers. 
+If the user enters ASCII digits expressing a numeric value too large to be contained in a 32-bit integer, or some mixture of characters that doesn't cood down to a numeric value, the value returned to the program by 'scanf()' will be a garbage value with no nescessary relation to what the user entered. 

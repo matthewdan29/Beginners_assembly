@@ -1,0 +1,9 @@
+With "puts()" we can only send a simple text string to a file, without any sort of formatting. 
+
+The "printf()" function enables you to do a number of truly useful things, all with one function call: 
+
+	1) Output text either with or without a terminating EOL
+
+	2) Convert numeric data to text in numerous formats, by outputting formatting codes along with the data 
+
+	3) Output text to a file that includes multiple strings stored separately

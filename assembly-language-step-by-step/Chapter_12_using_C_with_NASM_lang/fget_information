@@ -1,0 +1,52 @@
+The C library functions for reading data from the keyboard are almost the inverse of thos that display data to standard output. 
+
+'fgets()' gets the string passed in from your computer keyboard.
+Standard C library routines whose names begin with 'f' act on files. 
+You can use 'fgets()' to read text from a disk file but remember, in Unix terms, your keyboard is already connected to a file, the file is called standard input. 
+If we can connect 'fgets()' to standard input, we can read text from the keyboard, which is what the old and hazardous 'gets()' function does automatically. 
+
+The great fact about using 'fgets()' is that it enables us to specify a maximum number of characters for the routine to accept from the keyboard. 
+Anything else that the user types will be truncated and discarded. 
+If this maximum value is no longer than the string buffer you define to hold charcters entered by the user, there's no chanve that using 'fgets()' will crash your program. 
+Connecting 'fgets()' to standard input is easy. 
+'stdin', 'stdout', 'stderr'. 
+For accepting input from the keyboard thought 'fgets()' you want to use the identifier 'stdin'. 
+It's already there; you simply have to declare it as extern in order to reference it from inside your assembly language programs. 
+
+	Here's how to use the 'fgets()' functions: 
+
+		1) Make sure you have declared 'extern fgets' and 'extern stdin' along with your other external declarations at the top of the '.text'section of your program. 
+
+		2) Declare a buffer varibale large enought to hold the string data you want the user to enter. Use the 'RESB' directive in the '.bss' section of your program 
+
+		3) To call 'fgets()', first push the file handle. note well that you must push the handle itself, not the handle's addres! so use the form 'push dword [stdin]'
+
+		4) Push the value indicating the maximum number of characters that you want 'fgets()' to accept. Make sure it is no longer than the buffer variable you declared in '.bss'! The stack must contain the acutal value dont just push the address of a variable holding the value. Pushing an immediate value or the contents of a memory variable will work. 
+
+		5) Push the address of the buffer variable where 'fgets()' is to store the characters entered by the user. 
+
+		6) call 'fgets()' itself. 
+
+		7) As with all library function calls written in C, dont forget to clean up the stack.
+
+In terms of actual code, a call to 'fgets()' should look something like the following: 
+		push dword [stdin]	; Push predefined file handle for standard input 
+		push 72 		; Accept no more than 72 characters from keyboard 
+		push InString		; Push address of buffer for entered characters
+		call fgets		; call fgets()
+		add esp, 12		; Stack cleanup: 3 parms X 4 bytes = 12
+
+Here, the identifier 'InString' is a memory variable defined like this: 
+
+		[SECTION .bss]		; Section containing uninitialzed data
+		InString resb 96	; Reserve 96 bytes for the string entry buffer
+
+
+Recall that the 'RESB' directive just sets aside space for your variable. 
+That space is not pre-cleared with any particular value, spaces, nulls, or anything. 
+Until the user enters data through 'fgets()', the string storage you allocate using 'RESB' is uninitialized and could contain any garbage values at all. 
+It's generally full of nulls, but linux makes you no promises about that!
+From the user side of the screen, 'fgets()' simply acepts characters until the user presses Enter. 
+It Doesn't automatically return after the user types the maximum permitted number of characters. 
+Albeit, anything the user types beyond the number of permitted characters is discared. 
+The 'charsin.asm' file contains the preceding code. 

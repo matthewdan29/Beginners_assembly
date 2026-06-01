@@ -1,0 +1,5 @@
+Once you've seeded the generator, getting numbers in the pseudorandom sequence is easy: You pull the next number in the sequence with each call to 'rand()'. 
+The 'rand()' function is as easy to use as anything in the C library: It tacks no parameters and the psuedorandom number is returned in EAX
+
+The 'randtest.asm' program demonstrates how 'srand()' and 'rand()' work. 
+It also demontrates a couple of intresting assembly tricks. 

@@ -1,0 +1,23 @@
+To use 'fopen()', you must push the following parameteter onto the stack before the call: 
+
+	1) First onto the stack is the address of a code indicating for which mode the file should be opened. The ones you'll typically use for text files are 'r', 'w', and 'a'. These should be defined as short character strings, followed by a null: 
+	WriteCode db 'w',0
+	OpenCode  db 'r',0
+
+	2) Next onto the stack is the address of the character string containing the number of the file to be opened. 
+
+With those two items on the stack, you make the call to 'fopen()'. 
+If the file was successfully opened, 'fopen()' will return a file handle in EAX.
+A file handle is a 32 bit number assigned by Linux to a file during the call to 'fopen()'. 
+If the open was unseccessful, EAX will contain 0. 
+Here's how opening a file for reading looks in code: 
+
+	push opencode		; Push address of open-for-read code 'r'
+	push ebx		; Address of the neame of the help file is in EBX
+	call fopen		; Attempt to open the file for reading 
+	add esp, 8		; Stack cleanup: 2 parms x 4 bytes = 8
+	cmp eax, 0		; fopen() returns null if attempted open failed 
+	<jump as needed>
+
+The process of creating a file and then writing to it is identical, except that you must push the "w" code onto the stack, rather than the 'r' code. 
+

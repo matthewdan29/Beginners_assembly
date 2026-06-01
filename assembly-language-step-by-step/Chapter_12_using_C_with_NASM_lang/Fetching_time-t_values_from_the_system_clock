@@ -1,0 +1,20 @@
+Any single second of time can be represented as a 32-bit unsigned integer in a Unix-compatible system. 
+Fetching the value for the current time is done by calling the 'time()' function: 
+
+		push dword 0 		; Push a 32-bit null pointer to stack, since 
+					; we don't need a buffer. Time value is
+					; returned in eax. 
+		call time		; Returns calendar time in eax 
+		add esp, byte 4		; Stack cleanup for 1 parm 
+		mov [oldtime], eax	; Save time value in memory variable 
+
+The 'time()' function can potentially return the 'time_t' value in two places: 
+		
+		1) EAX 
+		2) A buffer that you allocate somewhere. 
+To have 'time()' place value in a buffer, you pass it a pointer to the buffer on the stack. 
+If you don't want to store the time calue in a buffer, then you must still hand it a null pointer on the stack. 
+That's why we push a 0 value in the preceding code; 0 is the value of a null pointer. 
+No other parameters need to be passed to 'time()'. 
+On return, you'll have the current 'time_t' value in EAX. 
+

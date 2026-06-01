@@ -1,0 +1,28 @@
+This how to set up a call to 'fprintf()': 
+
+	1) Push any values or addresses of values (as appropriate) onto the stack. There's no difference here from the way it's done for the call to 'printf()'. 
+	2) Push the address of the base string containing the formatting codes. Again, this is done just as for 'printf()'. 
+
+	3) Finally, and here's where 'fprintf()' differs from 'printf()', push the file handle of the file to which the text should be written. 
+
+Then call 'fprintf()'.
+Your text will be written to the open file. 
+Note that to use 'fprintf()', the destination file must have been open for either writing or appending. 
+Here's the 'fprintf()' call from 'textfile.asm': 
+
+	push esi 		; ESI is the pointer to the line of text 
+	push 1			; Push the first line number 
+	push WriteBase 		; Push address of the base string 
+	push ebx		; Push the file handle of the open file 
+writeline: 	
+	cmp dword edi, 0	; Has the line count gone to 0?
+	je donewrite 		; If so, go down & clean up stack 
+	call fprintf		; Write the text line to the file 
+	dec edi			; Decrement the count of lines to be written
+	add dword [esp+8], 1	; update the line number on the stack 
+	jmp writeline		; loop back and do it again
+donewrite: 
+	add esp, 16		; Clean up stack after call to fprintf
+
+The code doesn't clean up the stack immediately after the call to 'fprintf()'. 
+

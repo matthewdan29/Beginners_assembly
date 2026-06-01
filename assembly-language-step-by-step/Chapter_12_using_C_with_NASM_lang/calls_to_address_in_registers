@@ -1,0 +1,32 @@
+Jeff used a technique in 'randtest.asm' that is sometimes forgotten by assembly newcomers: you can execute a 'CALL' instruction to a procedure addres held in a register. 
+You don't always have to use 'CALL' with an immediate lable. 
+In other words, the two 'CALL' instructions in the following code snippet are both completely legal and equivalent: 
+	
+	mov ebx, pull8		; Load the address represented by label pull8 into EBX
+	call pull8 		; Call the address represented by pull8
+	call ebx		; Call the address stored in EBX
+
+In general it enables you to treat procedure calls as parameters. 
+In randtest, jeff factored out a lot of code into a procedure called 'puller', and then called 'puller' several times for different sizes of random number. 
+Jeff passed 'puller' the address of the correct random number procedure to call by loading the address of that procedure EDI: 
+
+	; Create and display an array of 8-bit random values: 
+	mov edi, pull8		; Copy address of random # subroutine into edi
+	call puller 		; Pull as many numbers as called for in [pulls]
+
+Down in the 'puller' procedure, the code calls the requested random-number procedure this way: 
+
+	puller: 
+		mov esi, dword [pulls]		; Put pull count into ESI
+	.grab:  dec esi				; Decrement counter in ESI 
+		call edi 			; Pull the value; it's returned in EAX
+		mov [Stash+esi*4], eax		; Store random value in the array
+		cmp esi, 0			; See if we've pulled enought yet 
+		jne .grab			; Do another if ESI <> 0
+		ret 				; Otherwise, go home
+
+In this situation, what is called is 'pull8' - evan though the label 'pull8' is nowehre present in procedure 'puller'. 
+The same code in 'puller' can be used to fill a buffer with all the different size of random numbers, by calling the procedure address passed to it in EDI 
+Calling an address in a register gives you a lot of power to generalize code - just make sure you document what you're up to, as the label that you're calling is not contained in the 'CALL' instruction. 
+
+
